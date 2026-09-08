@@ -1,6 +1,9 @@
+import { useNavigate } from "react-router-dom";
 import { MdOutlineTrendingFlat } from "react-icons/md";
 
 export const Home = () => {
+  const navigate = useNavigate();
+
   return (
     <main className="flex items-center relative justify-center top-28 h-96 m-52">
       <div className="flex-col flex-wrap relative h-full p-8 mr-auto">
@@ -15,11 +18,12 @@ export const Home = () => {
           em um só lugar.
         </p>
         <button
-          className="border-color-white w-44 h-11 
+          onClick={() => navigate("/login")}
+          className="border-color-white w-auto h-11 
       bg-linear-to-r from-btn-main-color to-second-color rounded-lg 
       text-color-white cursor-pointer 
-      hover:from-second-color hover:to-btn-main-color flex-wrap p-3
-        flex gap-2 items-center m-3.5
+      hover:from-second-color hover:to-btn-main-color p-3
+        flex gap-2 items-center m-3.5 whitespace-nowrap
       "
         >
           <span className="font-bold">Começar Agora</span>

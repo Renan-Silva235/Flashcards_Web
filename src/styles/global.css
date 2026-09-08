@@ -1,3 +1,4 @@
+@import url("https://fonts.googleapis.com/css2?family=Inter:wght@400;600;700;800&display=swap");
 @import "tailwindcss";
 
 @theme {
@@ -11,9 +12,14 @@
   --color-color-silver-2: #94a3b8;
   --color-color-red-1: #f87171;
   --color-color-purple-1: #c084fc;
+  --color-input-bg-main-color: #1e293b;
 
   /*hover*/
   --color-btn-main-color-hover: #6b9ae5;
+
+  /*fontes*/
+  --font-sans: "Inter", sans-serif;
+  --font-inter: "Inter", sans-serif;
 }
 
 body {
@@ -21,5 +27,20 @@ body {
   padding: 0;
   margin: 0;
   background-color: var(--color-main-color);
-  font-family: sans-serif;
+  font-family: var(--font-sans);
+}
+
+label {
+  color: var(--color-white);
+  margin-bottom: 5px;
+}
+
+/* Força a cor de fundo e do texto no autofill do Chrome/Webkit */
+input:-webkit-autofill,
+input:-webkit-autofill:hover,
+input:-webkit-autofill:focus,
+input:-webkit-autofill:active {
+  -webkit-text-fill-color: #ffffff !important;
+  -webkit-box-shadow: 0 0 0px 1000px var(--color-input-bg-main-color) inset !important;
+  transition: background-color 5000s ease-in-out 0s;
 }
