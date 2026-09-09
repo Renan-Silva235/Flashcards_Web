@@ -1,4 +1,28 @@
+import { useEffect, useState } from "react";
+import { useDispatch, useSelector } from "react-redux";
+import { useNavigate } from "react-router-dom";
+import { loginRequest } from "../../store/modules/auth/actions";
+import type { RootState } from "../../store/rootReducer";
+
 export const Login = () => {
+  const dispatch = useDispatch();
+  const [email, setEmail] = useState("");
+  const [password, setPassword] = useState("");
+  const navigate = useNavigate();
+  const { isLoading, error, isAuthenticated } = useSelector(
+    (state: RootState) => state.auth,
+  );
+
+  const handleSubmit = (event: React.FormEvent) => {
+    event.preventDefault();
+    console.log(email, password);
+    dispatch(loginRequest(email, password));
+  };
+
+  useEffect(() => {
+    if (isAuthenticated) navigate("/dashboard");
+  }, [isAuthenticated, navigate, error]);
+
   return (
     <main className="flex flex-col font-sans w-4xl h-fit m-auto justify-center relative top-52 pl-57.5 pr-57.5">
       <h1 className="font-inter text-color-white text-5xl text-center font-extrabold">
@@ -7,12 +31,15 @@ export const Login = () => {
       <p className="text-center text-color-silver-2 mt-1.5 mb-1.5">
         Aprenda idiomas de forma inteligente
       </p>
-      <form action="" className="flex flex-col mt-4">
+      <form onSubmit={handleSubmit} className="flex flex-col mt-4">
         <div className="flex flex-col mb-4">
           <label htmlFor="email">E-mail</label>
           <input
             type="email"
             id="email"
+            value={email}
+            autoComplete="off"
+            onChange={(e) => setEmail(e.target.value)}
             placeholder="seu@email.com"
             className="w-full h-11 rounded-lg p-2.5 border border-transparent outline-none caret-color-white text-white
                     bg-input-bg-main-color focus:bg-input-bg-main-color focus:border focus:border-color-white focus:shadow focus:shadow-color-white/35
@@ -24,6 +51,8 @@ export const Login = () => {
         <input
           type="password"
           id="password"
+          value={password}
+          onChange={(e) => setPassword(e.target.value)}
           autoComplete="off"
           placeholder="********"
           className="w-full h-11 rounded-lg p-2.5 border border-transparent outline-none caret-color-white text-white
@@ -35,7 +64,7 @@ export const Login = () => {
           className="w-full h-11 rounded-lg bg-linear-to-r from-btn-main-color to-second-color text-color-white font-bold 
                     mt-5 hover:brightness-110 active:scale-[0.98] cursor-pointer transition-all duration-300"
         >
-          Enviar
+          {isLoading ? "Autenticando..." : "Enviar"}
         </button>
       </form>
       <div className="flex-col flex-1 items-center text-center mt-5">
