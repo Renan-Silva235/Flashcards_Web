@@ -19,6 +19,7 @@ function* handleLogin(action: LoginRequestAction) {
     return;
   } catch (error: unknown) {
     if (axios.isAxiosError(error)) {
+      console.log("Erro da api: ", error.response?.data.message);
       yield put(loginFailure(error.response?.data?.message));
       toast.error(error.response?.data.message);
       return;

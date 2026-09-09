@@ -1,27 +1,28 @@
-import { useEffect, useState } from "react";
+import { useState, useEffect } from "react";
 import { useDispatch, useSelector } from "react-redux";
-import { useNavigate } from "react-router-dom";
 import { loginRequest } from "../../store/modules/auth/actions";
 import type { RootState } from "../../store/rootReducer";
+import { PATHS } from "../../routes/Routes";
+import { useNavigate } from "react-router-dom";
 
 export const Login = () => {
   const dispatch = useDispatch();
+  const navigate = useNavigate();
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
-  const navigate = useNavigate();
-  const { isLoading, error, isAuthenticated } = useSelector(
+
+  const { isLoading, isAuthenticated } = useSelector(
     (state: RootState) => state.auth,
   );
 
-  const handleSubmit = (event: React.FormEvent) => {
+  const handleSubmit = async (event: React.FormEvent) => {
     event.preventDefault();
-    console.log(email, password);
-    dispatch(loginRequest(email, password));
+    await dispatch(loginRequest(email, password));
   };
 
   useEffect(() => {
-    if (isAuthenticated) navigate("/dashboard");
-  }, [isAuthenticated, navigate, error]);
+    if (isAuthenticated) navigate(PATHS.DASHBOARD);
+  }, [navigate, isAuthenticated]);
 
   return (
     <main className="flex flex-col font-sans w-4xl h-fit m-auto justify-center relative top-52 pl-57.5 pr-57.5">
