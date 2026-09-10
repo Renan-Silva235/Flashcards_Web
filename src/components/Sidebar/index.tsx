@@ -12,7 +12,6 @@ import { Navbar } from "../Navbar";
 
 export const Sidebar = () => {
   const { user } = useSelector((state: RootState) => state.auth);
-  console.log(user?.name);
   return (
     <aside className="flex flex-col  bg-[#070b12] h-screen w-72 p-7 pt-7 text-color-white items-center sticky top-0 ">
       <div className="flex flex-col items-baseline w-full">

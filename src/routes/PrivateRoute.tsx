@@ -9,9 +9,11 @@ export const ProtectedRoute = () => {
   const { isAuthenticated } = useSelector((state: RootState) => state.auth);
 
   return isAuthenticated ? (
-    <div className="flex">
+    <div className="flex min-h-screen">
       <Sidebar />
-      <Outlet />
+      <main className="flex-1 p-20 overflow-y-auto">
+        <Outlet />
+      </main>
     </div>
   ) : (
     <Navigate to={PATHS.LOGIN} replace />
