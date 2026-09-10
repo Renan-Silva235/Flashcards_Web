@@ -7,7 +7,7 @@ import {
   LuChartNoAxesColumn,
 } from "react-icons/lu";
 import { MdOutlineLogout } from "react-icons/md";
-import { Link } from "react-router-dom";
+import { NavLink } from "react-router-dom";
 import { PATHS } from "../../routes/Routes";
 import type { IconType } from "react-icons/lib";
 // import { Dashboard } from "../../pages/Dashboard";
@@ -20,13 +20,20 @@ interface AbasInterface {
 
 const Aba = ({ icon: Icon, name, endpoint }: AbasInterface) => {
   return (
-    <div
-      className="flex items-center justify-start w-full  h-11 mt-2 rounded-lg bg-transparent pl-2
-                      whitespace-nowrap  gap-3 cursor-pointer hover:bg-white/10 transition-all duration-300"
-    >
-      {<Icon />}
-      <Link to={endpoint}>{name}</Link>
-    </div>
+    <NavLink to={endpoint} className="w-full">
+      {({ isActive }) => (
+        <div
+          className={`flex items-center rounded-lg justify-start w-full h-11 mt-2 pl-2 whitespace-nowrap gap-3 cursor-pointer transition-all duration-300 ${
+            isActive
+              ? "bg-btn-main-color text-color-white hover:brightness-50 scale-[0.98]"
+              : "rounded-lg bg-transparent hover:bg-white/10"
+          }`}
+        >
+          <Icon />
+          <span>{name}</span>
+        </div>
+      )}
+    </NavLink>
   );
 };
 
@@ -45,12 +52,12 @@ export const Sidebar = () => {
       </div>
       <div className="flex-1 flex-col mt-14 w-full text-center">
         <Aba icon={LuGrid3X3} name="Dashboard" endpoint={PATHS.DASHBOARD} />
-        <Aba icon={LuCirclePlus} name="Novo Deck" endpoint={PATHS.DASHBOARD} />
-        <Aba icon={LuBookOpen} name="Estudar" endpoint={PATHS.DASHBOARD} />
+        <Aba icon={LuCirclePlus} name="Novo Deck" endpoint={PATHS.NEW_DECK} />
+        <Aba icon={LuBookOpen} name="Estudar" endpoint={PATHS.STUDY_SESSION} />
         <Aba
           icon={LuChartNoAxesColumn}
           name="Estatísticas"
-          endpoint={PATHS.DASHBOARD}
+          endpoint={PATHS.STATISTICS}
         />
       </div>
       <Aba icon={MdOutlineLogout} name="Logout" endpoint={PATHS.DASHBOARD} />
