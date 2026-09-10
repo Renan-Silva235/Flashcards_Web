@@ -10,7 +10,6 @@ import { MdOutlineLogout } from "react-icons/md";
 import { NavLink } from "react-router-dom";
 import { PATHS } from "../../routes/Routes";
 import type { IconType } from "react-icons/lib";
-// import { Dashboard } from "../../pages/Dashboard";
 
 interface AbasInterface {
   icon: IconType;
@@ -60,7 +59,7 @@ export const Sidebar = () => {
           endpoint={PATHS.STATISTICS}
         />
       </div>
-      <Aba icon={MdOutlineLogout} name="Logout" endpoint={PATHS.DASHBOARD} />
+      <Aba icon={MdOutlineLogout} name="Logout" endpoint={""} />
     </aside>
   );
 };
