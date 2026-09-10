@@ -13,8 +13,7 @@ function* handleLogin(action: LoginRequestAction) {
       email: action.payload.email,
       password: action.payload.password,
     });
-
-    yield put(loginSuccess(response.data));
+    yield put(loginSuccess(response.data.user));
     toast.success("Login realizado com sucesso.");
     return;
   } catch (error: unknown) {

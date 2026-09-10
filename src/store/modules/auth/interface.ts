@@ -1,13 +1,14 @@
 import * as types from "./types";
 import type { Action } from "@reduxjs/toolkit";
 
-export interface LoginRequestInterface {
+export interface LoginResponseInterface {
+  id: number;
+  name: string;
   email: string;
-  password: string;
 }
 
 export interface AuthState {
-  user: LoginRequestInterface | null;
+  user: LoginResponseInterface | null;
   isLoading: boolean;
   isAuthenticated: boolean;
   error: string | null;
@@ -22,7 +23,7 @@ export interface LoginRequestAction extends Action<string> {
 
 export interface LoginSuccessAction extends Action<string> {
   type: typeof types.LOGIN_SUCCESS;
-  payload: { user: LoginRequestInterface };
+  payload: { user: LoginResponseInterface };
   [key: string]: unknown;
 }
 

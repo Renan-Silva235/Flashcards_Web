@@ -2,7 +2,7 @@
 @import "tailwindcss";
 
 @theme {
-  --color-main-color: #151e31;
+  --color-main-color: #161f32;
   --color-second-color: #2660e9;
   --color-btn-main-color: #387ef5;
   --color-color-white: #e2e8f0;
@@ -18,8 +18,7 @@
   --color-btn-main-color-hover: #6b9ae5;
 
   /*fontes*/
-  --font-sans: "Inter", sans-serif;
-  --font-inter: "Inter", sans-serif;
+  --font-sans: "Plus Jakarta Sans", sans-serif;
 }
 
 body {

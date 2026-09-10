@@ -1,9 +1,9 @@
 import * as types from "./types";
 import type {
-  LoginRequestInterface,
   LoginSuccessAction,
   LoginRequestAction,
   LoginFailureAction,
+  LoginResponseInterface,
 } from "./interface";
 
 export const loginRequest = (
@@ -15,7 +15,7 @@ export const loginRequest = (
 });
 
 export const loginSuccess = (
-  user: LoginRequestInterface,
+  user: LoginResponseInterface,
 ): LoginSuccessAction => ({
   type: types.LOGIN_SUCCESS,
   payload: { user },
