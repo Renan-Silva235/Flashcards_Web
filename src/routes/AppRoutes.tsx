@@ -13,6 +13,9 @@ export const AppRoutes = () => {
 
       <Route element={<ProtectedRoute />}>
         <Route path={PATHS.DASHBOARD} element={<Dashboard />} />
+        <Route path={PATHS.NEW_DECK} element={<Dashboard />} />
+        <Route path={PATHS.STUDY_SESSION} element={<Dashboard />} />
+        <Route path={PATHS.STATISTICS} element={<Dashboard />} />
       </Route>
     </Routes>
   );
