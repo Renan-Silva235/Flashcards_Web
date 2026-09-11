@@ -1,11 +1,12 @@
 import { useState } from "react";
 import { HiChevronDown } from "react-icons/hi";
 import {
-  getLanguageFlag,
+  // getLanguageFlag,
   getLanguageLabel,
   languageOptions,
 } from "../../utils/languages";
 import { CardsStatistic } from "../../components/CardsStatistic";
+import { CardsDeck } from "../../components/CardsDeck";
 
 export const Dashboard = () => {
   const [selectedLanguage, setSelectedLanguage] = useState<string>("English");
@@ -50,7 +51,7 @@ export const Dashboard = () => {
         </div>
       </div>
 
-      <div className="flex mt-11 w-full justify-center">
+      <div className="flex flex-wrap mt-11 w-full justify-center">
         <CardsStatistic />
       </div>
 
@@ -64,6 +65,27 @@ export const Dashboard = () => {
                       autofill:bg-input-bg-main-color"
           />
         </div>
+      </div>
+
+      <div className="flex flex-wrap gap-5 mt-10 justify-center">
+        <CardsDeck
+          category="English"
+          title="Verbos"
+          counter={8}
+          description="Verbos sss"
+        />
+        <CardsDeck
+          category="English"
+          title="Verbos"
+          counter={8}
+          description="Verbos sss"
+        />
+        <CardsDeck
+          category="English"
+          title="Verbos"
+          counter={8}
+          description="Verbos sss"
+        />
       </div>
     </>
   );
