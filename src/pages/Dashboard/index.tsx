@@ -1,3 +1,4 @@
+import { useSelector } from "react-redux";
 import { useState } from "react";
 import { HiChevronDown } from "react-icons/hi";
 import {
@@ -6,7 +7,8 @@ import {
   languageOptions,
 } from "../../utils/languages";
 import { CardsStatistic } from "../../components/CardsStatistic";
-import { CardsDeck } from "../../components/CardsDeck";
+import { DeckList } from "./DeckList";
+import type { RootState } from "../../store/rootReducer";
 
 export const Dashboard = () => {
   const [selectedLanguage, setSelectedLanguage] = useState<string>("English");
@@ -14,6 +16,8 @@ export const Dashboard = () => {
   const handleChange = (event: React.ChangeEvent<HTMLSelectElement>) => {
     setSelectedLanguage(event.target.value);
   };
+
+  const { user } = useSelector((state: RootState) => state.auth);
 
   return (
     <>
@@ -67,26 +71,7 @@ export const Dashboard = () => {
         </div>
       </div>
 
-      <div className="flex flex-wrap gap-5 mt-10 justify-center">
-        <CardsDeck
-          category="English"
-          title="Verbos"
-          counter={8}
-          description="Verbos sss"
-        />
-        <CardsDeck
-          category="English"
-          title="Verbos"
-          counter={8}
-          description="Verbos sss"
-        />
-        <CardsDeck
-          category="English"
-          title="Verbos"
-          counter={8}
-          description="Verbos sss"
-        />
-      </div>
+      <DeckList userId={user?.id} />
     </>
   );
 };
