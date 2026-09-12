@@ -56,7 +56,7 @@ export const Dashboard = () => {
       </div>
 
       <div className="flex flex-wrap mt-11 w-full justify-center">
-        <CardsStatistic />
+        <CardsStatistic selectedLanguage={selectedLanguage} />
       </div>
 
       <div className="w-96">
