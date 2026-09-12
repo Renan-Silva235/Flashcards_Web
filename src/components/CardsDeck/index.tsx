@@ -1,3 +1,5 @@
+import { getLanguageLabel } from "../../utils/languages";
+
 interface Metadata {
   language: string;
   title: string;
@@ -13,7 +15,7 @@ export const CardsDeck = ({ language, title, category, counter }: Metadata) => {
                   transition-transform duration-300 hover:scale-105 hover:-translate-y-2 cursor-pointer"
     >
       <p className="font-sans tracking-wider uppercase font-bold text-second-color">
-        {language}
+        {getLanguageLabel(language)} {language}
       </p>
       <div className="flex justify-between items-center">
         <h1 className="font-bold text-color-white text-4xl">{title}</h1>
