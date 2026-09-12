@@ -6,7 +6,7 @@ import {
   getLanguageLabel,
   languageOptions,
 } from "../../utils/languages";
-import { CardsStatistic } from "../../components/CardsStatistic";
+import { CardsStatistic } from "./CardsStatistic";
 import { DeckList } from "./DeckList";
 import type { RootState } from "../../store/rootReducer";
 

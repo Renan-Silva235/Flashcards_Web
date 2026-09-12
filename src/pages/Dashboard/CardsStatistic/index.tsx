@@ -1,7 +1,7 @@
 import { useEffect, useState } from "react";
-import api from "../../config/api";
+import api from "../../../config/api";
 import axios, { type AxiosResponse } from "axios";
-import { Loading } from "../Loading";
+import { Loading } from "../../../components/Loading";
 
 interface StatisticsData {
   totalCards: number;
