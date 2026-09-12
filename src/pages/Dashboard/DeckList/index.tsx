@@ -11,6 +11,10 @@ interface DeckListProps {
   selectedLanguage: string;
 }
 
+const DeckNotFound = ({ msg }: { msg: string }) => {
+  return <p className="flex text-color-silver-2 justify-center mt-8">{msg}</p>;
+};
+
 export const DeckList = ({
   userId,
   searchTerm,
@@ -27,10 +31,7 @@ export const DeckList = ({
 
   if (isLoading) return <Loading />;
 
-  if (decks == null)
-    return (
-      <p className="text-color-silver-2 ">Nenhum deck criado no momento.</p>
-    );
+  if (decks == null) return <DeckNotFound msg="Nenhum deck encontrado" />;
 
   const filteredDeck = decks.filter((deck) => {
     const term = searchTerm.toLocaleLowerCase();
@@ -51,7 +52,7 @@ export const DeckList = ({
   });
 
   if (filteredDeck.length == 0) {
-    return <p className="text-color-silver-2 mt-5">Nenhum deck encontrado.</p>;
+    return <DeckNotFound msg="Nenhum deck encontrado." />;
   }
 
   return (
