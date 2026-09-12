@@ -12,6 +12,7 @@ import type { RootState } from "../../store/rootReducer";
 
 export const Dashboard = () => {
   const [selectedLanguage, setSelectedLanguage] = useState<string>("English");
+  const [searchTerm, setSearchTerm] = useState<string>("");
 
   const handleChange = (event: React.ChangeEvent<HTMLSelectElement>) => {
     setSelectedLanguage(event.target.value);
@@ -64,6 +65,8 @@ export const Dashboard = () => {
           <input
             type="text"
             placeholder="pesquisar"
+            value={searchTerm}
+            onChange={(e) => setSearchTerm(e.target.value)}
             className="w-full h-11 rounded-lg p-2.5 border border-transparent outline-none caret-color-white text-white
                     bg-input-bg-main-color focus:bg-input-bg-main-color focus:border focus:border-color-white focus:shadow focus:shadow-color-white/35
                       autofill:bg-input-bg-main-color"
@@ -71,7 +74,7 @@ export const Dashboard = () => {
         </div>
       </div>
 
-      <DeckList userId={user?.id} />
+      <DeckList userId={user?.id} searchTerm={searchTerm} />
     </>
   );
 };
