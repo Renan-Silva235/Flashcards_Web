@@ -8,9 +8,14 @@ import { CardsDeck } from "../../../components/CardsDeck";
 interface DeckListProps {
   userId: number | undefined;
   searchTerm: string;
+  selectedLanguage: string;
 }
 
-export const DeckList = ({ userId, searchTerm }: DeckListProps) => {
+export const DeckList = ({
+  userId,
+  searchTerm,
+  selectedLanguage,
+}: DeckListProps) => {
   const dispatch = useDispatch();
 
   const { decks, isLoading } = useSelector((state: RootState) => state.deck);
@@ -29,10 +34,20 @@ export const DeckList = ({ userId, searchTerm }: DeckListProps) => {
 
   const filteredDeck = decks.filter((deck) => {
     const term = searchTerm.toLocaleLowerCase();
-    return (
+
+    const matchesSearch =
       deck.name.toLocaleLowerCase().includes(term) ||
-      deck.category.toLocaleLowerCase().includes(term)
-    );
+      deck.category.toLocaleLowerCase().includes(term);
+
+    const selectedUpper = selectedLanguage.toUpperCase();
+    const deckLangUpper = deck.language.toUpperCase();
+
+    const matchesLanguage =
+      selectedUpper === "ALL" ||
+      selectedUpper === "TODOS" ||
+      deckLangUpper === selectedUpper;
+
+    return matchesSearch && matchesLanguage;
   });
 
   if (filteredDeck.length == 0) {

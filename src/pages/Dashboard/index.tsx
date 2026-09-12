@@ -1,22 +1,13 @@
 import { useSelector } from "react-redux";
 import { useState } from "react";
-import { HiChevronDown } from "react-icons/hi";
-import {
-  // getLanguageFlag,
-  getLanguageLabel,
-  languageOptions,
-} from "../../utils/languages";
 import { CardsStatistic } from "./CardsStatistic";
 import { DeckList } from "./DeckList";
 import type { RootState } from "../../store/rootReducer";
+import { LanguageDropdown } from "./LanguageDropdown";
 
 export const Dashboard = () => {
   const [selectedLanguage, setSelectedLanguage] = useState<string>("English");
   const [searchTerm, setSearchTerm] = useState<string>("");
-
-  const handleChange = (event: React.ChangeEvent<HTMLSelectElement>) => {
-    setSelectedLanguage(event.target.value);
-  };
 
   const { user } = useSelector((state: RootState) => state.auth);
 
@@ -32,27 +23,10 @@ export const Dashboard = () => {
           </p>
         </div>
         <div className="flex flex-1 justify-end">
-          <div className="relative w-48">
-            <label
-              htmlFor="languages"
-              className="flex border-2 w-full h-14 gap-2 justify-center items-center bg-linear-to-r from-btn-main-color to-second-color 
-            text-color-white font-medium p-2 rounded-lg pointer-events-none"
-            >
-              {getLanguageLabel(selectedLanguage)} <HiChevronDown />
-            </label>
-            <select
-              id="languages"
-              value={selectedLanguage}
-              onChange={handleChange}
-              className="absolute inset-0 w-full h-full opacity-0 cursor-pointer"
-            >
-              {languageOptions.map((language) => (
-                <option key={language.id} value={language.value}>
-                  {language.label}
-                </option>
-              ))}
-            </select>
-          </div>
+          <LanguageDropdown
+            selectedLanguage={selectedLanguage}
+            onChange={(language) => setSelectedLanguage(language)}
+          />
         </div>
       </div>
 
@@ -74,7 +48,11 @@ export const Dashboard = () => {
         </div>
       </div>
 
-      <DeckList userId={user?.id} searchTerm={searchTerm} />
+      <DeckList
+        userId={user?.id}
+        searchTerm={searchTerm}
+        selectedLanguage={selectedLanguage}
+      />
     </>
   );
 };
