@@ -4,16 +4,13 @@ import type { RootState } from "../../../store/rootReducer";
 import { deckRequestAction } from "../../../store/modules/decks/actions";
 import { Loading } from "../../../components/Loading";
 import { CardsDeck } from "../../../components/CardsDeck";
+import { NotFound } from "../../../components/NotFound";
 
 interface DeckListProps {
   userId: number | undefined;
   searchTerm: string;
   selectedLanguage: string;
 }
-
-const DeckNotFound = ({ msg }: { msg: string }) => {
-  return <p className="flex text-color-silver-2 justify-center mt-8">{msg}</p>;
-};
 
 export const DeckList = ({
   userId,
@@ -27,11 +24,10 @@ export const DeckList = ({
   useEffect(() => {
     if (userId) dispatch(deckRequestAction(userId));
   }, [dispatch, userId]);
-  console.log("Deck: ", decks);
 
   if (isLoading) return <Loading />;
 
-  if (decks == null) return <DeckNotFound msg="Nenhum deck encontrado" />;
+  if (decks == null) return <NotFound msg="Nenhum deck encontrado" />;
 
   const filteredDeck = decks.filter((deck) => {
     const term = searchTerm.toLocaleLowerCase();
@@ -52,7 +48,7 @@ export const DeckList = ({
   });
 
   if (filteredDeck.length == 0) {
-    return <DeckNotFound msg="Nenhum deck encontrado." />;
+    return <NotFound msg="Nenhum deck encontrado." />;
   }
 
   return (
@@ -60,6 +56,7 @@ export const DeckList = ({
       {filteredDeck.map((deck) => (
         <CardsDeck
           key={deck.id}
+          id={deck.id}
           language={deck.language}
           title={deck.name}
           category={deck.category}
