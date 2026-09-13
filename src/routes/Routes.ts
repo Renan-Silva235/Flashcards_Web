@@ -4,5 +4,6 @@ export const PATHS = {
   DASHBOARD: "/dashboard",
   NEW_DECK: "/new-deck",
   STUDY_SESSION: "/study-session",
-  STATISTICS: "statistics",
+  STATISTICS: "/statistics",
+  FLASHCARDS: "/flashcards",
 };
