@@ -4,6 +4,7 @@ import { Home } from "../pages/Home";
 import { Login } from "../pages/Login";
 import { Dashboard } from "../pages/Dashboard";
 import { ProtectedRoute } from "./PrivateRoute";
+import { Flashcards } from "../pages/Flashcards";
 
 export const AppRoutes = () => {
   return (
@@ -16,6 +17,7 @@ export const AppRoutes = () => {
         <Route path={PATHS.NEW_DECK} element={<Dashboard />} />
         <Route path={PATHS.STUDY_SESSION} element={<Dashboard />} />
         <Route path={PATHS.STATISTICS} element={<Dashboard />} />
+        <Route path={PATHS.FLASHCARDS} element={<Flashcards />} />
       </Route>
     </Routes>
   );
