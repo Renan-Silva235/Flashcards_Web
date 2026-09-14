@@ -2,7 +2,7 @@ import type { Action } from "@reduxjs/toolkit";
 import * as types from "./types";
 
 export interface FlashcardResponseApi {
-  id: number;
+  id?: number;
   word: string;
   translation: string;
   past: string;

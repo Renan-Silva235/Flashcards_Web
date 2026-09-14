@@ -63,7 +63,7 @@ export const Flashcards = () => {
       </div>
       <FlashcardList deckId={deckId} searchTerm={searchTerm} />
       <Modal isOpen={isModalOpen} onClose={() => setIsModalOpen(false)}>
-        <CreateCardComponent />
+        <CreateCardComponent onClose={() => setIsModalOpen(false)} />
       </Modal>
     </>
   );
