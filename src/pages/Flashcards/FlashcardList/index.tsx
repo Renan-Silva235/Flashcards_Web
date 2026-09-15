@@ -23,7 +23,7 @@ export const FlashcardList = ({ deckId, searchTerm }: FlashcardListProps) => {
   }, [dispatch, deckId]);
 
   if (isLoading) return <Loading />;
-  if (!flashcards) return <NotFound msg="Nenhum card encontrado." />;
+  if (flashcards == null) return;
 
   const filteredFlashcard = flashcards.filter(
     (flashcard: FlashcardResponseApi) => {
@@ -32,8 +32,17 @@ export const FlashcardList = ({ deckId, searchTerm }: FlashcardListProps) => {
     },
   );
 
+  if (filteredFlashcard.length === 0 && searchTerm.trim() !== "")
+    return <NotFound msg="Nenhum Card encontrado" isFilterSearch={true} />;
+
   if (filteredFlashcard.length === 0)
-    return <NotFound msg="Nenhum Card encontrado" />;
+    return (
+      <NotFound
+        msg="Nenhum Card encontrado"
+        context="Crie o seu primeiro card para começar a estudar."
+        isFilterSearch={false}
+      />
+    );
 
   return (
     <div className="w-full flex flex-wrap gap-5 mt-10 justify-center">

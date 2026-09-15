@@ -27,7 +27,7 @@ export const DeckList = ({
 
   if (isLoading) return <Loading />;
 
-  if (decks == null) return <NotFound msg="Nenhum deck encontrado" />;
+  if (decks === null) return;
 
   const filteredDeck = decks.filter((deck) => {
     const term = searchTerm.toLocaleLowerCase();
@@ -47,9 +47,18 @@ export const DeckList = ({
     return matchesSearch && matchesLanguage;
   });
 
-  if (filteredDeck.length == 0) {
-    return <NotFound msg="Nenhum deck encontrado." />;
+  if (filteredDeck.length == 0 && searchTerm.trim() !== "") {
+    return <NotFound msg="Nenhum deck encontrado." isFilterSearch={true} />;
   }
+
+  if (filteredDeck.length === 0)
+    return (
+      <NotFound
+        msg="Nenhum deck encontrado"
+        context="Crie seus Decks para começar a estruturar seus flashcards."
+        isFilterSearch={false}
+      />
+    );
 
   return (
     <div className="flex flex-wrap gap-5 mt-10 justify-center">
