@@ -31,9 +31,11 @@ export const CreateDeckComponent = () => {
         if (response.data) {
           toast.success("Deck criado com sucesso");
           dispatch(deckRequestAction(user?.id));
-          return;
         }
       }
+
+      setName("");
+      setCategory("");
     } catch (error: unknown) {
       if (axios.isAxiosError(error)) {
         error.response?.data.forEach((erro: AxiosError) =>
