@@ -5,6 +5,7 @@ import { Login } from "../pages/Login";
 import { Dashboard } from "../pages/Dashboard";
 import { ProtectedRoute } from "./PrivateRoute";
 import { Flashcards } from "../pages/Flashcards";
+import { CreateDeckComponent } from "../pages/Dashboard/CreateDeck";
 
 export const AppRoutes = () => {
   return (
@@ -18,6 +19,7 @@ export const AppRoutes = () => {
         <Route path={PATHS.STUDY_SESSION} element={<Dashboard />} />
         <Route path={PATHS.STATISTICS} element={<Dashboard />} />
         <Route path={PATHS.FLASHCARDS} element={<Flashcards />} />
+        <Route path={PATHS.DECK_CREATE} element={<CreateDeckComponent />} />
       </Route>
     </Routes>
   );

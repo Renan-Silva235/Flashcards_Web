@@ -27,7 +27,7 @@ export const Sidebar = () => {
         <Navbar
           icon={LuCirclePlus}
           name="Novo Deck"
-          endpoint={PATHS.NEW_DECK}
+          endpoint={PATHS.DECK_CREATE}
         />
         <Navbar
           icon={LuBookOpen}

@@ -6,4 +6,5 @@ export const PATHS = {
   STUDY_SESSION: "/study-session",
   STATISTICS: "/statistics",
   FLASHCARDS: "/flashcards",
+  DECK_CREATE: "/deck/create",
 };
