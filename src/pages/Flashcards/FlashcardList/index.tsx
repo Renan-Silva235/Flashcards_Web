@@ -38,18 +38,7 @@ export const FlashcardList = ({ deckId, searchTerm }: FlashcardListProps) => {
   return (
     <div className="w-full flex flex-wrap gap-5 mt-10 justify-center">
       {filteredFlashcard.map((flashcard: FlashcardResponseApi) => (
-        <CardComponent
-          key={flashcard.id}
-          id={flashcard.id}
-          word={flashcard.word}
-          translation={flashcard.translation}
-          past={flashcard.past}
-          present={flashcard.present}
-          future={flashcard.future}
-          examplePhrase1={flashcard.examplePhrase1}
-          examplePhrase2={flashcard.examplePhrase2}
-          examplePhrase3={flashcard.examplePhrase3}
-        />
+        <CardComponent key={flashcard.id} mode="view" data={flashcard} />
       ))}
     </div>
   );
