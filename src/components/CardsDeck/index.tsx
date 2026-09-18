@@ -28,7 +28,7 @@ export const CardsDeck = ({
     <div
       className="flex flex-col justify-between overflow-hidden h-60 border border-color-white rounded-lg w-96 p-7 
                   bg-linear-to-r from-color-white/10 to-main-color shadow-lg shadow-black/50
-                  transition-transform duration-300 hover:scale-105 hover:-translate-y-2 cursor-pointer"
+                  transition-transform duration-300 hover:scale-100 hover:-translate-y-2 cursor-pointer"
     >
       <p className="font-sans tracking-wider uppercase font-bold text-second-color">
         {getLanguageFlag(language)} {language}
