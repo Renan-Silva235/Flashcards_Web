@@ -99,24 +99,9 @@ export const CreateCardComponent = ({ onClose }: CreateCardComponentProps) => {
           examplePhrase3: phrase3,
         }}
         onChange={onChangeField}
+        textButton="Criar Card"
+        onClose={onClose}
       />
-      <div className="w-full flex items-center justify-between">
-        <button
-          type="button"
-          onClick={onClose}
-          className="flex mt-3.5 bg-color-white rounded-lg w-40 
-                    justify-center h-11 cursor-pointer items-center hover:brightness-110"
-        >
-          Cancelar
-        </button>
-        <button
-          type="submit"
-          className="flex mt-3.5 bg-color-yellow-1 rounded-lg w-40 
-                    justify-center h-11 cursor-pointer items-center hover:brightness-110"
-        >
-          Criar Card
-        </button>
-      </div>
     </form>
   );
 };

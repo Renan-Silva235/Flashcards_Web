@@ -8,9 +8,17 @@ interface CardComponentProps {
   mode: "view" | "form";
   data: FlashcardResponseApi;
   onChange?: (field: keyof FlashcardResponseApi, value: string) => void;
+  textButton?: string;
+  onClose?: () => void;
 }
 
-export const CardComponent = ({ mode, data, onChange }: CardComponentProps) => {
+export const CardComponent = ({
+  mode,
+  data,
+  onChange,
+  textButton,
+  onClose,
+}: CardComponentProps) => {
   const [isModalOpen, setIsModalOpen] = useState<boolean>(false);
 
   //pegar as referências dos inputs
@@ -205,18 +213,27 @@ export const CardComponent = ({ mode, data, onChange }: CardComponentProps) => {
               Visualizar
             </button>
           ) : (
-            <button
-              // onClick={() => setIsModalOpen(false)}
-              className="flex mt-3.5 bg-color-white rounded-lg w-40 
-                    justify-center  h-11 cursor-pointer items-center hover:brightness-110"
-            >
-              Fechar
-            </button>
+            <div className="flex w-full mt-3.5 justify-between gap-4 items-center whitespace-nowrap">
+              <button
+                type="submit"
+                className="bg-color-yellow-1 w-40 h-11 rounded-lg cursor-pointer hover:brightness-110 scale-[0.98] transition-all duration-50"
+              >
+                {textButton}
+              </button>
+              <button
+                type="button"
+                onClick={onClose}
+                className="flex  bg-color-white rounded-lg w-40 
+              justify-center h-11 cursor-pointer items-center hover:brightness-110"
+              >
+                Fechar
+              </button>
+            </div>
           )}
         </div>
       </div>
       <Modal isOpen={isModalOpen} onClose={() => setIsModalOpen(false)}>
-        <ShowCard data={data} />
+        <ShowCard data={data} onClose={() => setIsModalOpen(false)} />
       </Modal>
     </>
   );

@@ -61,7 +61,6 @@ export const CardsStatistic = ({ selectedLanguage }: CardsStatisticProps) => {
     fetchStatistics();
   }, [selectedLanguage]);
 
-  console.log(stats);
   if (isLoading) return <Loading />;
 
   return (
