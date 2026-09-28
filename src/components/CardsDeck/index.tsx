@@ -35,7 +35,7 @@ export const CardsDeck = ({
       </p>
       <div className="flex justify-between items-center">
         <h1 className="font-bold text-color-white text-4xl">{title}</h1>
-        <div className="flex flex-col items-end">
+        <div className="flex flex-col items-center">
           <p className=" text-second-color text-2xl">{counter}</p>
           <p className="text-color-silver-2 text-base">cards</p>
         </div>
