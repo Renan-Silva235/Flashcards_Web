@@ -2,7 +2,8 @@ import React, { useRef, useState } from "react";
 import { Modal } from "../../../components/Modal";
 import type { FlashcardResponseApi } from "../../../store/modules/flashcards/interface";
 import { ShowCard } from "../ShowCard";
-// import { ShowCard } from "../ShowCard";
+import { MdDeleteOutline } from "react-icons/md";
+import { DeleteFlashCard } from "../DeleteFlashcard";
 
 interface CardComponentProps {
   mode: "view" | "form";
@@ -20,6 +21,7 @@ export const CardComponent = ({
   onClose,
 }: CardComponentProps) => {
   const [isModalOpen, setIsModalOpen] = useState<boolean>(false);
+  const [isDeleteModalOpen, setIsDeleteModalOpen] = useState<boolean>(false);
 
   //pegar as referências dos inputs
   const wordRef = useRef<HTMLInputElement>(null);
@@ -60,10 +62,14 @@ export const CardComponent = ({
       <div
         className={
           mode === "view"
-            ? "w-96 mt-7 h-fit border border-color-white rounded-lg bg-linear-to-r from-color-white/10 to-main-color shadow-lg shadow-black/50 transition-transform duration-300 hover:scale-100 hover:-translate-y-2 cursor-pointer p-6"
-            : "w-96 mt-7 h-fit border border-color-white rounded-lg bg-linear-to-r from-color-white/10 to-main-color shadow-lg shadow-black/50  cursor-pointer p-6"
+            ? "w-96 mt-7 h-fit border border-color-white rounded-lg bg-linear-to-r from-color-white/10 to-main-color shadow-lg shadow-black/50 transition-transform duration-300 hover:scale-100 hover:-translate-y-2 p-6"
+            : "w-96 mt-7 h-fit border border-color-white rounded-lg bg-linear-to-r from-color-white/10 to-main-color shadow-lg shadow-black/50  p-6"
         }
       >
+        <button onClick={() => setIsDeleteModalOpen(true)}>
+          <MdDeleteOutline className="text-2xl text-color-red-1 cursor-pointer hover:brightness-120 transition-all duration-200" />
+        </button>
+
         {mode === "view" ? (
           <p className="text-center text-color-white text-4xl">{data.word}</p>
         ) : (
@@ -234,6 +240,15 @@ export const CardComponent = ({
       </div>
       <Modal isOpen={isModalOpen} onClose={() => setIsModalOpen(false)}>
         <ShowCard data={data} onClose={() => setIsModalOpen(false)} />
+      </Modal>
+      <Modal
+        isOpen={isDeleteModalOpen}
+        onClose={() => setIsDeleteModalOpen(false)}
+      >
+        <DeleteFlashCard
+          onClose={() => setIsDeleteModalOpen(false)}
+          flashcardId={data.id}
+        />
       </Modal>
     </>
   );

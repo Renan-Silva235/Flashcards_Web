@@ -66,7 +66,6 @@ export const ShowCard = ({ data, onClose }: ShowCardProps) => {
       }
     } catch (error: unknown) {
       if (axios.isAxiosError(error)) {
-        console.log("erro de novo: ", error.response);
         error.response?.data.forEach((erro: AxiosError) =>
           toast.error(erro.message),
         );
