@@ -7,7 +7,7 @@ import type {
 } from "./interface";
 
 // Actions que busca os decks criados.
-export const deckRequestAction = (userId: number): DeckRequestAction => {
+export const deckRequestAction = (userId: string): DeckRequestAction => {
   return {
     type: types.DECK_REQUEST,
     payload: { userId },

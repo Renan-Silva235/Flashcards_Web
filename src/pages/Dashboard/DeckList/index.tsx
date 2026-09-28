@@ -7,7 +7,7 @@ import { CardsDeck } from "../../../components/CardsDeck";
 import { NotFound } from "../../../components/NotFound";
 
 interface DeckListProps {
-  userId: number | undefined;
+  userId: string | undefined;
   searchTerm: string;
   selectedLanguage: string;
 }
@@ -69,7 +69,7 @@ export const DeckList = ({
           language={deck.language}
           title={deck.name}
           category={deck.category}
-          counter={0}
+          counter={deck.cardsCount}
         />
       ))}
     </div>

@@ -2,7 +2,7 @@ import * as types from "./types";
 import type { Action } from "@reduxjs/toolkit";
 
 export interface LoginResponseInterface {
-  id: number;
+  id: string;
   name: string;
   email: string;
 }

@@ -3,9 +3,11 @@ import api from "../../../config/api";
 import axios, { type AxiosResponse, AxiosError } from "axios";
 import { toast } from "react-toastify";
 import { useSearchParams } from "react-router-dom";
-import { useDispatch } from "react-redux";
 import { flashcardRequestAction } from "../../../store/modules/flashcards/actions";
 import { CardComponent } from "../CardComponent";
+import { useDispatch, useSelector } from "react-redux";
+import type { RootState } from "../../../store/rootReducer";
+import { deckRequestAction } from "../../../store/modules/decks/actions";
 
 interface CreateCardComponentProps {
   onClose: () => void;
@@ -23,6 +25,7 @@ export const CreateCardComponent = ({ onClose }: CreateCardComponentProps) => {
   const [searchParams] = useSearchParams();
   const deckId = searchParams.get("deckId");
   const dispatch = useDispatch();
+  const { user } = useSelector((state: RootState) => state.auth);
 
   const onChangeField = (field: string, value: string) => {
     if (field === "word") setWord(value);
@@ -52,7 +55,7 @@ export const CreateCardComponent = ({ onClose }: CreateCardComponentProps) => {
   const handleSubmit = async (event: React.FormEvent<HTMLFormElement>) => {
     event.preventDefault();
     try {
-      if (deckId) {
+      if (deckId && user) {
         const response: AxiosResponse = await api.post(
           "/flashcards",
           flashcardPayload,
@@ -61,6 +64,7 @@ export const CreateCardComponent = ({ onClose }: CreateCardComponentProps) => {
         if (response) {
           toast.success("Card Criado com sucesso.");
           dispatch(flashcardRequestAction(deckId));
+          dispatch(deckRequestAction(user.id));
         }
 
         setWord("");

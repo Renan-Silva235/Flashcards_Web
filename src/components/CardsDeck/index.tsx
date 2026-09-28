@@ -3,7 +3,7 @@ import { getLanguageFlag } from "../../utils/languages";
 import { PATHS } from "../../routes/Routes";
 
 interface Metadata {
-  id?: number | null;
+  id?: string | null;
   language: string;
   title: string;
   category: string;

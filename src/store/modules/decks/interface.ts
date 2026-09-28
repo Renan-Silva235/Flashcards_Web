@@ -2,10 +2,11 @@ import * as types from "./types";
 import type { Action } from "@reduxjs/toolkit";
 
 export interface DeckResponseInterface {
-  id: number;
+  id: string;
   name: string;
   language: string;
   category: string;
+  cardsCount: number;
 }
 
 export interface DeckState {
@@ -16,7 +17,7 @@ export interface DeckState {
 
 export interface DeckRequestAction extends Action {
   type: typeof types.DECK_REQUEST;
-  payload: { userId: number };
+  payload: { userId: string };
   [key: string]: unknown;
 }
 

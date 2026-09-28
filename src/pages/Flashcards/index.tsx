@@ -1,4 +1,4 @@
-import { useState } from "react";
+import { useState, useEffect } from "react";
 import { useSearchParams } from "react-router-dom";
 import { Link } from "react-router-dom";
 import { IoIosReturnLeft } from "react-icons/io";
@@ -7,6 +7,9 @@ import { HiOutlinePlusSmall } from "react-icons/hi2";
 import { FlashcardList } from "./FlashcardList";
 import { Modal } from "../../components/Modal";
 import { CreateCardComponent } from "./CreateCardComponent";
+import { useDispatch, useSelector } from "react-redux";
+import type { RootState } from "../../store/rootReducer";
+import { deckRequestAction } from "../../store/modules/decks/actions";
 
 export const Flashcards = () => {
   const [searchParams] = useSearchParams();
@@ -14,6 +17,14 @@ export const Flashcards = () => {
   const deckId = searchParams.get("deckId");
   const [searchTerm, setSearchTerm] = useState<string>("");
   const [isModalOpen, setIsModalOpen] = useState(false);
+  const dispatch = useDispatch();
+  const { decks } = useSelector((state: RootState) => state.deck);
+  const { user } = useSelector((state: RootState) => state.auth);
+  const currentDeck = (decks ?? []).find((deck) => deck.id === deckId);
+
+  useEffect(() => {
+    if (user?.id) dispatch(deckRequestAction(user.id));
+  }, [dispatch, user]);
   return (
     <>
       <div className="flex flex-col w-full">
@@ -27,7 +38,9 @@ export const Flashcards = () => {
         <div className="flex mt-10 justify-between">
           <h1 className="text-color-white font-bold text-5xl">{deckName}</h1>
           <div className="flex flex-col items-center">
-            <p className="text-second-color text-5xl">0</p>
+            <p className="text-second-color text-5xl">
+              {currentDeck?.cardsCount ?? 0}
+            </p>
             <p className="text-color-silver-2 text-3xl">cards</p>
           </div>
         </div>
