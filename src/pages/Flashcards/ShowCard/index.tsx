@@ -52,7 +52,6 @@ export const ShowCard = ({ data, onClose }: ShowCardProps) => {
   };
   const handleSubmit = async (event: React.FormEvent<HTMLFormElement>) => {
     event.preventDefault();
-    console.log("PAYLOAD:", dataToUpdatePayload);
     try {
       if (data.id && deckId) {
         const response: AxiosResponse = await api.put(

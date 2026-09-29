@@ -21,7 +21,7 @@ export const CardsDeck = ({
 
   const handleOpenDeck = () => {
     navigate(
-      `${PATHS.FLASHCARDS}?deckId=${id}&deckName=${encodeURIComponent(title)}`,
+      `${PATHS.FLASHCARDS}?deckId=${id}&deckName=${encodeURIComponent(title)}&deckLanguage=${language}`,
     );
   };
   return (

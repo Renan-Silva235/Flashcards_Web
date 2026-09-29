@@ -4,6 +4,8 @@ import type { FlashcardResponseApi } from "../../../store/modules/flashcards/int
 import { ShowCard } from "../ShowCard";
 import { MdDeleteOutline } from "react-icons/md";
 import { DeleteFlashCard } from "../DeleteFlashcard";
+import { SpeechAudio } from "../../../components/SpeechAudio";
+import { useSearchParams } from "react-router-dom";
 
 interface CardComponentProps {
   mode: "view" | "form";
@@ -22,7 +24,8 @@ export const CardComponent = ({
 }: CardComponentProps) => {
   const [isModalOpen, setIsModalOpen] = useState<boolean>(false);
   const [isDeleteModalOpen, setIsDeleteModalOpen] = useState<boolean>(false);
-
+  const [searchParams] = useSearchParams();
+  const deckLanguage = searchParams.get("deckLanguage");
   //pegar as referências dos inputs
   const wordRef = useRef<HTMLInputElement>(null);
   const translationRef = useRef<HTMLInputElement>(null);
@@ -66,21 +69,36 @@ export const CardComponent = ({
             : "w-96 mt-7 h-fit border border-color-white rounded-lg bg-linear-to-r from-color-white/10 to-main-color shadow-lg shadow-black/50  p-6"
         }
       >
-        <button onClick={() => setIsDeleteModalOpen(true)}>
-          <MdDeleteOutline className="text-2xl text-color-red-1 cursor-pointer hover:brightness-120 transition-all duration-200" />
-        </button>
+        {mode == "view" ? (
+          <button onClick={() => setIsDeleteModalOpen(true)}>
+            <MdDeleteOutline className="text-2xl text-color-red-1 cursor-pointer hover:brightness-120 transition-all duration-200" />
+          </button>
+        ) : (
+          ""
+        )}
 
         {mode === "view" ? (
-          <p className="text-center text-color-white text-4xl">{data.word}</p>
+          <>
+            <p className="text-center text-color-white text-4xl">
+              {data.word}{" "}
+              <SpeechAudio
+                language={deckLanguage ?? ""}
+                pronounce={data.word}
+              />
+            </p>
+          </>
         ) : (
-          <input
-            ref={wordRef}
-            type="text"
-            value={data.word}
-            placeholder="Palavra"
-            onChange={(e) => handleInputChange(e, wordRef, "word")}
-            className="text-center text-color-white text-4xl w-full"
-          />
+          <>
+            {/* <SpeechAudio language={} pronounce={data.word} /> */}
+            <input
+              ref={wordRef}
+              type="text"
+              value={data.word}
+              placeholder="Palavra"
+              onChange={(e) => handleInputChange(e, wordRef, "word")}
+              className="text-center text-color-white text-4xl w-full"
+            />
+          </>
         )}
         {mode === "view" ? (
           <p className="text-color-white gap-3 font-normal m-3 text-center">
@@ -102,7 +120,19 @@ export const CardComponent = ({
         <div className="mt-4 flex w-full gap-2.5 items-center whitespace-nowrap justify-start">
           <p className="text-color-yellow-1 text-2xl">Passado:</p>
           {mode === "view" ? (
-            <p className="text-color-white text-2xl">{data.past}</p>
+            <>
+              {data.past ? (
+                <p className="text-color-white text-2xl">
+                  {data.past}{" "}
+                  <SpeechAudio
+                    language={deckLanguage ?? ""}
+                    pronounce={data.past}
+                  />
+                </p>
+              ) : (
+                ""
+              )}
+            </>
           ) : (
             <input
               ref={pastRef}
@@ -116,7 +146,19 @@ export const CardComponent = ({
         <div className="mt-4 flex w-full gap-2.5 items-center whitespace-nowrap justify-start">
           <p className="text-color-yellow-1 text-2xl">Presente:</p>
           {mode === "view" ? (
-            <p className="text-color-white text-2xl">{data.present}</p>
+            <>
+              {data.present ? (
+                <p className="text-color-white text-2xl">
+                  {data.present}{" "}
+                  <SpeechAudio
+                    language={deckLanguage ?? ""}
+                    pronounce={data.present}
+                  />
+                </p>
+              ) : (
+                ""
+              )}
+            </>
           ) : (
             <input
               ref={presentRef}
@@ -130,7 +172,19 @@ export const CardComponent = ({
         <div className="mt-4 flex w-full gap-2.5 items-center whitespace-nowrap justify-start">
           <p className="text-color-yellow-1 text-2xl">Futuro:</p>
           {mode === "view" ? (
-            <p className="text-color-white text-2xl">{data.future}</p>
+            <>
+              {data.future ? (
+                <p className="text-color-white text-2xl">
+                  {data.future}{" "}
+                  <SpeechAudio
+                    language={deckLanguage ?? ""}
+                    pronounce={data.future}
+                  />
+                </p>
+              ) : (
+                ""
+              )}
+            </>
           ) : (
             <input
               ref={futureRef}
@@ -142,7 +196,29 @@ export const CardComponent = ({
           )}
         </div>
         <div className="mt-4 flex flex-col w-full gap-2.5">
-          <p className="text-center text-color-yellow-1 text-2xl">Frase 1</p>
+          {mode === "view" ? (
+            <>
+              <div className="relative flex items-center justify-center w-full min-h-10">
+                <p className="text-center text-color-yellow-1 text-2xl">
+                  Frase 1
+                </p>
+                {data.examplePhrase1 ? (
+                  <div className="absolute right-0 top-1/2 -translate-y-1/2">
+                    <SpeechAudio
+                      language={deckLanguage ?? ""}
+                      pronounce={data.examplePhrase1}
+                      position-end
+                    />
+                  </div>
+                ) : (
+                  ""
+                )}
+              </div>
+            </>
+          ) : (
+            <p className="text-center text-color-yellow-1 text-2xl">Frase 1</p>
+          )}
+
           {mode === "view" ? (
             <textarea
               readOnly
@@ -165,7 +241,29 @@ export const CardComponent = ({
           )}
         </div>
         <div className="mt-4 flex flex-col w-full gap-2.5">
-          <p className="text-center text-color-yellow-1 text-2xl">Frase 2</p>
+          {mode === "view" ? (
+            <>
+              <div className="relative flex items-center justify-center w-full min-h-10">
+                <p className="text-center text-color-yellow-1 text-2xl">
+                  Frase 2
+                </p>
+                {data.examplePhrase2 ? (
+                  <div className="absolute right-0 top-1/2 -translate-y-1/2">
+                    <SpeechAudio
+                      language={deckLanguage ?? ""}
+                      pronounce={data.examplePhrase2}
+                      position-end
+                    />
+                  </div>
+                ) : (
+                  ""
+                )}
+              </div>
+            </>
+          ) : (
+            <p className="text-center text-color-yellow-1 text-2xl">Frase 2</p>
+          )}
+
           {mode === "view" ? (
             <textarea
               readOnly
@@ -188,7 +286,28 @@ export const CardComponent = ({
           )}
         </div>
         <div className="mt-4 flex flex-col w-full gap-2.5">
-          <p className="text-center text-color-yellow-1 text-2xl">Frase 3</p>
+          {mode === "view" ? (
+            <>
+              <div className="relative flex items-center justify-center w-full min-h-10">
+                <p className="text-center text-color-yellow-1 text-2xl">
+                  Frase 3
+                </p>
+                {data.examplePhrase3 ? (
+                  <div className="absolute right-0 top-1/2 -translate-y-1/2">
+                    <SpeechAudio
+                      language={deckLanguage ?? ""}
+                      pronounce={data.examplePhrase3}
+                      position-end
+                    />
+                  </div>
+                ) : (
+                  ""
+                )}
+              </div>
+            </>
+          ) : (
+            <p className="text-center text-color-yellow-1 text-2xl">Frase 3</p>
+          )}
           {mode === "view" ? (
             <textarea
               readOnly

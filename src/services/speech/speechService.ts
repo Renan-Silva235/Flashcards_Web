@@ -1,13 +1,12 @@
-import * as Speech from "expo-speech";
+export function speak(text: string, language: string): void {
+  if (!text || !("speechSynthesis" in window)) return;
 
-export function speak(text: string, language = "en-US"): void {
-  if (!text) return;
+  window.speechSynthesis.cancel();
 
-  Speech.stop();
+  const utterance = new SpeechSynthesisUtterance(text);
+  utterance.lang = language;
+  utterance.pitch = 1;
+  utterance.rate = 0.9;
 
-  Speech.speak(text, {
-    language,
-    pitch: 1,
-    rate: 0.9,
-  });
+  window.speechSynthesis.speak(utterance);
 }
