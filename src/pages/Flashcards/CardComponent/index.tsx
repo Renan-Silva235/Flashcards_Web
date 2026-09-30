@@ -26,6 +26,7 @@ export const CardComponent = ({
   const [isDeleteModalOpen, setIsDeleteModalOpen] = useState<boolean>(false);
   const [searchParams] = useSearchParams();
   const deckLanguage = searchParams.get("deckLanguage");
+
   //pegar as referências dos inputs
   const wordRef = useRef<HTMLInputElement>(null);
   const translationRef = useRef<HTMLInputElement>(null);

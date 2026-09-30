@@ -11,8 +11,9 @@ export const SpeechAudio = ({ language, pronounce }: SpeechAudioProps) => {
   const handleSpeak = () => {
     if (!pronounce) return;
     const languageCode = getLanguageCode(language);
-    console.log("language code: ", languageCode);
-    speak(pronounce, languageCode);
+    speak(pronounce, languageCode).catch((error) => {
+      console.error("Falha ao reproduzir áudio:", error);
+    });
   };
 
   return (

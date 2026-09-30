@@ -15,7 +15,6 @@ export const Flashcards = () => {
   const [searchParams] = useSearchParams();
   const deckId = searchParams.get("deckId");
   const deckName = searchParams.get("deckName");
-  const deckLanguage = searchParams.get("deckLanguage");
   const [searchTerm, setSearchTerm] = useState<string>("");
   const [isModalOpen, setIsModalOpen] = useState(false);
   const dispatch = useDispatch();

@@ -12,6 +12,10 @@ dist
 dist-ssr
 *.local
 
+# piper-tts-web wasm assets, copied from node_modules by scripts/copy-piper-assets.js
+public/onnx
+public/piper
+
 # Editor directories and files
 .vscode/*
 !.vscode/extensions.json
