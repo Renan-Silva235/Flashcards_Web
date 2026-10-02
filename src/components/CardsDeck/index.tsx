@@ -27,7 +27,7 @@ export const CardsDeck = ({
 
   const handleOpenSessionStudy = () => {
     navigate(
-      `${PATHS.STUDY_SESSION}?deckId=$${id}&deckName=${encodeURIComponent(title)}&deckLanguage=${language}`,
+      `${PATHS.STUDY_SESSION}?deckId=${id}&deckName=${encodeURIComponent(title)}&deckLanguage=${language}`,
     );
   };
 
