@@ -44,14 +44,14 @@ export const CardFlip = ({ word, translation, isLoading }: CardProps) => {
           </div>
 
           {/* Lado de trás */}
-          <div className="absolute inset-0 w-full h-full bg-linear-to-br from-orange-500 to-red-600 text-color-white rounded-2xl flex flex-col items-center justify-center p-6 backface-hidden rotate-y-180">
-            <h2 className="text-3xl font-bold mb-2">{translation}</h2>
-            <p className="text-center text-orange-100 text-sm mb-4">
-              Informações secretas ou adicionais ficam aqui!
-            </p>
-            <span className="text-xs text-orange-200 underline">
-              Clique novamente para voltar
+          <div className="absolute inset-0 w-full h-full bg-linear-to-br from-color-purple-1/75 to-purple-900 text-color-white rounded-2xl flex flex-col items-center justify-center p-6 backface-hidden rotate-y-180">
+            <span className="text-sm text-color-silver-2 px-3 py-1 mb-4 backdrop-blur-sm">
+              TRADUÇÃO
             </span>
+            <h2 className="text-4xl font-bold mb-2">{translation}</h2>
+            <p className="text-sm text-color-silver-2 text-center mt-6">
+              Clique novamente para voltar
+            </p>
           </div>
         </div>
       </div>

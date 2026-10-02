@@ -3,7 +3,7 @@ import type { RootState } from "../../store/rootReducer";
 import {
   LuGrid3X3,
   LuCirclePlus,
-  LuBookOpen,
+  // LuBookOpen,
   LuChartNoAxesColumn,
 } from "react-icons/lu";
 import { MdOutlineLogout } from "react-icons/md";
@@ -29,11 +29,11 @@ export const Sidebar = () => {
           name="Novo Deck"
           endpoint={PATHS.DECK_CREATE}
         />
-        <Navbar
+        {/* <Navbar
           icon={LuBookOpen}
           name="Estudar"
           endpoint={PATHS.STUDY_SESSION}
-        />
+        /> */}
         <Navbar
           icon={LuChartNoAxesColumn}
           name="Estatísticas"

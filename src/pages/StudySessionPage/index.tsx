@@ -8,6 +8,9 @@ import type { AxiosResponse } from "axios";
 import api from "../../config/api";
 import axios from "axios";
 import { toast } from "react-toastify";
+import { Link } from "react-router-dom";
+import { IoIosReturnLeft } from "react-icons/io";
+import { LuX, LuMinus, LuCheck } from "react-icons/lu";
 
 export const StudySessionPage = () => {
   const [searchParams] = useSearchParams();
@@ -116,6 +119,13 @@ export const StudySessionPage = () => {
 
   return (
     <>
+      <Link
+        to="/dashboard"
+        className="flex gap-4 text-color-white text-base font-serif hover:text-white 
+                    whitespace-nowrap items-center w-fit"
+      >
+        {<IoIosReturnLeft />} Meus Decks
+      </Link>
       <CardFlip
         word={currentCard ? currentCard.word : ""}
         translation={currentCard ? currentCard.translation : ""}
@@ -125,21 +135,22 @@ export const StudySessionPage = () => {
         <div className="flex text-center items-center justify-center gap-14 mt-6 text-color-white">
           <button
             onClick={() => handleReview("MISTAKE")}
-            className="bg-red-600 rounded-lg w-40 h-11 cursor-pointer hover:brightness-110 transition-all duration-200"
+            className="flex bg-red-600 rounded-lg w-40 h-11 cursor-pointer hover:brightness-110 transition-all duration-200 gap-2 text-center justify-center p-3 m-3.5 whitespace-nowrap"
           >
-            Difícil
+            <LuX />
+            <span className="font-bold">Difícil</span>
           </button>
           <button
             onClick={() => handleReview("DIFFICULT")}
-            className="bg-orange-500 rounded-lg w-40 h-11 cursor-pointer hover:brightness-110 transition-all duration-200"
+            className="flex bg-orange-500 rounded-lg w-40 h-11 cursor-pointer hover:brightness-110 transition-all duration-200 gap-2 text-center justify-center p-3 m-3.5 whitespace-nowrap"
           >
-            Médio
+            {<LuMinus />} Médio
           </button>
           <button
             onClick={() => handleReview("HIT")}
-            className="bg-green-500 rounded-lg w-40 h-11 cursor-pointer hover:brightness-110 transition-all duration-200"
+            className="flex bg-green-500 rounded-lg w-40 h-11 cursor-pointer hover:brightness-110 transition-all duration-200 gap-2 text-center justify-center p-3 m-3.5 whitespace-nowrap"
           >
-            Fácil
+            {<LuCheck />} Fácil
           </button>
         </div>
       )}
