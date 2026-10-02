@@ -43,3 +43,18 @@ input:-webkit-autofill:active {
   -webkit-box-shadow: 0 0 0px 1000px var(--color-input-bg-main-color) inset !important;
   transition: background-color 5000s ease-in-out 0s;
 }
+
+@layer utilities {
+  .perspective-1000 {
+    perspective: 1000px;
+  }
+  .preserve-3d {
+    transform-style: preserve-3d;
+  }
+  .backface-hidden {
+    backface-visibility: hidden;
+  }
+  .rotate-y-180 {
+    transform: rotateY(180deg);
+  }
+}

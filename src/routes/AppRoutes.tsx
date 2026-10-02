@@ -6,6 +6,7 @@ import { Dashboard } from "../pages/Dashboard";
 import { ProtectedRoute } from "./PrivateRoute";
 import { Flashcards } from "../pages/Flashcards";
 import { CreateDeckComponent } from "../pages/Dashboard/CreateDeck";
+import { StudySessionPage } from "../pages/StudySessionPage";
 
 export const AppRoutes = () => {
   return (
@@ -16,7 +17,7 @@ export const AppRoutes = () => {
       <Route element={<ProtectedRoute />}>
         <Route path={PATHS.DASHBOARD} element={<Dashboard />} />
         <Route path={PATHS.NEW_DECK} element={<Dashboard />} />
-        <Route path={PATHS.STUDY_SESSION} element={<Dashboard />} />
+        <Route path={PATHS.STUDY_SESSION} element={<StudySessionPage />} />
         <Route path={PATHS.STATISTICS} element={<Dashboard />} />
         <Route path={PATHS.FLASHCARDS} element={<Flashcards />} />
         <Route path={PATHS.DECK_CREATE} element={<CreateDeckComponent />} />

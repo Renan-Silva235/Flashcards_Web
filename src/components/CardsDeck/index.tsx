@@ -24,6 +24,13 @@ export const CardsDeck = ({
       `${PATHS.FLASHCARDS}?deckId=${id}&deckName=${encodeURIComponent(title)}&deckLanguage=${language}`,
     );
   };
+
+  const handleOpenSessionStudy = () => {
+    navigate(
+      `${PATHS.STUDY_SESSION}?deckId=$${id}&deckName=${encodeURIComponent(title)}&deckLanguage=${language}`,
+    );
+  };
+
   return (
     <div
       className="flex flex-col justify-between overflow-hidden h-60 border border-color-white rounded-lg w-96 p-7 
@@ -48,7 +55,10 @@ export const CardsDeck = ({
         >
           Abrir Deck
         </button>
-        <button className="bg-linear-to-r from-btn-main-color to-second-color cursor-pointer rounded-lg w-fit h-fit p-2 hover:brightness-110 scale-[0.98] transition-all duration-300">
+        <button
+          onClick={handleOpenSessionStudy}
+          className="bg-linear-to-r from-btn-main-color to-second-color cursor-pointer rounded-lg w-fit h-fit p-2 hover:brightness-110 scale-[0.98] transition-all duration-300"
+        >
           Estudar
         </button>
       </div>
