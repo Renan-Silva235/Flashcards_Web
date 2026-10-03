@@ -1,11 +1,7 @@
 import { useSelector } from "react-redux";
 import type { RootState } from "../../store/rootReducer";
-import {
-  LuGrid3X3,
-  LuCirclePlus,
-  // LuBookOpen,
-  LuChartNoAxesColumn,
-} from "react-icons/lu";
+import { LuGrid3X3, LuCirclePlus } from "react-icons/lu";
+import { CgProfile } from "react-icons/cg";
 import { MdOutlineLogout } from "react-icons/md";
 import { PATHS } from "../../routes/Routes";
 import { Navbar } from "../Navbar";
@@ -18,7 +14,7 @@ export const Sidebar = () => {
         <h1 className="font-sans font-black tracking-tighter text-3xl">
           Flash Cards
         </h1>
-        <p className="text-color-silver-2 text-base ">
+        <p className="text-color-silver-2 text-base">
           Bem vindo, {user?.name}!
         </p>
       </div>
@@ -29,16 +25,7 @@ export const Sidebar = () => {
           name="Novo Deck"
           endpoint={PATHS.DECK_CREATE}
         />
-        {/* <Navbar
-          icon={LuBookOpen}
-          name="Estudar"
-          endpoint={PATHS.STUDY_SESSION}
-        /> */}
-        <Navbar
-          icon={LuChartNoAxesColumn}
-          name="Estatísticas"
-          endpoint={PATHS.STATISTICS}
-        />
+        <Navbar icon={CgProfile} name="Perfil" endpoint={PATHS.PROFILE} />
       </div>
       <Navbar icon={MdOutlineLogout} name="Logout" endpoint={""} />
     </aside>

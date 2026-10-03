@@ -7,6 +7,7 @@ import { ProtectedRoute } from "./PrivateRoute";
 import { Flashcards } from "../pages/Flashcards";
 import { CreateDeckComponent } from "../pages/Dashboard/CreateDeck";
 import { StudySessionPage } from "../pages/StudySessionPage";
+import { Profile } from "../pages/Profile";
 
 export const AppRoutes = () => {
   return (
@@ -21,6 +22,7 @@ export const AppRoutes = () => {
         <Route path={PATHS.STATISTICS} element={<Dashboard />} />
         <Route path={PATHS.FLASHCARDS} element={<Flashcards />} />
         <Route path={PATHS.DECK_CREATE} element={<CreateDeckComponent />} />
+        <Route path={PATHS.PROFILE} element={<Profile />} />
       </Route>
     </Routes>
   );

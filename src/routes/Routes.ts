@@ -7,4 +7,5 @@ export const PATHS = {
   STATISTICS: "/statistics",
   FLASHCARDS: "/flashcards",
   DECK_CREATE: "/deck/create",
+  PROFILE: "/perfil",
 };
