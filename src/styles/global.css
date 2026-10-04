@@ -163,3 +163,23 @@ input:-webkit-autofill:active {
     transition-duration: 0.01ms !important;
   }
 }
+
+/* Toasts no celular: o react-toastify ocupa a largura toda colado nas bordas.
+   Regra do projeto: nada encosta nas bordas no celular (evita toques acidentais). */
+@media only screen and (max-width: 480px) {
+  .Toastify .Toastify__toast-container,
+  .Toastify .Toastify__toast-container[data-stacked="true"] {
+    width: calc(100vw - 2rem);
+    left: 1rem;
+    right: 1rem;
+  }
+  .Toastify .Toastify__toast-container--top-right,
+  .Toastify .Toastify__toast-container--top-left,
+  .Toastify .Toastify__toast-container--top-center {
+    top: calc(env(safe-area-inset-top) + 1rem);
+  }
+  .Toastify .Toastify__toast {
+    margin-bottom: 0.5rem;
+    border-radius: var(--toastify-toast-bd-radius);
+  }
+}

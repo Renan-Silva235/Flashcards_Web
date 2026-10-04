@@ -68,8 +68,8 @@ export const CardComponent = ({
       <div
         className={
           mode === "view"
-            ? "w-96 mt-7 h-fit border border-color-white rounded-lg bg-linear-to-r from-color-white/10 to-main-color shadow-lg shadow-black/50 transition-transform duration-300 hover:scale-100 hover:-translate-y-2 p-6"
-            : "w-96 mt-7 h-fit border border-color-white rounded-lg bg-linear-to-r from-color-white/10 to-main-color shadow-lg shadow-black/50  p-6"
+            ? "w-full max-w-96 mt-7 h-fit border border-color-white rounded-lg bg-linear-to-r from-color-white/10 to-main-color shadow-lg shadow-black/50 transition-transform duration-300 hover:scale-100 hover:-translate-y-2 p-4 sm:p-6"
+            : "w-96 max-w-full mt-7 h-fit border border-color-white rounded-lg bg-linear-to-r from-color-white/10 to-main-color shadow-lg shadow-black/50 p-4 sm:p-6"
         }
       >
         {mode == "view" ? (
@@ -82,7 +82,7 @@ export const CardComponent = ({
 
         {mode === "view" ? (
           <>
-            <p className="text-center text-color-white text-4xl">
+            <p className="text-center text-color-white text-3xl sm:text-4xl break-words">
               {data.word}{" "}
               <SpeechAudio
                 language={deckLanguage ?? ""}
@@ -99,7 +99,7 @@ export const CardComponent = ({
               value={data.word}
               placeholder="Palavra"
               onChange={(e) => handleInputChange(e, wordRef, "word")}
-              className="text-center text-color-white text-4xl w-full"
+              className="text-center text-color-white text-3xl sm:text-4xl w-full min-w-0"
             />
           </>
         )}
@@ -120,12 +120,14 @@ export const CardComponent = ({
           />
         )}
 
-        <div className="mt-4 flex w-full gap-2.5 items-center whitespace-nowrap justify-start">
-          <p className="text-color-yellow-1 text-2xl">Passado:</p>
+        <div className="mt-4 flex w-full gap-2.5 items-center justify-start">
+          <p className="shrink-0 whitespace-nowrap text-color-yellow-1 text-xl sm:text-2xl">
+            Passado:
+          </p>
           {mode === "view" ? (
             <>
               {data.past ? (
-                <p className="text-color-white text-2xl">
+                <p className="min-w-0 break-words text-color-white text-xl sm:text-2xl">
                   {data.past}{" "}
                   <SpeechAudio
                     language={deckLanguage ?? ""}
@@ -142,16 +144,18 @@ export const CardComponent = ({
               type="text"
               value={data.past}
               onChange={(e) => handleInputChange(e, pastRef, "past")}
-              className="text-color-white text-2xl w-full"
+              className="min-w-0 text-color-white text-xl sm:text-2xl w-full"
             />
           )}
         </div>
-        <div className="mt-4 flex w-full gap-2.5 items-center whitespace-nowrap justify-start">
-          <p className="text-color-yellow-1 text-2xl">Presente:</p>
+        <div className="mt-4 flex w-full gap-2.5 items-center justify-start">
+          <p className="shrink-0 whitespace-nowrap text-color-yellow-1 text-xl sm:text-2xl">
+            Presente:
+          </p>
           {mode === "view" ? (
             <>
               {data.present ? (
-                <p className="text-color-white text-2xl">
+                <p className="min-w-0 break-words text-color-white text-xl sm:text-2xl">
                   {data.present}{" "}
                   <SpeechAudio
                     language={deckLanguage ?? ""}
@@ -168,16 +172,18 @@ export const CardComponent = ({
               type="text"
               value={data.present}
               onChange={(e) => handleInputChange(e, presentRef, "present")}
-              className="text-color-white text-2xl w-full"
+              className="min-w-0 text-color-white text-xl sm:text-2xl w-full"
             />
           )}
         </div>
-        <div className="mt-4 flex w-full gap-2.5 items-center whitespace-nowrap justify-start">
-          <p className="text-color-yellow-1 text-2xl">Futuro:</p>
+        <div className="mt-4 flex w-full gap-2.5 items-center justify-start">
+          <p className="shrink-0 whitespace-nowrap text-color-yellow-1 text-xl sm:text-2xl">
+            Futuro:
+          </p>
           {mode === "view" ? (
             <>
               {data.future ? (
-                <p className="text-color-white text-2xl">
+                <p className="min-w-0 break-words text-color-white text-xl sm:text-2xl">
                   {data.future}{" "}
                   <SpeechAudio
                     language={deckLanguage ?? ""}
@@ -194,7 +200,7 @@ export const CardComponent = ({
               type="text"
               value={data.future}
               onChange={(e) => handleInputChange(e, futureRef, "future")}
-              className="text-color-white text-2xl w-full"
+              className="min-w-0 text-color-white text-xl sm:text-2xl w-full"
             />
           )}
         </div>
@@ -202,7 +208,7 @@ export const CardComponent = ({
           {mode === "view" ? (
             <>
               <div className="relative flex items-center justify-center w-full min-h-10">
-                <p className="text-center text-color-yellow-1 text-2xl">
+                <p className="text-center text-color-yellow-1 text-xl sm:text-2xl">
                   Frase 1
                 </p>
                 {data.examplePhrase1 ? (
@@ -219,7 +225,9 @@ export const CardComponent = ({
               </div>
             </>
           ) : (
-            <p className="text-center text-color-yellow-1 text-2xl">Frase 1</p>
+            <p className="text-center text-color-yellow-1 text-xl sm:text-2xl">
+              Frase 1
+            </p>
           )}
 
           {mode === "view" ? (
@@ -247,7 +255,7 @@ export const CardComponent = ({
           {mode === "view" ? (
             <>
               <div className="relative flex items-center justify-center w-full min-h-10">
-                <p className="text-center text-color-yellow-1 text-2xl">
+                <p className="text-center text-color-yellow-1 text-xl sm:text-2xl">
                   Frase 2
                 </p>
                 {data.examplePhrase2 ? (
@@ -264,7 +272,9 @@ export const CardComponent = ({
               </div>
             </>
           ) : (
-            <p className="text-center text-color-yellow-1 text-2xl">Frase 2</p>
+            <p className="text-center text-color-yellow-1 text-xl sm:text-2xl">
+              Frase 2
+            </p>
           )}
 
           {mode === "view" ? (
@@ -292,7 +302,7 @@ export const CardComponent = ({
           {mode === "view" ? (
             <>
               <div className="relative flex items-center justify-center w-full min-h-10">
-                <p className="text-center text-color-yellow-1 text-2xl">
+                <p className="text-center text-color-yellow-1 text-xl sm:text-2xl">
                   Frase 3
                 </p>
                 {data.examplePhrase3 ? (
@@ -309,7 +319,9 @@ export const CardComponent = ({
               </div>
             </>
           ) : (
-            <p className="text-center text-color-yellow-1 text-2xl">Frase 3</p>
+            <p className="text-center text-color-yellow-1 text-xl sm:text-2xl">
+              Frase 3
+            </p>
           )}
           {mode === "view" ? (
             <textarea
@@ -336,7 +348,7 @@ export const CardComponent = ({
           {mode === "view" ? (
             <button
               onClick={() => (onView ? onView() : setIsModalOpen(true))}
-              className="bg-color-yellow-1 w-55 h-11 rounded-lg cursor-pointer hover:brightness-110 scale-[0.98] transition-all duration-50"
+              className="bg-color-yellow-1 w-full max-w-55 h-11 rounded-lg cursor-pointer hover:brightness-110 scale-[0.98] transition-all duration-50"
             >
               Visualizar
             </button>
@@ -344,14 +356,14 @@ export const CardComponent = ({
             <div className="flex w-full mt-3.5 justify-between gap-4 items-center whitespace-nowrap">
               <button
                 type="submit"
-                className="bg-color-yellow-1 w-40 h-11 rounded-lg cursor-pointer hover:brightness-110 scale-[0.98] transition-all duration-50"
+                className="bg-color-yellow-1 flex-1 sm:flex-none sm:w-40 h-11 rounded-lg cursor-pointer hover:brightness-110 scale-[0.98] transition-all duration-50"
               >
                 {textButton}
               </button>
               <button
                 type="button"
                 onClick={onClose}
-                className="flex  bg-color-white rounded-lg w-40 
+                className="flex bg-color-white rounded-lg flex-1 sm:flex-none sm:w-40 
               justify-center h-11 cursor-pointer items-center hover:brightness-110"
               >
                 Fechar

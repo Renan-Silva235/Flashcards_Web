@@ -19,8 +19,8 @@ export const HeroCard = () => {
   return (
     <div className="relative w-full max-w-md h-72 perspective-1000">
       {/* cards decorativos flutuando atrás */}
-      <div className="absolute -top-8 -left-10 w-40 h-24 rounded-xl bg-color-purple-1/20 border border-color-purple-1/30 backdrop-blur-sm -rotate-12 animate-float-slow" />
-      <div className="absolute -bottom-10 -right-6 w-44 h-28 rounded-xl bg-second-color/20 border border-second-color/30 backdrop-blur-sm rotate-6 animate-float" />
+      <div className="absolute -top-6 -left-3 sm:-top-8 sm:-left-10 w-32 sm:w-40 h-24 rounded-xl bg-color-purple-1/20 border border-color-purple-1/30 backdrop-blur-sm -rotate-12 animate-float-slow" />
+      <div className="absolute -bottom-8 -right-2 sm:-bottom-10 sm:-right-6 w-36 sm:w-44 h-28 rounded-xl bg-second-color/20 border border-second-color/30 backdrop-blur-sm rotate-6 animate-float" />
 
       <div className="relative w-full h-full animate-float">
         <div

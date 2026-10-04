@@ -26,7 +26,6 @@ const ping = async (): Promise<boolean> => {
     await api.get("/", { timeout: REQUEST_TIMEOUT_MS });
     return true;
   } catch (error: unknown) {
-    // Qualquer resposta HTTP (até 401/404) significa que o servidor já está ligado
     return axios.isAxiosError(error) && !!error.response;
   }
 };

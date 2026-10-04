@@ -14,8 +14,11 @@ export const Dashboard = () => {
 
   return (
     <>
-      <div className="flex w-full">
-        <div className="flex-col">
+      {/* flex-wrap: título e idioma ficam lado a lado enquanto couberem
+          (título com no mínimo 128px + dropdown de 192px); em telas estreitas
+          como 320px, o dropdown desce para a linha de baixo */}
+      <div className="flex flex-wrap w-full items-start gap-x-3 gap-y-4">
+        <div className="flex-1 basis-32 min-w-0">
           <h1 className="font-bold text-color-white text-4xl font-sans">
             Meus Decks
           </h1>
@@ -23,8 +26,9 @@ export const Dashboard = () => {
             Entre em um deck para criar cards e estudar.
           </p>
         </div>
-        <div className="flex flex-1 justify-end">
+        <div className="shrink-0">
           <LanguageDropdown
+            mode="push"
             selectedLanguage={selectedLanguage}
             onChange={(language) => setSelectedLanguage(language)}
           />
@@ -35,7 +39,7 @@ export const Dashboard = () => {
         <CardsStatistic selectedLanguage={selectedLanguage} />
       </div>
 
-      <div className="w-96">
+      <div className="w-full sm:w-96">
         <div className="mt-9">
           <input
             type="text"

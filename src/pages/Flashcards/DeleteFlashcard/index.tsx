@@ -45,26 +45,28 @@ export const DeleteFlashCard = ({
   };
 
   return (
-    <div className="flex flex-col gap-4 bg-main-color w-fit h-fit p-6 text-center rounded-lg">
-      <h1 className="text-color-white text-2xl">
+    <div className="flex flex-col gap-4 bg-main-color w-full max-w-md h-fit p-5 sm:p-6 text-center rounded-lg">
+      <h1 className="text-color-white text-xl sm:text-2xl">
         Deseja realmente apagar este Card?
       </h1>
       <p className="text-[14px] text-color-white">
-        Está ação não poderá ser desfeita, deseja mesmo prosseguir?
+        Esta ação não poderá ser desfeita, deseja mesmo prosseguir?
       </p>
       <form
         onSubmit={handleSubmit}
-        className="flex gap-6 items-center justify-center"
+        className="flex w-full gap-3 sm:gap-4 items-center sm:justify-center"
       >
         <button
           type="submit"
-          className="bg-red-700 text-color-white rounded-lg text-base w-20 cursor-pointer hover:brightness-110 transition-all duration-200"
+          className="flex-1 sm:flex-none sm:w-32 h-11 sm:h-10 bg-red-700 text-color-white rounded-lg text-base cursor-pointer hover:brightness-110 transition-all duration-200"
         >
           Deletar
         </button>
+        {/* type="button": sem isso o botão envia o form e apaga o card */}
         <button
+          type="button"
           onClick={onClose}
-          className="bg-color-white text-black rounded-lg text-base w-20 cursor-pointer hover:brightness-110 transition-all duration-200"
+          className="flex-1 sm:flex-none sm:w-32 h-11 sm:h-10 bg-color-white text-black rounded-lg text-base cursor-pointer hover:brightness-110 transition-all duration-200"
         >
           Cancelar
         </button>

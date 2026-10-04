@@ -1,4 +1,4 @@
-import { useState, type FormEvent } from "react";
+import { useState, type FormEvent, type ReactNode } from "react";
 import api from "../../config/api";
 import { toast } from "react-toastify";
 import { getApiErrorMessages } from "../../utils/apiError";
@@ -9,6 +9,7 @@ interface VerifyCodeProps {
   onClose: () => void;
   onSuccess: (code: string) => void | Promise<void>;
   onResend?: () => Promise<void>;
+  description?: ReactNode; // substitui o texto padrão abaixo do título
 }
 
 export const VerifyCode = ({
@@ -17,6 +18,7 @@ export const VerifyCode = ({
   onClose,
   onSuccess,
   onResend,
+  description,
 }: VerifyCodeProps) => {
   const [code, setCode] = useState<string>("");
   const [isVerifying, setIsVerifying] = useState<boolean>(false);
@@ -57,8 +59,12 @@ export const VerifyCode = ({
     <div className="flex flex-col text-center gap-4 w-full max-w-md h-fit bg-main-color text-color-white p-6 rounded-lg ">
       <h1 className="text-3xl">Verificar Código</h1>
       <p className="text-base text-color-silver-2">
-        Digite o código enviado para{" "}
-        <span className="text-color-white font-bold">{email}</span>.
+        {description ?? (
+          <>
+            Digite o código enviado para{" "}
+            <span className="text-color-white font-bold">{email}</span>.
+          </>
+        )}
       </p>
 
       <form

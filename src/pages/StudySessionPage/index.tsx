@@ -161,19 +161,19 @@ export const StudySessionPage = () => {
 
   const cardAnimationClass = {
     idle: "opacity-100 translate-x-0 duration-300",
-    leaving: "opacity-0 -translate-x-24 duration-300",
-    entering: "opacity-0 translate-x-24 duration-0",
+    leaving: "opacity-0 -translate-x-12 sm:-translate-x-24 duration-300",
+    entering: "opacity-0 translate-x-12 sm:translate-x-24 duration-0",
   }[cardAnimation];
 
   return (
     <>
       <BackButton to={PATHS.DASHBOARD} label="Voltar para Meus Decks" />
 
-      <div className="flex flex-col w-full max-w-2xl mx-auto mt-10">
-        <div className="flex items-center justify-between text-sm text-color-silver-2 mb-3">
-          <span>{deckName}</span>
+      <div className="flex flex-col w-full max-w-2xl mx-auto mt-6 sm:mt-10">
+        <div className="flex items-center justify-between gap-4 text-sm text-color-silver-2 mb-3">
+          <span className="min-w-0 truncate">{deckName}</span>
           {total > 0 && (
-            <span>
+            <span className="shrink-0 tabular-nums">
               {Math.min(currentIndex + 1, total)}/{total}
             </span>
           )}
@@ -185,27 +185,31 @@ export const StudySessionPage = () => {
           />
         </div>
 
-        <div className={`mt-10 transition-all ${cardAnimationClass}`}>
-          <CardFlip
-            key={currentIndex}
-            word={currentCard ? currentCard.word : ""}
-            translation={currentCard ? currentCard.translation : ""}
-            isFlipped={isFlipped}
-            onFlip={() => setIsFlipped((prev) => !prev)}
-            isLoading={isLoading}
-          />
+        {/* overflow-x-clip: no celular o card que sai/entra não cria rolagem horizontal */}
+        <div className="mt-6 sm:mt-10 overflow-x-clip sm:overflow-x-visible">
+          <div className={`transition-all ${cardAnimationClass}`}>
+            <CardFlip
+              key={currentIndex}
+              word={currentCard ? currentCard.word : ""}
+              translation={currentCard ? currentCard.translation : ""}
+              isFlipped={isFlipped}
+              onFlip={() => setIsFlipped((prev) => !prev)}
+              isLoading={isLoading}
+            />
+          </div>
         </div>
 
         {!isLoading && currentCard && !isFinished && (
-          <div className="flex justify-center gap-6 mt-10 text-color-white">
+          // No celular os 3 botões dividem a largura em partes iguais
+          <div className="grid grid-cols-3 gap-2 sm:flex sm:justify-center sm:gap-6 mt-6 sm:mt-10 text-color-white">
             {REVIEW_BUTTONS.map(({ result, label, icon: Icon, color }) => (
               <button
                 key={result}
                 onClick={() => handleReview(result)}
                 disabled={!isFlipped || pressed !== null}
-                className={`${color} flex items-center justify-center gap-2 rounded-lg w-40 h-11 font-bold transition-all duration-200 ${
+                className={`${color} flex items-center justify-center gap-1.5 sm:gap-2 rounded-lg w-full sm:w-40 h-12 sm:h-11 text-sm sm:text-base font-bold transition-all duration-200 ${
                   pressed === result
-                    ? "scale-110 ring-2 ring-color-white"
+                    ? "scale-105 sm:scale-110 ring-2 ring-color-white"
                     : isFlipped
                       ? "opacity-100 cursor-pointer hover:brightness-110"
                       : "opacity-40 cursor-not-allowed"

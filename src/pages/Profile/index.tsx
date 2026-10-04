@@ -66,14 +66,20 @@ export const Profile = () => {
 
   return (
     <>
-      <div className="flex flex-col w-full h-fit items-center text-center justify-center p-6">
+      <div className="flex flex-col w-full h-fit items-center text-center justify-center py-2 sm:p-6">
         <span className="text-second-color">
-          <CgProfile size={110} />
+          <CgProfile
+            size={110}
+            className="w-20 h-20 sm:w-[110px] sm:h-[110px]"
+          />
         </span>
-        <h2 className="mt-6 text-color-white text-2xl">{user?.email}</h2>
-        <div className="flex flex-col gap-6 w-96 mt-12 ">
+        {/* break-all: e-mails longos quebram em vez de estourar a largura */}
+        <h2 className="mt-4 sm:mt-6 max-w-full break-all text-color-white text-lg sm:text-2xl">
+          {user?.email}
+        </h2>
+        <div className="flex flex-col gap-3 sm:gap-6 w-full max-w-96 mt-8 sm:mt-12">
           <p className="text-start text-color-silver-2">Sua Conta</p>
-          <div className="flex flex-col w-full h-fit bg-color-silver-1 rounded-lg p-6 gap-4">
+          <div className="flex flex-col w-full h-fit bg-color-silver-1 rounded-lg p-4 sm:p-6 gap-4">
             <div className="flex justify-between border-b border-b-color-silver-2 pb-3">
               <p className="text-color-white text-start">Decks</p>
               <p className="text-second-color">{profile?.totalDecks ?? 0}</p>
@@ -90,40 +96,35 @@ export const Profile = () => {
             </div>
           </div>
         </div>
-        <div className="flex flex-col gap-6 w-96 mt-12 ">
+        <div className="flex flex-col gap-3 sm:gap-6 w-full max-w-96 mt-8 sm:mt-12">
           <p className="text-start text-color-silver-2">Configurações</p>
-          <div className="flex flex-col w-full h-fit bg-color-silver-1 rounded-lg p-6 gap-4">
-            <div className="flex justify-between hover:brightness-110 transition-all duration-200 cursor-pointer">
-              <div className="flex whitespace-nowrap gap-2">
+          <div className="flex flex-col w-full h-fit bg-color-silver-1 rounded-lg p-4 sm:p-6 gap-4">
+            {/* A linha inteira é o botão: área de toque maior no celular */}
+            <button
+              type="button"
+              onClick={handleSendCode}
+              className="flex min-h-11 items-center justify-between gap-2 rounded-lg -mx-2 px-2 w-[calc(100%+1rem)] text-color-white text-start cursor-pointer hover:bg-white/5 transition-all duration-200"
+            >
+              <span className="flex items-center gap-2">
                 <span className="text-second-color">
                   <GiPadlock size={24} />
                 </span>
-                <button
-                  type="button"
-                  onClick={handleSendCode}
-                  className="w-full h-full rounded-lg text-color-white text-start cursor-pointer"
-                >
-                  Alterar Senha
-                </button>
-              </div>
-              <p className="text-color-silver-2">{">"}</p>
-            </div>
+                Alterar Senha
+              </span>
+              <span className="text-color-silver-2">{">"}</span>
+            </button>
             <div className="w-full border-b border-b-color-silver-2"></div>
-            <div className="flex justify-between hover:brightness-110 transition-all duration-200 cursor-pointer">
-              <div className="flex whitespace-nowrap gap-2">
-                <span className="text-color-red-1">
-                  <MdOutlineLogout size={24} />
-                </span>
-                <button
-                  type="button"
-                  onClick={() => setConfirmLogout(true)}
-                  className="w-full h-full rounded-lg text-color-red-1 text-start cursor-pointer"
-                >
-                  Sair da Conta
-                </button>{" "}
-              </div>
-              <p className="text-color-silver-2">{">"}</p>
-            </div>
+            <button
+              type="button"
+              onClick={() => setConfirmLogout(true)}
+              className="flex min-h-11 items-center justify-between gap-2 rounded-lg -mx-2 px-2 w-[calc(100%+1rem)] text-color-red-1 text-start cursor-pointer hover:bg-white/5 transition-all duration-200"
+            >
+              <span className="flex items-center gap-2">
+                <MdOutlineLogout size={24} />
+                Sair da Conta
+              </span>
+              <span className="text-color-silver-2">{">"}</span>
+            </button>
           </div>
         </div>
       </div>
@@ -140,6 +141,7 @@ export const Profile = () => {
       </Modal>
       <Modal isOpen={!!verifiedCode} onClose={() => setVerifiedCode("")}>
         <ChangePassword
+          email={user?.email ?? ""}
           code={verifiedCode}
           onClose={() => setVerifiedCode("")}
         />

@@ -1,17 +1,21 @@
 import { useState, type FormEvent } from "react";
-import { useSelector } from "react-redux";
-import type { RootState } from "../../store/rootReducer";
 import api from "../../config/api";
-import axios from "axios";
 import { toast } from "react-toastify";
+import { getApiErrorMessages } from "../../utils/apiError";
 
 interface ChangePasswordProps {
+  email: string;
   code: string;
   onClose: () => void;
+  onSuccess?: () => void;
 }
 
-export const ChangePassword = ({ code, onClose }: ChangePasswordProps) => {
-  const { user } = useSelector((state: RootState) => state.auth);
+export const ChangePassword = ({
+  email,
+  code,
+  onClose,
+  onSuccess,
+}: ChangePasswordProps) => {
   const [newPassword, setNewPassword] = useState<string>("");
   const [confirmPassword, setConfirmPassword] = useState<string>("");
   const [isLoading, setIsLoading] = useState<boolean>(false);
@@ -37,27 +41,27 @@ export const ChangePassword = ({ code, onClose }: ChangePasswordProps) => {
     setIsLoading(true);
     try {
       await api.post("/auth/password/change", {
-        email: user?.email,
+        email,
         code,
         newPassword,
       });
 
       toast.success("Senha alterada com sucesso.");
+      onSuccess?.();
       onClose();
     } catch (error: unknown) {
-      if (axios.isAxiosError(error))
-        toast.error(
-          error.response?.data?.message ??
-            "Erro ao alterar senha, tente novamente.",
-        );
+      getApiErrorMessages(
+        error,
+        "Erro ao alterar senha, tente novamente.",
+      ).forEach((message) => toast.error(message));
     } finally {
       setIsLoading(false);
     }
   };
 
   return (
-    <div className="flex flex-col text-center gap-4 w-full h-fit bg-main-color text-color-white p-6 rounded-lg ">
-      <h1 className="text-3xl">Alterar Senha</h1>
+    <div className="flex flex-col text-center gap-4 w-full max-w-md h-fit bg-main-color text-color-white p-5 sm:p-6 rounded-lg">
+      <h1 className="text-2xl sm:text-3xl">Alterar Senha</h1>
       <p className="text-base text-color-silver-2">Digite a sua nova senha.</p>
 
       <form

@@ -94,89 +94,92 @@ export const Register = () => {
       <BackButton
         to={PATHS.LOGIN}
         label="Voltar para o Login"
-        className="fixed top-6 left-6"
+        className="absolute top-4 left-4 sm:top-6 sm:left-6"
       />
-      <main className="flex flex-col font-sans w-full max-w-md h-fit mx-auto justify-center px-4 py-32">
-        <h1 className="font-inter text-color-white text-5xl text-center font-extrabold">
-          Criar Conta
-        </h1>
-        <p className="text-center text-color-silver-2 mt-1.5 mb-1.5">
-          Comece a aprender idiomas com flashcards
-        </p>
+      {/* Mesmo padrão do Login: 16px nas bordas no celular e espaço para o botão Voltar */}
+      <div className="flex min-h-dvh items-center justify-center px-4 pt-20 pb-10 sm:px-6">
+        <main className="flex flex-col font-sans w-full max-w-md">
+          <h1 className="font-inter text-color-white text-4xl sm:text-5xl text-center font-extrabold">
+            Criar Conta
+          </h1>
+          <p className="text-center text-color-silver-2 mt-1.5 mb-1.5">
+            Comece a aprender idiomas com flashcards
+          </p>
 
-        <form onSubmit={handleSubmit} className="flex flex-col gap-4 mt-4">
-          <div className="flex flex-col">
-            <label htmlFor="name">Nome</label>
-            <input
-              type="text"
-              id="name"
-              value={name}
-              onChange={(e) => setName(e.target.value)}
-              placeholder="Seu nome"
-              className={inputClass}
-            />
-          </div>
+          <form onSubmit={handleSubmit} className="flex flex-col gap-4 mt-4">
+            <div className="flex flex-col">
+              <label htmlFor="name">Nome</label>
+              <input
+                type="text"
+                id="name"
+                value={name}
+                onChange={(e) => setName(e.target.value)}
+                placeholder="Seu nome"
+                className={inputClass}
+              />
+            </div>
 
-          <div className="flex flex-col">
-            <label htmlFor="email">E-mail</label>
-            <input
-              type="email"
-              id="email"
-              value={email}
-              autoComplete="off"
-              onChange={(e) => setEmail(e.target.value)}
-              placeholder="seu@email.com"
-              className={inputClass}
-            />
-          </div>
+            <div className="flex flex-col">
+              <label htmlFor="email">E-mail</label>
+              <input
+                type="email"
+                id="email"
+                value={email}
+                autoComplete="off"
+                onChange={(e) => setEmail(e.target.value)}
+                placeholder="seu@email.com"
+                className={inputClass}
+              />
+            </div>
 
-          <div className="flex flex-col">
-            <label htmlFor="password">Senha</label>
-            <input
-              type="password"
-              id="password"
-              value={password}
-              autoComplete="new-password"
-              onChange={(e) => setPassword(e.target.value)}
-              placeholder="Mínimo de 6 caracteres"
-              className={inputClass}
-            />
-          </div>
+            <div className="flex flex-col">
+              <label htmlFor="password">Senha</label>
+              <input
+                type="password"
+                id="password"
+                value={password}
+                autoComplete="new-password"
+                onChange={(e) => setPassword(e.target.value)}
+                placeholder="Mínimo de 6 caracteres"
+                className={inputClass}
+              />
+            </div>
 
-          <div className="flex flex-col">
-            <label htmlFor="confirmPassword">Confirmar senha</label>
-            <input
-              type="password"
-              id="confirmPassword"
-              value={confirmPassword}
-              autoComplete="new-password"
-              onChange={(e) => setConfirmPassword(e.target.value)}
-              placeholder="Digite a senha novamente"
-              className={inputClass}
-            />
-          </div>
+            <div className="flex flex-col">
+              <label htmlFor="confirmPassword">Confirmar senha</label>
+              <input
+                type="password"
+                id="confirmPassword"
+                value={confirmPassword}
+                autoComplete="new-password"
+                onChange={(e) => setConfirmPassword(e.target.value)}
+                placeholder="Digite a senha novamente"
+                className={inputClass}
+              />
+            </div>
 
-          <button
-            type="submit"
-            disabled={isSendingCode}
-            className="w-full h-11 rounded-lg bg-linear-to-r from-btn-main-color to-second-color text-color-white font-bold 
+            <button
+              type="submit"
+              disabled={isSendingCode}
+              className="w-full h-11 rounded-lg bg-linear-to-r from-btn-main-color to-second-color text-color-white font-bold 
                     mt-2 hover:brightness-110 active:scale-[0.98] cursor-pointer transition-all duration-300
                     disabled:opacity-60 disabled:cursor-not-allowed"
-          >
-            {isSendingCode ? "Enviando código..." : "Cadastrar"}
-          </button>
-        </form>
+            >
+              {isSendingCode ? "Enviando código..." : "Cadastrar"}
+            </button>
+          </form>
 
-        <p className="text-center text-color-silver-2 mt-6">
-          Já tem conta?{" "}
-          <Link
-            to={PATHS.LOGIN}
-            className="text-second-color font-bold hover:brightness-125"
-          >
-            Entrar
-          </Link>
-        </p>
-      </main>
+          <p className="text-center text-color-silver-2 mt-6">
+            Já tem conta?{" "}
+            <Link
+              to={PATHS.LOGIN}
+              className="text-second-color font-bold hover:brightness-125"
+            >
+              Entrar
+            </Link>
+          </p>
+        </main>
+      </div>
 
       <Modal
         isOpen={isVerifyModalOpen}

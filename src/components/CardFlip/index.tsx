@@ -25,7 +25,7 @@ export const CardFlip = ({
 
   return (
     <div
-      className="w-full h-80 text-color-white cursor-pointer perspective-1000"
+      className="w-full h-64 sm:h-80 text-color-white cursor-pointer perspective-1000"
       onClick={onFlip}
     >
       <div
@@ -34,11 +34,13 @@ export const CardFlip = ({
         }`}
       >
         {/* Lado da frente */}
-        <div className="absolute inset-0 rounded-2xl bg-linear-to-br from-blue-600 to-indigo-700 shadow-2xl shadow-second-color/30 flex flex-col items-center justify-center p-6 backface-hidden">
+        <div className="absolute inset-0 rounded-2xl bg-linear-to-br from-blue-600 to-indigo-700 shadow-2xl shadow-second-color/30 flex flex-col items-center justify-center p-4 sm:p-6 backface-hidden">
           <span className="text-xs tracking-widest text-color-white/60">
             PALAVRA
           </span>
-          <h2 className="text-5xl font-bold mt-4 text-center">{word}</h2>
+          <h2 className="max-w-full break-words text-3xl sm:text-5xl font-bold mt-4 text-center">
+            {word}
+          </h2>
           <div className="w-fit mt-6" onClick={(e) => e.stopPropagation()}>
             <SpeechAudio language={deckLanguage ?? ""} pronounce={word} />
           </div>
@@ -48,11 +50,13 @@ export const CardFlip = ({
         </div>
 
         {/* Lado de trás */}
-        <div className="absolute inset-0 rounded-2xl bg-linear-to-br from-color-purple-1/75 to-purple-900 shadow-2xl shadow-color-purple-1/30 flex flex-col items-center justify-center p-6 backface-hidden rotate-y-180">
+        <div className="absolute inset-0 rounded-2xl bg-linear-to-br from-color-purple-1/75 to-purple-900 shadow-2xl shadow-color-purple-1/30 flex flex-col items-center justify-center p-4 sm:p-6 backface-hidden rotate-y-180">
           <span className="text-xs tracking-widest text-color-white/60">
             TRADUÇÃO
           </span>
-          <h2 className="text-5xl font-bold mt-4 text-center">{translation}</h2>
+          <h2 className="max-w-full break-words text-3xl sm:text-5xl font-bold mt-4 text-center">
+            {translation}
+          </h2>
           <p className="text-sm text-color-white/60 mt-6">
             Clique novamente para voltar
           </p>
