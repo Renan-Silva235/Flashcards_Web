@@ -129,6 +129,8 @@ export const Profile = () => {
       </div>
       <Modal isOpen={verifyCode} onClose={() => setVerifyCode(false)}>
         <VerifyCode
+          email={user?.email ?? ""}
+          endpoint="/auth/password/verify-code"
           onClose={() => setVerifyCode(false)}
           onSuccess={(code) => {
             setVerifyCode(false);

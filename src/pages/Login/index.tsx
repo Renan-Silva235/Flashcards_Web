@@ -3,7 +3,7 @@ import { useDispatch, useSelector } from "react-redux";
 import { loginRequest } from "../../store/modules/auth/actions";
 import type { RootState } from "../../store/rootReducer";
 import { PATHS } from "../../routes/Routes";
-import { useNavigate } from "react-router-dom";
+import { useLocation, useNavigate } from "react-router-dom";
 import { BackButton } from "../../components/BackButton";
 import { ServerWakeUpModal } from "../../components/ServerWakeUpModal";
 import { useServerStatus } from "../../services/serverStatus";
@@ -11,7 +11,11 @@ import { useServerStatus } from "../../services/serverStatus";
 export const Login = () => {
   const dispatch = useDispatch();
   const navigate = useNavigate();
-  const [email, setEmail] = useState("");
+  const location = useLocation();
+  // Depois do cadastro, o e-mail da conta nova já vem preenchido
+  const [email, setEmail] = useState<string>(
+    (location.state as { email?: string } | null)?.email ?? "",
+  );
   const [password, setPassword] = useState("");
 
   const serverStatus = useServerStatus();
@@ -85,7 +89,11 @@ export const Login = () => {
         </form>
         <div className="flex-col flex-1 items-center text-center mt-5">
           <p className="text-color-silver-2">Não tem conta?</p>
-          <button className="mt-5 bg-color-silver-1 w-full h-11 rounded-lg text-color-white font-bold hover:brightness-110 active:scale-50 cursor-pointer transition-all duration-300">
+          <button
+            type="button"
+            onClick={() => navigate(PATHS.REGISTER)}
+            className="mt-5 bg-color-silver-1 w-full h-11 rounded-lg text-color-white font-bold hover:brightness-110 active:scale-[0.98] cursor-pointer transition-all duration-300"
+          >
             Criar Conta
           </button>
         </div>

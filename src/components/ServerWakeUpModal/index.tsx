@@ -62,7 +62,7 @@ export const ServerWakeUpModal = () => {
         >
           {isOnline ? (
             <>
-              <LuCheck className="text-lg" /> Servidor pronto! Pode fazer login.
+              <LuCheck className="text-lg" /> Servidor pronto! Pode continuar.
             </>
           ) : (
             <>
@@ -79,7 +79,7 @@ export const ServerWakeUpModal = () => {
           onClick={handleClose}
           className="w-full h-11 rounded-lg bg-linear-to-r from-btn-main-color to-second-color font-bold cursor-pointer hover:brightness-110 transition-all duration-200"
         >
-          {isOnline ? "Fazer login" : "Entendi, vou aguardar"}
+          {isOnline ? "Continuar" : "Entendi, vou aguardar"}
         </button>
       </div>
     </Modal>

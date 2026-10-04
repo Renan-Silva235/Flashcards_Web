@@ -1,53 +1,64 @@
 import { useState, type FormEvent } from "react";
-import { useSelector } from "react-redux";
-import type { RootState } from "../../store/rootReducer";
 import api from "../../config/api";
-import axios from "axios";
 import { toast } from "react-toastify";
+import { getApiErrorMessages } from "../../utils/apiError";
 
 interface VerifyCodeProps {
+  email: string;
+  endpoint: string; // ex.: /auth/password/verify-code ou /auth/register/verify-code
   onClose: () => void;
-  onSuccess: (code: string) => void;
+  onSuccess: (code: string) => void | Promise<void>;
+  onResend?: () => Promise<void>;
 }
 
-interface Metadata {
-  email: string | undefined;
-  code: string;
-}
-
-export const VerifyCode = ({ onClose, onSuccess }: VerifyCodeProps) => {
-  const { user } = useSelector((state: RootState) => state.auth);
+export const VerifyCode = ({
+  email,
+  endpoint,
+  onClose,
+  onSuccess,
+  onResend,
+}: VerifyCodeProps) => {
   const [code, setCode] = useState<string>("");
-
-  const sendRequest: Metadata = {
-    email: user?.email,
-    code: code,
-  };
+  const [isVerifying, setIsVerifying] = useState<boolean>(false);
+  const [isResending, setIsResending] = useState<boolean>(false);
 
   const handleVerifyCode = async (event: FormEvent<HTMLFormElement>) => {
     event.preventDefault();
-    if (!code) {
+    if (!code.trim()) {
       toast.error("Erro: Por favor digite o código enviado no seu e-mail.");
       return;
     }
 
+    setIsVerifying(true);
     try {
-      await api.post("/auth/password/verify-code", sendRequest);
-
-      onSuccess(code);
+      await api.post(endpoint, { email, code: code.trim() });
+      await onSuccess(code.trim());
     } catch (error: unknown) {
-      if (axios.isAxiosError(error))
-        toast.error(
-          error.response?.data?.message ?? "Código inválido ou expirado.",
-        );
+      getApiErrorMessages(error, "Código inválido.").forEach((message) =>
+        toast.error(message),
+      );
+    } finally {
+      setIsVerifying(false);
+    }
+  };
+
+  const handleResend = async () => {
+    if (!onResend) return;
+    setIsResending(true);
+    try {
+      await onResend();
+      setCode("");
+    } finally {
+      setIsResending(false);
     }
   };
 
   return (
-    <div className="flex flex-col text-center gap-4 w-full h-fit bg-main-color text-color-white p-6 rounded-lg ">
+    <div className="flex flex-col text-center gap-4 w-full max-w-md h-fit bg-main-color text-color-white p-6 rounded-lg ">
       <h1 className="text-3xl">Verificar Código</h1>
       <p className="text-base text-color-silver-2">
-        Digite o código enviado para o seu e-mail.
+        Digite o código enviado para{" "}
+        <span className="text-color-white font-bold">{email}</span>.
       </p>
 
       <form
@@ -58,15 +69,27 @@ export const VerifyCode = ({ onClose, onSuccess }: VerifyCodeProps) => {
           type="text"
           placeholder="Código"
           value={code}
+          autoFocus
           onChange={(e) => setCode(e.target.value)}
-          className="border border-color-white w-full text-center h-11 rounded-lg p-4 outline-none"
+          className="border border-color-white w-full text-center h-11 rounded-lg p-4 outline-none tracking-widest"
         />
         <button
           type="submit"
-          className="bg-linear-to-r from-btn-main-color to-second-color h-11 w-full rounded-lg cursor-pointer hover:brightness-110 transition-all duration-200"
+          disabled={isVerifying}
+          className="bg-linear-to-r from-btn-main-color to-second-color h-11 w-full rounded-lg cursor-pointer hover:brightness-110 transition-all duration-200 disabled:opacity-60 disabled:cursor-not-allowed"
         >
-          Verificar
+          {isVerifying ? "Verificando..." : "Verificar"}
         </button>
+        {onResend && (
+          <button
+            type="button"
+            onClick={handleResend}
+            disabled={isResending || isVerifying}
+            className="text-sm text-color-silver-2 hover:text-color-white underline cursor-pointer disabled:opacity-60 disabled:cursor-not-allowed"
+          >
+            {isResending ? "Reenviando..." : "Não recebeu? Reenviar código"}
+          </button>
+        )}
         <button
           type="button"
           onClick={onClose}
