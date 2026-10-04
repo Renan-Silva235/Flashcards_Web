@@ -2,8 +2,13 @@ import { StrictMode } from "react";
 import { createRoot } from "react-dom/client";
 import { Provider } from "react-redux";
 import { store } from "./store";
+import { sessionCheckRequest } from "./store/modules/auth/actions";
 import App from "./App.tsx";
 import { BrowserRouter } from "react-router-dom";
+
+// Antes de tudo: pergunta ao backend se já existe login (cookie) para manter o
+// usuário logado ao recarregar a página
+store.dispatch(sessionCheckRequest());
 
 createRoot(document.getElementById("root")!).render(
   <StrictMode>

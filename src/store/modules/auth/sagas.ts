@@ -1,5 +1,5 @@
 import { call, takeLatest, put, all } from "redux-saga/effects";
-import { loginFailure, loginSuccess } from "./actions";
+import { loginFailure, loginSuccess, sessionCheckDone } from "./actions";
 import * as types from "./types";
 import type { LoginRequestAction } from "./interface";
 import api from "../../../config/api";
@@ -28,6 +28,19 @@ function* handleLogin(action: LoginRequestAction) {
   }
 }
 
+// Ao abrir/recarregar o app: se o cookie de login ainda for válido, o backend devolve
+// o usuário e a sessão é restaurada sem precisar logar de novo
+function* handleSessionCheck() {
+  try {
+    const response: AxiosResponse = yield call(api.get, "/auth/me");
+    yield put(loginSuccess(response.data));
+  } catch {
+    // 401 = não está logado (ou o token expirou): segue deslogado, sem mostrar erro
+  } finally {
+    yield put(sessionCheckDone());
+  }
+}
+
 function* handleLogout() {
   localStorage.removeItem("access_token");
   try {
@@ -44,5 +57,6 @@ export default function* authSaga() {
   yield all([
     takeLatest(types.LOGIN_REQUEST, handleLogin),
     takeLatest(types.LOGOUT, handleLogout),
+    takeLatest(types.SESSION_CHECK_REQUEST, handleSessionCheck),
   ]);
 }

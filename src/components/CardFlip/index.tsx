@@ -21,7 +21,14 @@ export const CardFlip = ({
   const [searchParams] = useSearchParams();
   const deckLanguage = searchParams.get("deckLanguage");
 
-  if (isLoading) return <Loading />;
+  // Mesma altura do card: a bolinha fica no centro de onde o card vai aparecer
+  // e a página não "pula" quando os cards terminam de carregar
+  if (isLoading)
+    return (
+      <div className="flex w-full h-64 sm:h-80 items-center justify-center">
+        <Loading />
+      </div>
+    );
 
   return (
     <div

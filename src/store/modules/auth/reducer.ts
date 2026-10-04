@@ -6,6 +6,7 @@ const InitialState: AuthState = {
   isLoading: false,
   isAuthenticated: false,
   error: null,
+  isSessionChecked: false,
 };
 
 export const authReducer = (
@@ -20,8 +21,11 @@ export const authReducer = (
         ...state,
         isLoading: false,
         isAuthenticated: true,
+        isSessionChecked: true,
         user: action.payload.user,
       };
+    case types.SESSION_CHECK_DONE:
+      return { ...state, isSessionChecked: true };
     case types.LOGIN_FAILURE:
       return { ...state, isLoading: false, error: action.payload.error };
     case types.LOGOUT:

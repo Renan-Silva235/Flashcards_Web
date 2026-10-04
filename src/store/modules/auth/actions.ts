@@ -4,6 +4,8 @@ import type {
   LoginRequestAction,
   LoginFailureAction,
   LoginResponseInterface,
+  SessionCheckRequestAction,
+  SessionCheckDoneAction,
   LogoutAction,
 } from "./interface";
 
@@ -29,4 +31,12 @@ export const loginFailure = (error: string): LoginFailureAction => ({
 
 export const logout = (): LogoutAction => ({
   type: types.LOGOUT,
+});
+
+export const sessionCheckRequest = (): SessionCheckRequestAction => ({
+  type: types.SESSION_CHECK_REQUEST,
+});
+
+export const sessionCheckDone = (): SessionCheckDoneAction => ({
+  type: types.SESSION_CHECK_DONE,
 });

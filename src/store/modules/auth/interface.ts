@@ -12,6 +12,8 @@ export interface AuthState {
   isLoading: boolean;
   isAuthenticated: boolean;
   error: string | null;
+  // false enquanto o app ainda não perguntou ao backend se o cookie de login é válido
+  isSessionChecked: boolean;
 }
 
 // Tipagem exata de cada Action
@@ -39,8 +41,20 @@ export interface LogoutAction extends Action<string> {
 }
 
 // União de todas as ações possíveis do módulo
+export interface SessionCheckRequestAction extends Action<string> {
+  type: typeof types.SESSION_CHECK_REQUEST;
+  [key: string]: unknown;
+}
+
+export interface SessionCheckDoneAction extends Action<string> {
+  type: typeof types.SESSION_CHECK_DONE;
+  [key: string]: unknown;
+}
+
 export type AuthActionTypes =
   | LoginRequestAction
   | LoginSuccessAction
   | LoginFailureAction
-  | LogoutAction;
+  | LogoutAction
+  | SessionCheckRequestAction
+  | SessionCheckDoneAction;

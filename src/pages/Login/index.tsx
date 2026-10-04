@@ -62,8 +62,15 @@ export const Login = () => {
   };
 
   useEffect(() => {
-    if (isAuthenticated) navigate(PATHS.DASHBOARD);
-  }, [navigate, isAuthenticated]);
+    if (!isAuthenticated) return;
+    // Volta para a página que o usuário tentou abrir antes de ser mandado ao login
+    const from = (
+      location.state as { from?: { pathname: string; search: string } } | null
+    )?.from;
+    navigate(from ? `${from.pathname}${from.search}` : PATHS.DASHBOARD, {
+      replace: true,
+    });
+  }, [navigate, isAuthenticated, location.state]);
 
   return (
     <>

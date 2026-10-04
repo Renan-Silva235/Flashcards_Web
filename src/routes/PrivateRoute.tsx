@@ -5,9 +5,36 @@ import { Navigate, Outlet, useLocation } from "react-router-dom";
 import { LuMenu } from "react-icons/lu";
 import { PATHS } from "./Routes";
 import { Sidebar } from "../components/Sidebar";
+import { Loading } from "../components/Loading";
+
+// Tela de espera enquanto o login é restaurado. Com o Render dormindo, a primeira
+// resposta pode demorar, então depois de alguns segundos explica o motivo.
+const SLOW_HINT_DELAY_MS = 3000;
+
+const SessionLoading = () => {
+  const [isSlow, setIsSlow] = useState<boolean>(false);
+
+  useEffect(() => {
+    const timer = setTimeout(() => setIsSlow(true), SLOW_HINT_DELAY_MS);
+    return () => clearTimeout(timer);
+  }, []);
+
+  return (
+    <div className="flex min-h-dvh flex-col items-center justify-center gap-4 px-4 text-center">
+      <Loading />
+      <p className="text-color-silver-2 text-sm">
+        {isSlow
+          ? "Conectando ao servidor… no primeiro acesso isso pode levar até 1 minuto."
+          : "Carregando…"}
+      </p>
+    </div>
+  );
+};
 
 export const ProtectedRoute = () => {
-  const { isAuthenticated } = useSelector((state: RootState) => state.auth);
+  const { isAuthenticated, isSessionChecked } = useSelector(
+    (state: RootState) => state.auth,
+  );
   const location = useLocation();
   // Guarda em qual página o menu foi aberto: ao navegar para outra (inclusive
   // pelo voltar do navegador), ele fecha sozinho, sem precisar de useEffect
@@ -29,7 +56,13 @@ export const ProtectedRoute = () => {
     };
   }, [isMenuOpen]);
 
-  if (!isAuthenticated) return <Navigate to={PATHS.LOGIN} replace />;
+  // Ainda verificando o cookie (/auth/me): espera, senão ao recarregar a página
+  // o usuário seria mandado para o login mesmo estando logado
+  if (!isSessionChecked) return <SessionLoading />;
+
+  // Guarda a página que ele tentou abrir para voltar a ela depois do login
+  if (!isAuthenticated)
+    return <Navigate to={PATHS.LOGIN} replace state={{ from: location }} />;
 
   return (
     <div className="flex min-h-screen">
