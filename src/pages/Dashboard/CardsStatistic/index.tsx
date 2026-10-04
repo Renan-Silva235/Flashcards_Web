@@ -14,27 +14,33 @@ interface CardsStatisticProps {
   selectedLanguage?: string;
 }
 
-interface CardProps {
-  stats: number | undefined;
-  context: string;
-  color: string;
-}
+const ANIMATION_MS = 900;
 
-const Card = ({ stats, context, color }: CardProps) => {
-  return (
-    <div
-      className="flex flex-col border border-color-white bg-color-silver-1 hover:brightness-110 active:scale-[0.98]
-                    transition-all duration-300 w-64 h-28 rounded-lg cursor-pointer p-2.5 items-center ml-5 justify-center"
-    >
-      <p className={`text-2xl ${color}`}>{stats}</p>
-      <p className="text-color-silver-2">{context}</p>
-    </div>
-  );
+// Anima de 0 a 1 (com easeOutCubic) sempre que `trigger` muda
+const useGrowAnimation = (trigger: unknown) => {
+  const [progress, setProgress] = useState<number>(0);
+
+  useEffect(() => {
+    let frame: number;
+    const start = performance.now();
+
+    const animate = (now: number) => {
+      const linear = Math.min((now - start) / ANIMATION_MS, 1);
+      setProgress(1 - Math.pow(1 - linear, 3));
+      if (linear < 1) frame = requestAnimationFrame(animate);
+    };
+
+    frame = requestAnimationFrame(animate);
+    return () => cancelAnimationFrame(frame);
+  }, [trigger]);
+
+  return progress;
 };
 
 export const CardsStatistic = ({ selectedLanguage }: CardsStatisticProps) => {
   const [stats, setStats] = useState<StatisticsData | null>(null);
   const [isLoading, setIsLoading] = useState(false);
+  const progress = useGrowAnimation(stats);
 
   useEffect(() => {
     const fetchStatistics = async () => {
@@ -61,30 +67,72 @@ export const CardsStatistic = ({ selectedLanguage }: CardsStatisticProps) => {
     fetchStatistics();
   }, [selectedLanguage]);
 
-  if (isLoading) return <Loading />;
+  const bars = [
+    {
+      label: "Fácil",
+      value: stats?.easy ?? 0,
+      color: "text-color-green-1",
+      bar: "bg-color-green-1",
+    },
+    {
+      label: "Médio",
+      value: stats?.medium ?? 0,
+      color: "text-color-yellow-1",
+      bar: "bg-color-yellow-1",
+    },
+    {
+      label: "Difícil",
+      value: stats?.hard ?? 0,
+      color: "text-color-red-1",
+      bar: "bg-color-red-1",
+    },
+  ];
+  const max = Math.max(...bars.map((bar) => bar.value));
 
   return (
-    <div className="flex flex-wrap gap-5">
-      <Card
-        stats={stats?.totalCards}
-        context="Total Cards"
-        color="text-second-color"
-      />
-      <Card
-        stats={stats?.easy}
-        context="Dificuldade Fácil"
-        color="text-color-green-1"
-      />
-      <Card
-        stats={stats?.medium}
-        context="Dificuldade média"
-        color="text-color-yellow-1"
-      />
-      <Card
-        stats={stats?.totalCards}
-        context="Dificuldade Difícil"
-        color="text-color-red-1"
-      />
+    <div className="w-full rounded-2xl border border-color-silver-1 bg-[#0d1424] shadow-2xl shadow-black/50 p-6">
+      <div className="rounded-lg border border-color-silver-1 bg-color-silver-1/40 px-5 py-4 flex items-center justify-between">
+        <span className="text-color-silver-2">Total Cards</span>
+        <span className="text-second-color text-3xl font-bold tabular-nums">
+          {Math.round((stats?.totalCards ?? 0) * progress)}
+        </span>
+      </div>
+
+      <div className="relative h-56 flex items-end justify-around gap-8 px-4 mt-6">
+        {isLoading ? (
+          <div className="absolute inset-0 flex items-center justify-center">
+            <Loading />
+          </div>
+        ) : (
+          bars.map((bar) => (
+            <div
+              key={bar.label}
+              className="flex flex-col items-center justify-end h-full flex-1"
+            >
+              <span
+                className={`${bar.color} text-xl font-bold tabular-nums mb-2`}
+              >
+                {Math.round(bar.value * progress)}
+              </span>
+              <div
+                className={`${bar.bar} w-full max-w-24 rounded-t-md opacity-80`}
+                style={{
+                  height: max > 0 ? `${(bar.value / max) * 75 * progress}%` : 0,
+                }}
+              />
+              <span className="text-color-silver-2 text-sm mt-3">
+                {bar.label}
+              </span>
+            </div>
+          ))
+        )}
+
+        {!isLoading && max === 0 && (
+          <p className="absolute inset-x-0 top-1/3 text-center text-color-silver-2 text-sm">
+            Estude um deck para ver suas estatísticas aqui.
+          </p>
+        )}
+      </div>
     </div>
   );
 };

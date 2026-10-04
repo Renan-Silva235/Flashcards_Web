@@ -1,5 +1,6 @@
 import { useState } from "react";
 import { LanguageDropdown } from "../LanguageDropdown";
+import { usePreferredLanguage } from "../../../hooks/usePreferredLanguage";
 import api from "../../../config/api";
 import axios, { type AxiosResponse, AxiosError } from "axios";
 import { toast } from "react-toastify";
@@ -8,7 +9,10 @@ import { useSelector, useDispatch } from "react-redux";
 import type { RootState } from "../../../store/rootReducer";
 
 export const CreateDeckComponent = () => {
-  const [selectedLanguage, setSelectedLanguage] = useState<string>("English");
+  const [preferredLanguage] = usePreferredLanguage();
+  // Começa no idioma salvo, mas trocar aqui não altera a preferência do dashboard
+  const [selectedLanguage, setSelectedLanguage] =
+    useState<string>(preferredLanguage);
   const [name, setName] = useState<string>("");
   const [category, setCategory] = useState<string>("");
   const dispatch = useDispatch();

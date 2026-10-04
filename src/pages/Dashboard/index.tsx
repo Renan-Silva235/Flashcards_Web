@@ -4,9 +4,10 @@ import { CardsStatistic } from "./CardsStatistic";
 import { DeckList } from "./DeckList";
 import type { RootState } from "../../store/rootReducer";
 import { LanguageDropdown } from "./LanguageDropdown";
+import { usePreferredLanguage } from "../../hooks/usePreferredLanguage";
 
 export const Dashboard = () => {
-  const [selectedLanguage, setSelectedLanguage] = useState<string>("English");
+  const [selectedLanguage, setSelectedLanguage] = usePreferredLanguage();
   const [searchTerm, setSearchTerm] = useState<string>("");
 
   const { user } = useSelector((state: RootState) => state.auth);
