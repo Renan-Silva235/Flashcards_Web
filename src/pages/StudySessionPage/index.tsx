@@ -11,10 +11,40 @@ import { toast } from "react-toastify";
 import { Link } from "react-router-dom";
 import { IoIosReturnLeft } from "react-icons/io";
 import { LuX, LuMinus, LuCheck } from "react-icons/lu";
+import type { IconType } from "react-icons/lib";
+
+type ReviewResult = "MISTAKE" | "DIFFICULT" | "HIT";
+
+const REVIEW_BUTTONS: {
+  result: ReviewResult;
+  label: string;
+  icon: IconType;
+  color: string;
+}[] = [
+  { result: "MISTAKE", label: "Difícil", icon: LuX, color: "bg-red-600" },
+  {
+    result: "DIFFICULT",
+    label: "Médio",
+    icon: LuMinus,
+    color: "bg-orange-500",
+  },
+  { result: "HIT", label: "Fácil", icon: LuCheck, color: "bg-green-500" },
+];
+
+// Tempo da animação de saída/entrada do card (igual ao duration-300 das classes)
+const CARD_ANIMATION_MS = 300;
+
+const wait = (ms: number) => new Promise((resolve) => setTimeout(resolve, ms));
 
 export const StudySessionPage = () => {
   const [searchParams] = useSearchParams();
   const deckId = searchParams.get("deckId");
+  const deckName = searchParams.get("deckName");
+  const [isFlipped, setIsFlipped] = useState<boolean>(false);
+  const [pressed, setPressed] = useState<ReviewResult | null>(null);
+  const [cardAnimation, setCardAnimation] = useState<
+    "idle" | "leaving" | "entering"
+  >("idle");
   const dispatch = useDispatch();
   const [currentIndex, setCurrentIndex] = useState<number>(0);
   const [sessionId, setSessionId] = useState<string | null>(null);
@@ -44,10 +74,11 @@ export const StudySessionPage = () => {
     initSessionStudy();
   }, [dispatch, deckId]);
 
-  const handleReview = async (result: "MISTAKE" | "DIFFICULT" | "HIT") => {
-    if (!sessionId || !flashcards || flashcards.length === 0) return;
+  const handleReview = async (result: ReviewResult) => {
+    if (!sessionId || !flashcards || flashcards.length === 0 || pressed) return;
 
     const currentCard = flashcards[currentIndex];
+    setPressed(result);
 
     try {
       // Envia a revisão do card atual
@@ -56,9 +87,18 @@ export const StudySessionPage = () => {
         result: result,
       });
 
+      // Card sai pela esquerda
+      setCardAnimation("leaving");
+      await wait(CARD_ANIMATION_MS);
+
       // Se ainda houver próximos cards, avança o índice
       if (currentIndex < flashcards.length - 1) {
+        setIsFlipped(false);
         setCurrentIndex((prev) => prev + 1);
+        // Próximo card entra pela direita
+        setCardAnimation("entering");
+        await wait(50);
+        setCardAnimation("idle");
       } else {
         // Se era o último card, tenta encerrar a sessão
         try {
@@ -75,6 +115,9 @@ export const StudySessionPage = () => {
         console.error("Erro no review:", error.response?.data);
         toast.error("Erro ao registrar a resposta.");
       }
+      setCardAnimation("idle");
+    } finally {
+      setPressed(null);
     }
   };
 
@@ -117,6 +160,16 @@ export const StudySessionPage = () => {
       ? flashcards[currentIndex]
       : null;
 
+  const total = flashcards?.length ?? 0;
+  const answered = currentIndex + (cardAnimation === "leaving" ? 1 : 0);
+  const progress = total > 0 ? (answered / total) * 100 : 0;
+
+  const cardAnimationClass = {
+    idle: "opacity-100 translate-x-0 duration-300",
+    leaving: "opacity-0 -translate-x-24 duration-300",
+    entering: "opacity-0 translate-x-24 duration-0",
+  }[cardAnimation];
+
   return (
     <>
       <Link
@@ -126,34 +179,55 @@ export const StudySessionPage = () => {
       >
         {<IoIosReturnLeft />} Meus Decks
       </Link>
-      <CardFlip
-        word={currentCard ? currentCard.word : ""}
-        translation={currentCard ? currentCard.translation : ""}
-        isLoading={isLoading}
-      />
-      {!isLoading && currentCard && !isFinished && (
-        <div className="flex text-center items-center justify-center gap-14 mt-6 text-color-white">
-          <button
-            onClick={() => handleReview("MISTAKE")}
-            className="flex bg-red-600 rounded-lg w-40 h-11 cursor-pointer hover:brightness-110 transition-all duration-200 gap-2 text-center justify-center p-3 m-3.5 whitespace-nowrap"
-          >
-            <LuX />
-            <span className="font-bold">Difícil</span>
-          </button>
-          <button
-            onClick={() => handleReview("DIFFICULT")}
-            className="flex bg-orange-500 rounded-lg w-40 h-11 cursor-pointer hover:brightness-110 transition-all duration-200 gap-2 text-center justify-center p-3 m-3.5 whitespace-nowrap"
-          >
-            {<LuMinus />} Médio
-          </button>
-          <button
-            onClick={() => handleReview("HIT")}
-            className="flex bg-green-500 rounded-lg w-40 h-11 cursor-pointer hover:brightness-110 transition-all duration-200 gap-2 text-center justify-center p-3 m-3.5 whitespace-nowrap"
-          >
-            {<LuCheck />} Fácil
-          </button>
+
+      <div className="flex flex-col w-full max-w-2xl mx-auto mt-10">
+        <div className="flex items-center justify-between text-sm text-color-silver-2 mb-3">
+          <span>{deckName}</span>
+          {total > 0 && (
+            <span>
+              {Math.min(currentIndex + 1, total)}/{total}
+            </span>
+          )}
         </div>
-      )}
+        <div className="h-2 w-full rounded-full bg-color-silver-1 overflow-hidden">
+          <div
+            className="h-full bg-linear-to-r from-btn-main-color to-color-purple-1 transition-all duration-500"
+            style={{ width: `${progress}%` }}
+          />
+        </div>
+
+        <div className={`mt-10 transition-all ${cardAnimationClass}`}>
+          <CardFlip
+            key={currentIndex}
+            word={currentCard ? currentCard.word : ""}
+            translation={currentCard ? currentCard.translation : ""}
+            isFlipped={isFlipped}
+            onFlip={() => setIsFlipped((prev) => !prev)}
+            isLoading={isLoading}
+          />
+        </div>
+
+        {!isLoading && currentCard && !isFinished && (
+          <div className="flex justify-center gap-6 mt-10 text-color-white">
+            {REVIEW_BUTTONS.map(({ result, label, icon: Icon, color }) => (
+              <button
+                key={result}
+                onClick={() => handleReview(result)}
+                disabled={!isFlipped || pressed !== null}
+                className={`${color} flex items-center justify-center gap-2 rounded-lg w-40 h-11 font-bold transition-all duration-200 ${
+                  pressed === result
+                    ? "scale-110 ring-2 ring-color-white"
+                    : isFlipped
+                      ? "opacity-100 cursor-pointer hover:brightness-110"
+                      : "opacity-40 cursor-not-allowed"
+                }`}
+              >
+                <Icon /> {label}
+              </button>
+            ))}
+          </div>
+        )}
+      </div>
     </>
   );
 };
