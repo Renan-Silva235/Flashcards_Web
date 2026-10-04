@@ -13,6 +13,7 @@ interface CardComponentProps {
   onChange?: (field: keyof FlashcardResponseApi, value: string) => void;
   textButton?: string;
   onClose?: () => void;
+  onView?: () => void; // se informado, o pai controla o modal de visualizar (carrossel)
 }
 
 export const CardComponent = ({
@@ -21,6 +22,7 @@ export const CardComponent = ({
   onChange,
   textButton,
   onClose,
+  onView,
 }: CardComponentProps) => {
   const [isModalOpen, setIsModalOpen] = useState<boolean>(false);
   const [isDeleteModalOpen, setIsDeleteModalOpen] = useState<boolean>(false);
@@ -333,7 +335,7 @@ export const CardComponent = ({
         <div className="mt-4 flex flex-col w-full gap-2.5 items-center">
           {mode === "view" ? (
             <button
-              onClick={() => setIsModalOpen(true)}
+              onClick={() => (onView ? onView() : setIsModalOpen(true))}
               className="bg-color-yellow-1 w-55 h-11 rounded-lg cursor-pointer hover:brightness-110 scale-[0.98] transition-all duration-50"
             >
               Visualizar

@@ -88,7 +88,6 @@ export const ShowCard = ({ data, onClose }: ShowCardProps) => {
           textButton="Editar"
           onClose={onClose}
         />
-        ;
       </form>
     </>
   );
