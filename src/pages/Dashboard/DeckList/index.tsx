@@ -25,7 +25,13 @@ export const DeckList = ({
     if (userId) dispatch(deckRequestAction(userId));
   }, [dispatch, userId]);
 
-  if (isLoading) return <Loading />;
+  // Centralizado no lugar onde a lista vai aparecer (antes ficava colado no campo de pesquisa)
+  if (isLoading)
+    return (
+      <div className="flex w-full justify-center py-16">
+        <Loading />
+      </div>
+    );
 
   if (decks === null) return;
 

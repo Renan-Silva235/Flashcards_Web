@@ -34,7 +34,13 @@ export const FlashcardList = ({ deckId, searchTerm }: FlashcardListProps) => {
   );
 
   const renderContent = () => {
-    if (isLoading) return <Loading />;
+    // Centralizado no lugar onde a lista vai aparecer (antes ficava colado no campo de pesquisa)
+    if (isLoading)
+      return (
+        <div className="flex w-full justify-center py-16">
+          <Loading />
+        </div>
+      );
     if (flashcards == null) return null;
 
     if (filteredFlashcard.length === 0 && searchTerm.trim() !== "")
