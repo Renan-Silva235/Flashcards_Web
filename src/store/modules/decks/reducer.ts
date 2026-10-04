@@ -23,6 +23,16 @@ export const deckReducer = (
       };
     case types.DECK_FAILURE:
       return { ...state, isLoading: false, error: action.payload.error };
+    case types.DECK_FAVORITE_UPDATE: {
+      const { deckId, favorite } = action.payload;
+      return {
+        ...state,
+        decks:
+          state.decks?.map((deck) =>
+            deck.id === deckId ? { ...deck, favorite } : deck,
+          ) ?? null,
+      };
+    }
     default:
       return state;
   }

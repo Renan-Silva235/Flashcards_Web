@@ -1,4 +1,11 @@
+import { useState } from "react";
 import { useNavigate } from "react-router-dom";
+import { useDispatch } from "react-redux";
+import axios from "axios";
+import { toast } from "react-toastify";
+import { FaStar, FaRegStar } from "react-icons/fa";
+import api from "../../config/api";
+import { deckFavoriteUpdateAction } from "../../store/modules/decks/actions";
 import { getLanguageFlag } from "../../utils/languages";
 import { PATHS } from "../../routes/Routes";
 
@@ -8,6 +15,7 @@ interface Metadata {
   title: string;
   category: string;
   counter: number;
+  favorite: boolean;
 }
 
 export const CardsDeck = ({
@@ -16,8 +24,29 @@ export const CardsDeck = ({
   title,
   category,
   counter,
+  favorite,
 }: Metadata) => {
   const navigate = useNavigate();
+  const dispatch = useDispatch();
+  const [isTogglingFavorite, setIsTogglingFavorite] = useState<boolean>(false);
+
+  const handleToggleFavorite = async () => {
+    if (!id || isTogglingFavorite) return;
+
+    // Atualização otimista: a estrela muda na hora e volta se a API falhar
+    dispatch(deckFavoriteUpdateAction(id, !favorite));
+    setIsTogglingFavorite(true);
+
+    try {
+      await api.patch(`decks/${id}/favorite`);
+    } catch (error: unknown) {
+      dispatch(deckFavoriteUpdateAction(id, favorite));
+      if (axios.isAxiosError(error))
+        toast.error("Não foi possível atualizar o favorito.");
+    } finally {
+      setIsTogglingFavorite(false);
+    }
+  };
 
   const handleOpenDeck = () => {
     navigate(
@@ -37,9 +66,28 @@ export const CardsDeck = ({
                   bg-linear-to-r from-color-white/10 to-main-color shadow-lg shadow-black/50
                   transition-transform duration-300 hover:scale-100 hover:-translate-y-2 cursor-pointer"
     >
-      <p className="font-sans tracking-wider uppercase font-bold text-second-color">
-        {getLanguageFlag(language)} {language}
-      </p>
+      <div className="flex justify-between items-center">
+        <p className="font-sans tracking-wider uppercase font-bold text-second-color">
+          {getLanguageFlag(language)} {language}
+        </p>
+        <button
+          type="button"
+          onClick={handleToggleFavorite}
+          disabled={isTogglingFavorite}
+          title={favorite ? "Remover dos favoritos" : "Adicionar aos favoritos"}
+          aria-label={
+            favorite ? "Remover dos favoritos" : "Adicionar aos favoritos"
+          }
+          aria-pressed={favorite}
+          className={`text-2xl cursor-pointer transition-all duration-200 hover:scale-125 active:scale-90 ${
+            favorite
+              ? "text-color-yellow-1 drop-shadow-[0_0_6px_rgba(224,184,24,0.6)]"
+              : "text-color-silver-2 hover:text-color-yellow-1"
+          }`}
+        >
+          {favorite ? <FaStar /> : <FaRegStar />}
+        </button>
+      </div>
       <div className="flex justify-between items-center">
         <h1 className="font-bold text-color-white text-4xl">{title}</h1>
         <div className="flex flex-col items-center">

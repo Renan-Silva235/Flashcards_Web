@@ -47,6 +47,11 @@ export const DeckList = ({
     return matchesSearch && matchesLanguage;
   });
 
+  // Favoritos primeiro; o sort é estável, então a ordem original se mantém dentro de cada grupo
+  const sortedDecks = [...filteredDeck].sort(
+    (a, b) => Number(b.favorite) - Number(a.favorite),
+  );
+
   if (filteredDeck.length == 0 && searchTerm.trim() !== "") {
     return <NotFound msg="Nenhum deck encontrado." isFilterSearch={true} />;
   }
@@ -62,7 +67,7 @@ export const DeckList = ({
 
   return (
     <div className="flex flex-wrap gap-5 mt-10 justify-center">
-      {filteredDeck.map((deck) => (
+      {sortedDecks.map((deck) => (
         <CardsDeck
           key={deck.id}
           id={deck.id}
@@ -70,6 +75,7 @@ export const DeckList = ({
           title={deck.name}
           category={deck.category}
           counter={deck.cardsCount}
+          favorite={deck.favorite}
         />
       ))}
     </div>

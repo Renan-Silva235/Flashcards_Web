@@ -7,6 +7,7 @@ export interface DeckResponseInterface {
   language: string;
   category: string;
   cardsCount: number;
+  favorite: boolean;
 }
 
 export interface DeckState {
@@ -33,7 +34,14 @@ export interface DeckFailureAction extends Action<string> {
   [key: string]: unknown;
 }
 
+export interface DeckFavoriteUpdateAction extends Action<string> {
+  type: typeof types.DECK_FAVORITE_UPDATE;
+  payload: { deckId: string; favorite: boolean };
+  [key: string]: unknown;
+}
+
 export type DeckActionTypes =
   | DeckRequestAction
   | DeckSuccessAction
-  | DeckFailureAction;
+  | DeckFailureAction
+  | DeckFavoriteUpdateAction;

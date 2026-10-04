@@ -1,7 +1,7 @@
 import { useState, useEffect } from "react";
 import { useSearchParams } from "react-router-dom";
-import { Link } from "react-router-dom";
-import { IoIosReturnLeft } from "react-icons/io";
+import { PATHS } from "../../routes/Routes";
+import { BackButton } from "../../components/BackButton";
 import { LuBookOpen } from "react-icons/lu";
 import { HiOutlinePlusSmall } from "react-icons/hi2";
 import { FlashcardList } from "./FlashcardList";
@@ -28,13 +28,7 @@ export const Flashcards = () => {
   return (
     <>
       <div className="flex flex-col w-full">
-        <Link
-          to="/dashboard"
-          className="flex gap-4 text-color-white text-base font-serif hover:text-white 
-                    whitespace-nowrap items-center w-fit"
-        >
-          {<IoIosReturnLeft />} Meus Decks
-        </Link>
+        <BackButton to={PATHS.DASHBOARD} label="Voltar para Meus Decks" />
         <div className="flex mt-10 justify-between">
           <h1 className="text-color-white font-bold text-5xl">{deckName}</h1>
           <div className="flex flex-col items-center">
