@@ -27,7 +27,9 @@ const GATEWAY_STATUSES = [502, 503, 504];
 
 const ping = async (): Promise<boolean> => {
   try {
-    await api.get("/", { timeout: REQUEST_TIMEOUT_MS });
+    // Rota real da API (não a raiz): com o rewrite da Vercel, "/api/" sozinho cai na
+    // página do app e responderia na hora, mesmo com o Render ainda dormindo
+    await api.get("/statistics", { timeout: REQUEST_TIMEOUT_MS });
     return true;
   } catch (error: unknown) {
     // Qualquer outra resposta HTTP (até 401/404) significa que o backend já está ligado
