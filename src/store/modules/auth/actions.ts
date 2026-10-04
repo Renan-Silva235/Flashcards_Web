@@ -4,6 +4,7 @@ import type {
   LoginRequestAction,
   LoginFailureAction,
   LoginResponseInterface,
+  LogoutAction,
 } from "./interface";
 
 export const loginRequest = (
@@ -24,4 +25,8 @@ export const loginSuccess = (
 export const loginFailure = (error: string): LoginFailureAction => ({
   type: types.LOGIN_FAILURE,
   payload: { error },
+});
+
+export const logout = (): LogoutAction => ({
+  type: types.LOGOUT,
 });

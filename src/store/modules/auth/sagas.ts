@@ -28,8 +28,16 @@ function* handleLogin(action: LoginRequestAction) {
   }
 }
 
-function handleLogout() {
+function* handleLogout() {
   localStorage.removeItem("access_token");
+  try {
+    // Pede ao backend para apagar o cookie HttpOnly com o JWT
+    yield call(api.post, "/auth/logout");
+  } catch (error: unknown) {
+    if (axios.isAxiosError(error)) {
+      console.error("Erro ao encerrar sessão: ", error.response?.data?.message);
+    }
+  }
 }
 
 export default function* authSaga() {

@@ -3,7 +3,8 @@ import { useDispatch, useSelector } from "react-redux";
 import { loginRequest } from "../../store/modules/auth/actions";
 import type { RootState } from "../../store/rootReducer";
 import { PATHS } from "../../routes/Routes";
-import { useNavigate } from "react-router-dom";
+import { Link, useNavigate } from "react-router-dom";
+import { IoIosReturnLeft } from "react-icons/io";
 
 export const Login = () => {
   const dispatch = useDispatch();
@@ -25,55 +26,64 @@ export const Login = () => {
   }, [navigate, isAuthenticated]);
 
   return (
-    <main className="flex flex-col font-sans w-4xl h-fit m-auto justify-center relative top-52 pl-57.5 pr-57.5">
-      <h1 className="font-inter text-color-white text-5xl text-center font-extrabold">
-        Flash Cards
-      </h1>
-      <p className="text-center text-color-silver-2 mt-1.5 mb-1.5">
-        Aprenda idiomas de forma inteligente
-      </p>
-      <form onSubmit={handleSubmit} className="flex flex-col mt-4">
-        <div className="flex flex-col mb-4">
-          <label htmlFor="email">E-mail</label>
+    <>
+      <Link
+        to={PATHS.HOME}
+        className="fixed top-6 left-6 flex items-center gap-2 text-color-silver-2 hover:text-color-white
+                    border border-color-silver-1 rounded-lg px-4 py-2 hover:bg-white/10 transition-all duration-300"
+      >
+        <IoIosReturnLeft size={20} /> Voltar para a Home
+      </Link>
+      <main className="flex flex-col font-sans w-4xl h-fit m-auto justify-center relative top-52 pl-57.5 pr-57.5">
+        <h1 className="font-inter text-color-white text-5xl text-center font-extrabold">
+          Flash Cards
+        </h1>
+        <p className="text-center text-color-silver-2 mt-1.5 mb-1.5">
+          Aprenda idiomas de forma inteligente
+        </p>
+        <form onSubmit={handleSubmit} className="flex flex-col mt-4">
+          <div className="flex flex-col mb-4">
+            <label htmlFor="email">E-mail</label>
+            <input
+              type="email"
+              id="email"
+              value={email}
+              autoComplete="off"
+              onChange={(e) => setEmail(e.target.value)}
+              placeholder="seu@email.com"
+              className="w-full h-11 rounded-lg p-2.5 border border-transparent outline-none caret-color-white text-white
+                    bg-input-bg-main-color focus:bg-input-bg-main-color focus:border focus:border-color-white focus:shadow focus:shadow-color-white/35
+                      autofill:bg-input-bg-main-color"
+            />
+          </div>
+
+          <label htmlFor="password">Senha</label>
           <input
-            type="email"
-            id="email"
-            value={email}
+            type="password"
+            id="password"
+            value={password}
+            onChange={(e) => setPassword(e.target.value)}
             autoComplete="off"
-            onChange={(e) => setEmail(e.target.value)}
-            placeholder="seu@email.com"
+            placeholder="********"
             className="w-full h-11 rounded-lg p-2.5 border border-transparent outline-none caret-color-white text-white
                     bg-input-bg-main-color focus:bg-input-bg-main-color focus:border focus:border-color-white focus:shadow focus:shadow-color-white/35
                       autofill:bg-input-bg-main-color"
           />
-        </div>
-
-        <label htmlFor="password">Senha</label>
-        <input
-          type="password"
-          id="password"
-          value={password}
-          onChange={(e) => setPassword(e.target.value)}
-          autoComplete="off"
-          placeholder="********"
-          className="w-full h-11 rounded-lg p-2.5 border border-transparent outline-none caret-color-white text-white
-                    bg-input-bg-main-color focus:bg-input-bg-main-color focus:border focus:border-color-white focus:shadow focus:shadow-color-white/35
-                      autofill:bg-input-bg-main-color"
-        />
-        <button
-          type="submit"
-          className="w-full h-11 rounded-lg bg-linear-to-r from-btn-main-color to-second-color text-color-white font-bold 
+          <button
+            type="submit"
+            className="w-full h-11 rounded-lg bg-linear-to-r from-btn-main-color to-second-color text-color-white font-bold 
                     mt-5 hover:brightness-110 active:scale-[0.98] cursor-pointer transition-all duration-300"
-        >
-          {isLoading ? "Autenticando..." : "Enviar"}
-        </button>
-      </form>
-      <div className="flex-col flex-1 items-center text-center mt-5">
-        <p className="text-color-silver-2">Não tem conta?</p>
-        <button className="mt-5 bg-color-silver-1 w-full h-11 rounded-lg text-color-white font-bold hover:brightness-110 active:scale-50 cursor-pointer transition-all duration-300">
-          Criar Conta
-        </button>
-      </div>
-    </main>
+          >
+            {isLoading ? "Autenticando..." : "Enviar"}
+          </button>
+        </form>
+        <div className="flex-col flex-1 items-center text-center mt-5">
+          <p className="text-color-silver-2">Não tem conta?</p>
+          <button className="mt-5 bg-color-silver-1 w-full h-11 rounded-lg text-color-white font-bold hover:brightness-110 active:scale-50 cursor-pointer transition-all duration-300">
+            Criar Conta
+          </button>
+        </div>
+      </main>
+    </>
   );
 };
