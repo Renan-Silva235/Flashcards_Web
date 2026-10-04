@@ -1,5 +1,5 @@
 import { useState, useEffect } from "react";
-import { useSearchParams } from "react-router-dom";
+import { useSearchParams, useNavigate } from "react-router-dom";
 import { PATHS } from "../../routes/Routes";
 import { BackButton } from "../../components/BackButton";
 import { LuBookOpen } from "react-icons/lu";
@@ -15,9 +15,11 @@ export const Flashcards = () => {
   const [searchParams] = useSearchParams();
   const deckId = searchParams.get("deckId");
   const deckName = searchParams.get("deckName");
+  const deckLanguage = searchParams.get("deckLanguage");
   const [searchTerm, setSearchTerm] = useState<string>("");
   const [isModalOpen, setIsModalOpen] = useState(false);
   const dispatch = useDispatch();
+  const navigate = useNavigate();
   const { decks } = useSelector((state: RootState) => state.deck);
   const { user } = useSelector((state: RootState) => state.auth);
   const currentDeck = (decks ?? []).find((deck) => deck.id === deckId);
@@ -25,6 +27,20 @@ export const Flashcards = () => {
   useEffect(() => {
     if (user?.id) dispatch(deckRequestAction(user.id));
   }, [dispatch, user]);
+
+  const cardsCount = currentDeck?.cardsCount ?? 0;
+
+  const handleOpenSessionStudy = () => {
+    if (!deckId || cardsCount === 0) return;
+
+    // URLSearchParams já codifica os valores (nomes com espaço, acento etc.)
+    const params = new URLSearchParams({
+      deckId,
+      deckName: deckName ?? "",
+      deckLanguage: deckLanguage ?? "",
+    });
+    navigate(`${PATHS.STUDY_SESSION}?${params.toString()}`);
+  };
   return (
     <>
       <div className="flex flex-col w-full">
@@ -32,9 +48,7 @@ export const Flashcards = () => {
         <div className="flex mt-10 justify-between">
           <h1 className="text-color-white font-bold text-5xl">{deckName}</h1>
           <div className="flex flex-col items-center">
-            <p className="text-second-color text-5xl">
-              {currentDeck?.cardsCount ?? 0}
-            </p>
+            <p className="text-second-color text-5xl">{cardsCount}</p>
             <p className="text-color-silver-2 text-3xl">cards</p>
           </div>
         </div>
@@ -48,10 +62,19 @@ export const Flashcards = () => {
             {<HiOutlinePlusSmall className="text-2xl" />}Novo Card
           </button>
           <button
+            onClick={handleOpenSessionStudy}
+            disabled={cardsCount === 0}
+            title={
+              cardsCount === 0
+                ? "Crie pelo menos um card para estudar"
+                : "Estudar este deck"
+            }
             className="flex items-center justify-center gap-2.5 w-2xs h-11 bg-color-silver-1 hover:brightness-110 scale-[0.98] 
-                    cursor-pointer transition-all drop-shadow-blue-200 text-color-white font-medium border-none outline-none rounded-lg"
+                    cursor-pointer transition-all drop-shadow-blue-200 text-color-white font-medium border-none outline-none rounded-lg
+                    disabled:opacity-50 disabled:cursor-not-allowed disabled:hover:brightness-100"
           >
-            {<LuBookOpen className="text-bold text-" />}Estudar
+            <LuBookOpen className="text-xl" />
+            Estudar
           </button>
         </div>
         <div className="w-96">

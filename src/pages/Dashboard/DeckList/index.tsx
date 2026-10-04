@@ -47,7 +47,6 @@ export const DeckList = ({
     return matchesSearch && matchesLanguage;
   });
 
-  // Favoritos primeiro; o sort é estável, então a ordem original se mantém dentro de cada grupo
   const sortedDecks = [...filteredDeck].sort(
     (a, b) => Number(b.favorite) - Number(a.favorite),
   );
