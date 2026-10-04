@@ -3,8 +3,8 @@ import { useDispatch, useSelector } from "react-redux";
 import { loginRequest } from "../../store/modules/auth/actions";
 import type { RootState } from "../../store/rootReducer";
 import { PATHS } from "../../routes/Routes";
-import { Link, useNavigate } from "react-router-dom";
-import { IoIosReturnLeft } from "react-icons/io";
+import { useNavigate } from "react-router-dom";
+import { BackButton } from "../../components/BackButton";
 
 export const Login = () => {
   const dispatch = useDispatch();
@@ -27,13 +27,11 @@ export const Login = () => {
 
   return (
     <>
-      <Link
+      <BackButton
         to={PATHS.HOME}
-        className="fixed top-6 left-6 flex items-center gap-2 text-color-silver-2 hover:text-color-white
-                    border border-color-silver-1 rounded-lg px-4 py-2 hover:bg-white/10 transition-all duration-300"
-      >
-        <IoIosReturnLeft size={20} /> Voltar para a Home
-      </Link>
+        label="Voltar para a Home"
+        className="fixed top-6 left-6"
+      />
       <main className="flex flex-col font-sans w-4xl h-fit m-auto justify-center relative top-52 pl-57.5 pr-57.5">
         <h1 className="font-inter text-color-white text-5xl text-center font-extrabold">
           Flash Cards

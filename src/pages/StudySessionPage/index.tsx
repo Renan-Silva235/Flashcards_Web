@@ -8,8 +8,8 @@ import type { AxiosResponse } from "axios";
 import api from "../../config/api";
 import axios from "axios";
 import { toast } from "react-toastify";
-import { Link } from "react-router-dom";
-import { IoIosReturnLeft } from "react-icons/io";
+import { PATHS } from "../../routes/Routes";
+import { BackButton } from "../../components/BackButton";
 import { LuX, LuMinus, LuCheck } from "react-icons/lu";
 import type { IconType } from "react-icons/lib";
 
@@ -145,12 +145,7 @@ export const StudySessionPage = () => {
         <p className="text-color-silver-2 mb-6">
           Este deck ainda não possui flashcards cadastrados.
         </p>
-        <button
-          onClick={() => navigate(-1)}
-          className="bg-blue-600 px-6 py-2 rounded-lg cursor-pointer hover:brightness-110"
-        >
-          Voltar
-        </button>
+        <BackButton label="Voltar" />
       </div>
     );
   }
@@ -172,13 +167,7 @@ export const StudySessionPage = () => {
 
   return (
     <>
-      <Link
-        to="/dashboard"
-        className="flex gap-4 text-color-white text-base font-serif hover:text-white 
-                    whitespace-nowrap items-center w-fit"
-      >
-        {<IoIosReturnLeft />} Meus Decks
-      </Link>
+      <BackButton to={PATHS.DASHBOARD} label="Voltar para Meus Decks" />
 
       <div className="flex flex-col w-full max-w-2xl mx-auto mt-10">
         <div className="flex items-center justify-between text-sm text-color-silver-2 mb-3">
