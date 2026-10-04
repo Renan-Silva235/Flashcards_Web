@@ -21,12 +21,21 @@ const setStatus = (next: ServerStatus) => {
 const RETRY_DELAY_MS = 5000;
 const REQUEST_TIMEOUT_MS = 90000;
 
+// Respostas de "gateway": quem respondeu foi o proxy da Vercel (rewrite /api),
+// não o backend. Significa que o Render ainda está ligando.
+const GATEWAY_STATUSES = [502, 503, 504];
+
 const ping = async (): Promise<boolean> => {
   try {
     await api.get("/", { timeout: REQUEST_TIMEOUT_MS });
     return true;
   } catch (error: unknown) {
-    return axios.isAxiosError(error) && !!error.response;
+    // Qualquer outra resposta HTTP (até 401/404) significa que o backend já está ligado
+    return (
+      axios.isAxiosError(error) &&
+      !!error.response &&
+      !GATEWAY_STATUSES.includes(error.response.status)
+    );
   }
 };
 
