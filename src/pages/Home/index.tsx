@@ -1,3 +1,4 @@
+import { useEffect } from "react";
 import { useNavigate } from "react-router-dom";
 import { useSelector } from "react-redux";
 import { MdOutlineTrendingFlat } from "react-icons/md";
@@ -12,6 +13,7 @@ import { StudyDemo } from "./components/StudyDemo";
 import { StatsDemo } from "./components/StatsDemo";
 import { Reveal } from "./components/Reveal";
 import { useTicker } from "./components/useTicker";
+import { wakeUpServer } from "../../services/serverStatus";
 
 const LANGUAGES = ["Inglês", "Espanhol", "Turco"];
 
@@ -67,6 +69,11 @@ export const Home = () => {
   const { isAuthenticated } = useSelector((state: RootState) => state.auth);
   const languageTick = useTicker(2200);
   const language = LANGUAGES[languageTick % LANGUAGES.length];
+
+  // Acorda o servidor (plano gratuito do Render) enquanto o visitante lê a página
+  useEffect(() => {
+    wakeUpServer();
+  }, []);
 
   const handleStart = () =>
     navigate(isAuthenticated ? PATHS.DASHBOARD : PATHS.LOGIN);

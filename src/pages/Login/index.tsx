@@ -5,6 +5,8 @@ import type { RootState } from "../../store/rootReducer";
 import { PATHS } from "../../routes/Routes";
 import { useNavigate } from "react-router-dom";
 import { BackButton } from "../../components/BackButton";
+import { ServerWakeUpModal } from "../../components/ServerWakeUpModal";
+import { useServerStatus } from "../../services/serverStatus";
 
 export const Login = () => {
   const dispatch = useDispatch();
@@ -12,6 +14,7 @@ export const Login = () => {
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
 
+  const serverStatus = useServerStatus();
   const { isLoading, isAuthenticated } = useSelector(
     (state: RootState) => state.auth,
   );
@@ -32,6 +35,7 @@ export const Login = () => {
         label="Voltar para a Home"
         className="fixed top-6 left-6"
       />
+      <ServerWakeUpModal />
       <main className="flex flex-col font-sans w-4xl h-fit m-auto justify-center relative top-52 pl-57.5 pr-57.5">
         <h1 className="font-inter text-color-white text-5xl text-center font-extrabold">
           Flash Cards
@@ -72,7 +76,11 @@ export const Login = () => {
             className="w-full h-11 rounded-lg bg-linear-to-r from-btn-main-color to-second-color text-color-white font-bold 
                     mt-5 hover:brightness-110 active:scale-[0.98] cursor-pointer transition-all duration-300"
           >
-            {isLoading ? "Autenticando..." : "Enviar"}
+            {isLoading
+              ? serverStatus === "online"
+                ? "Autenticando..."
+                : "Aguardando o servidor ligar..."
+              : "Enviar"}
           </button>
         </form>
         <div className="flex-col flex-1 items-center text-center mt-5">
