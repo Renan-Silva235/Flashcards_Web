@@ -7,8 +7,10 @@ import { GiPadlock } from "react-icons/gi";
 import type { RootState } from "../../store/rootReducer";
 import api from "../../config/api";
 import { VerifyCode } from "../../components/VerifyCode";
+import { ChangePassword } from "../../components/ChangePassword";
+import { ConfirmLogout } from "../../components/ConfirmLogout";
 import { Modal } from "../../components/Modal";
-
+import { toast } from "react-toastify";
 interface ProfileData {
   name: string;
   email: string;
@@ -21,6 +23,25 @@ export const Profile = () => {
   const { user } = useSelector((state: RootState) => state.auth);
   const [profile, setProfile] = useState<ProfileData | null>(null);
   const [verifyCode, setVerifyCode] = useState<boolean>(false);
+  const [verifiedCode, setVerifiedCode] = useState<string>("");
+  const [confirmLogout, setConfirmLogout] = useState<boolean>(false);
+
+  const handleSendCode = async () => {
+    try {
+      await api.post("/auth/password/send-code", {
+        email: user?.email,
+      });
+
+      toast.success("Código enviado para o seu e-mail.");
+      setVerifyCode(true);
+    } catch (error: unknown) {
+      if (axios.isAxiosError(error))
+        toast.error("Erro ao enviar código de validação, tente novamente.");
+      setVerifyCode(false);
+      return;
+    }
+  };
+
   useEffect(() => {
     if (!user?.id) return;
 
@@ -42,6 +63,7 @@ export const Profile = () => {
 
     fetchProfile();
   }, [user?.id]);
+
   return (
     <>
       <div className="flex flex-col w-full h-fit items-center text-center justify-center p-6">
@@ -78,7 +100,7 @@ export const Profile = () => {
                 </span>
                 <button
                   type="button"
-                  onClick={() => setVerifyCode(true)}
+                  onClick={handleSendCode}
                   className="w-full h-full rounded-lg text-color-white text-start cursor-pointer"
                 >
                   Alterar Senha
@@ -92,7 +114,11 @@ export const Profile = () => {
                 <span className="text-color-red-1">
                   <MdOutlineLogout size={24} />
                 </span>
-                <button className="w-full h-full rounded-lg text-color-red-1 text-start cursor-pointer">
+                <button
+                  type="button"
+                  onClick={() => setConfirmLogout(true)}
+                  className="w-full h-full rounded-lg text-color-red-1 text-start cursor-pointer"
+                >
                   Sair da Conta
                 </button>{" "}
               </div>
@@ -102,7 +128,22 @@ export const Profile = () => {
         </div>
       </div>
       <Modal isOpen={verifyCode} onClose={() => setVerifyCode(false)}>
-        <VerifyCode onClose={() => setVerifyCode(false)} />
+        <VerifyCode
+          onClose={() => setVerifyCode(false)}
+          onSuccess={(code) => {
+            setVerifyCode(false);
+            setVerifiedCode(code);
+          }}
+        />
+      </Modal>
+      <Modal isOpen={!!verifiedCode} onClose={() => setVerifiedCode("")}>
+        <ChangePassword
+          code={verifiedCode}
+          onClose={() => setVerifiedCode("")}
+        />
+      </Modal>
+      <Modal isOpen={confirmLogout} onClose={() => setConfirmLogout(false)}>
+        <ConfirmLogout onClose={() => setConfirmLogout(false)} />
       </Modal>
     </>
   );
