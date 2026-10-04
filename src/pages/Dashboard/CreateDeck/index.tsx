@@ -19,8 +19,8 @@ export const CreateDeckComponent = () => {
 
   const { user } = useSelector((state: RootState) => state.auth);
 
+  // O dono do deck é definido pela API a partir do token de login
   const deckPayload = {
-    userId: user?.id,
     name: name,
     language: selectedLanguage,
     category: category,
