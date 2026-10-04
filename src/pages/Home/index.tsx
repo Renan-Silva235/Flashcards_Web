@@ -1,54 +1,224 @@
 import { useNavigate } from "react-router-dom";
+import { useSelector } from "react-redux";
 import { MdOutlineTrendingFlat } from "react-icons/md";
+import { HiOutlineSpeakerWave } from "react-icons/hi2";
+import { LuLanguages, LuLayers, LuChartColumn } from "react-icons/lu";
+import type { IconType } from "react-icons/lib";
+import type { RootState } from "../../store/rootReducer";
+import { PATHS } from "../../routes/Routes";
+import { HeroCard } from "./components/HeroCard";
+import { CreateDeckDemo } from "./components/CreateDeckDemo";
+import { StudyDemo } from "./components/StudyDemo";
+import { StatsDemo } from "./components/StatsDemo";
+import { Reveal } from "./components/Reveal";
+import { useTicker } from "./components/useTicker";
+
+const LANGUAGES = ["Inglês", "Espanhol", "Turco"];
+
+const STEPS = [
+  {
+    number: "01",
+    title: "Crie seus decks",
+    description:
+      "Escolha o idioma, dê um nome e organize as palavras do jeito que fizer sentido para você.",
+    demo: <CreateDeckDemo />,
+  },
+  {
+    number: "02",
+    title: "Estude virando os cards",
+    description:
+      "Veja a palavra, tente lembrar, vire o card e diga o quão difícil foi. Simples e rápido.",
+    demo: <StudyDemo />,
+  },
+  {
+    number: "03",
+    title: "Acompanhe sua evolução",
+    description:
+      "No dashboard você vê quantos cards já domina e quais ainda precisam de mais prática.",
+    demo: <StatsDemo />,
+  },
+];
+
+const FEATURES: { icon: IconType; title: string; description: string }[] = [
+  {
+    icon: HiOutlineSpeakerWave,
+    title: "Pronúncia em áudio",
+    description: "Ouça cada palavra para treinar o ouvido e a fala.",
+  },
+  {
+    icon: LuLanguages,
+    title: "Vários idiomas",
+    description: "Inglês, Espanhol e Turco no mesmo lugar.",
+  },
+  {
+    icon: LuLayers,
+    title: "Revisão por dificuldade",
+    description: "Marque fácil, médio ou difícil e foque no que importa.",
+  },
+  {
+    icon: LuChartColumn,
+    title: "Estatísticas",
+    description: "Visualize seu progresso por idioma e por dificuldade.",
+  },
+];
 
 export const Home = () => {
   const navigate = useNavigate();
+  const { isAuthenticated } = useSelector((state: RootState) => state.auth);
+  const languageTick = useTicker(2200);
+  const language = LANGUAGES[languageTick % LANGUAGES.length];
+
+  const handleStart = () =>
+    navigate(isAuthenticated ? PATHS.DASHBOARD : PATHS.LOGIN);
 
   return (
-    <main className="flex items-center relative justify-center top-28 h-96 m-52">
-      <div className="flex-col flex-wrap relative h-full p-8 mr-auto">
-        <h1 className="text-color-white font-bold text-6xl mb-6">
-          Flash Cards <br />
-          <span className="bg-linear-to-r from-btn-main-color to-second-color/55 bg-clip-text text-transparent">
-            Language
-          </span>
-        </h1>
-        <p className="text-color-silver-2 mt-2 m-b-2 text-lg">
-          Crie seus próprios decks, pratique palavras e acompanhe sua evolução
-          em um só lugar.
-        </p>
-        <button
-          onClick={() => navigate("/login")}
-          className="border-color-white w-auto h-11 
-      bg-linear-to-r from-btn-main-color to-second-color rounded-lg 
-      text-color-white cursor-pointer 
-      hover:from-second-color hover:to-btn-main-color p-3
-        flex gap-2 items-center m-3.5 whitespace-nowrap
-      "
+    <div className="relative min-h-screen overflow-x-hidden text-color-white">
+      {/* manchas de luz animadas no fundo */}
+      <div className="pointer-events-none absolute inset-0 -z-0 overflow-hidden">
+        <div className="absolute -top-32 -left-32 w-[28rem] h-[28rem] rounded-full bg-second-color/30 blur-3xl animate-blob" />
+        <div className="absolute top-40 -right-40 w-[30rem] h-[30rem] rounded-full bg-color-purple-1/20 blur-3xl animate-blob [animation-delay:-4s]" />
+        <div className="absolute top-[60rem] left-1/3 w-[26rem] h-[26rem] rounded-full bg-btn-main-color/15 blur-3xl animate-blob [animation-delay:-8s]" />
+      </div>
+
+      <div className="relative z-10">
+        <header className="flex items-center justify-between max-w-6xl mx-auto px-6 py-6">
+          <h1 className="font-black tracking-tighter text-2xl">Flash Cards</h1>
+          <button
+            onClick={handleStart}
+            className="text-sm border border-color-silver-1 rounded-lg px-4 py-2 cursor-pointer hover:bg-white/10 transition-colors duration-300"
+          >
+            {isAuthenticated ? "Ir para o Dashboard" : "Entrar"}
+          </button>
+        </header>
+
+        {/* HERO */}
+        <section className="max-w-6xl mx-auto px-6 pt-10 pb-24 md:pt-20 grid md:grid-cols-2 gap-16 items-center">
+          <div>
+            <span className="inline-flex items-center gap-2 text-xs font-semibold tracking-wider uppercase text-second-color bg-second-color/10 border border-second-color/30 rounded-full px-3 py-1 animate-word-in">
+              <span className="w-2 h-2 rounded-full bg-second-color animate-pulse" />
+              Aprenda idiomas com flashcards
+            </span>
+
+            <h2 className="font-bold text-5xl md:text-6xl leading-tight mt-6">
+              Memorize palavras em{" "}
+              <span
+                key={language}
+                className="inline-block bg-linear-to-r from-btn-main-color via-color-purple-1 to-second-color bg-[length:200%_auto] bg-clip-text text-transparent animate-word-in"
+              >
+                {language}
+              </span>
+              <br />
+              sem complicação.
+            </h2>
+
+            <p className="text-color-silver-2 text-lg mt-6 max-w-lg">
+              Crie seus próprios decks, pratique com cards que viram, ouça a
+              pronúncia e acompanhe sua evolução em um só lugar.
+            </p>
+
+            <div className="flex flex-wrap items-center gap-4 mt-10">
+              <button
+                onClick={handleStart}
+                className="group h-12 px-6 rounded-lg bg-linear-to-r from-btn-main-color via-second-color to-btn-main-color bg-[length:200%_auto] animate-gradient-x font-bold flex items-center gap-2 cursor-pointer shadow-lg shadow-second-color/30 hover:shadow-second-color/50 hover:scale-[1.03] transition-all duration-300"
+              >
+                Começar Agora
+                <MdOutlineTrendingFlat className="w-6 h-6 transition-transform duration-300 group-hover:translate-x-1" />
+              </button>
+              <a
+                href="#como-funciona"
+                className="h-12 px-6 rounded-lg border border-color-silver-1 flex items-center hover:bg-white/10 transition-colors duration-300"
+              >
+                Ver como funciona
+              </a>
+            </div>
+          </div>
+
+          <div className="flex justify-center md:justify-end">
+            <HeroCard />
+          </div>
+        </section>
+
+        {/* COMO FUNCIONA */}
+        <section
+          id="como-funciona"
+          className="max-w-6xl mx-auto px-6 py-24 scroll-mt-10"
         >
-          <span className="font-bold">Começar Agora</span>
-          <MdOutlineTrendingFlat className="w-6" />
-        </button>
+          <Reveal className="text-center mb-20">
+            <p className="text-second-color font-semibold tracking-wider uppercase text-sm">
+              Como funciona
+            </p>
+            <h3 className="text-4xl font-bold mt-3">
+              Três passos para turbinar seus estudos
+            </h3>
+          </Reveal>
+
+          <div className="flex flex-col gap-28">
+            {STEPS.map((step, i) => (
+              <div
+                key={step.number}
+                className={`grid md:grid-cols-2 gap-12 items-center ${
+                  i % 2 === 1 ? "md:[&>*:first-child]:order-2" : ""
+                }`}
+              >
+                <Reveal>
+                  <span className="text-6xl font-black bg-linear-to-b from-second-color to-transparent bg-clip-text text-transparent">
+                    {step.number}
+                  </span>
+                  <h4 className="text-3xl font-bold mt-2">{step.title}</h4>
+                  <p className="text-color-silver-2 text-lg mt-4 max-w-md">
+                    {step.description}
+                  </p>
+                </Reveal>
+                <Reveal delay={150}>{step.demo}</Reveal>
+              </div>
+            ))}
+          </div>
+        </section>
+
+        {/* RECURSOS */}
+        <section className="max-w-6xl mx-auto px-6 py-24">
+          <Reveal className="text-center mb-14">
+            <h3 className="text-4xl font-bold">Tudo que você precisa</h3>
+          </Reveal>
+          <div className="grid sm:grid-cols-2 lg:grid-cols-4 gap-6">
+            {FEATURES.map(({ icon: Icon, title, description }, i) => (
+              <Reveal key={title} delay={i * 100}>
+                <div className="h-full rounded-2xl border border-color-silver-1 bg-color-silver-1/20 p-6 hover:-translate-y-2 hover:border-second-color/60 hover:shadow-lg hover:shadow-second-color/20 transition-all duration-300">
+                  <span className="inline-flex w-11 h-11 rounded-xl bg-second-color/15 text-second-color items-center justify-center">
+                    <Icon size={22} />
+                  </span>
+                  <h4 className="font-bold text-lg mt-4">{title}</h4>
+                  <p className="text-color-silver-2 text-sm mt-2">
+                    {description}
+                  </p>
+                </div>
+              </Reveal>
+            ))}
+          </div>
+        </section>
+
+        {/* CTA FINAL */}
+        <section className="max-w-4xl mx-auto px-6 py-24">
+          <Reveal>
+            <div className="relative overflow-hidden rounded-3xl p-12 text-center bg-linear-to-r from-btn-main-color via-second-color to-color-purple-1/80 bg-[length:200%_auto] animate-gradient-x shadow-2xl shadow-second-color/30">
+              <h3 className="text-4xl font-bold">Pronto para começar?</h3>
+              <p className="text-color-white/80 text-lg mt-4">
+                Crie seu primeiro deck em menos de um minuto.
+              </p>
+              <button
+                onClick={handleStart}
+                className="mt-8 h-12 px-8 rounded-lg bg-color-white text-main-color font-bold cursor-pointer hover:scale-105 transition-transform duration-300"
+              >
+                Começar Agora
+              </button>
+            </div>
+          </Reveal>
+        </section>
+
+        <footer className="text-center text-color-silver-2 text-sm py-10 border-t border-color-silver-1/50">
+          Flash Cards Language © {new Date().getFullYear()}
+        </footer>
       </div>
-      <div
-        className="flex flex-col flex-1 border border-color-silver-1 h-full m-3.5 mt-9 mb-9 rounded-3xl cursor-pointer items-center 
-                      justify-center bg-linear-to-r from-color-silver-1/20 to-main-color
-                      shadow-lg hover:shadow-color-silver-2/10 transition-shadow duration-500
-                      "
-      >
-        <p className="text-color-silver-2 font-medium relative right-40 mb-6">
-          Seu próximo estudo
-        </p>
-        <div className="flex flex-col h-60 w-full text-center max-w-md border bg-linear-to-r from-btn-main-color to-second-color/20 rounded-2xl p-4">
-          <p className="text-color-white font-medium text-lg mt-2.5">
-            INGLÊS • VERBO
-          </p>
-          <p className="text-color-white font-bold text-4xl m-auto">to learn</p>
-          <p className="text-color-white font-medium text-base m-auto">
-            clique para revelar a tradução
-          </p>
-        </div>
-      </div>
-    </main>
+    </div>
   );
 };
