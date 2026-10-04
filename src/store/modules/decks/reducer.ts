@@ -23,6 +23,13 @@ export const deckReducer = (
       };
     case types.DECK_FAILURE:
       return { ...state, isLoading: false, error: action.payload.error };
+    case types.DECK_REMOVE:
+      return {
+        ...state,
+        decks:
+          state.decks?.filter((deck) => deck.id !== action.payload.deckId) ??
+          null,
+      };
     case types.DECK_FAVORITE_UPDATE: {
       const { deckId, favorite } = action.payload;
       return {

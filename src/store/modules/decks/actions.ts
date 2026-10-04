@@ -5,6 +5,7 @@ import type {
   DeckSuccessAction,
   DeckFailureAction,
   DeckFavoriteUpdateAction,
+  DeckRemoveAction,
 } from "./interface";
 
 // Actions que busca os decks criados.
@@ -39,5 +40,13 @@ export const deckFavoriteUpdateAction = (
   return {
     type: types.DECK_FAVORITE_UPDATE,
     payload: { deckId, favorite },
+  };
+};
+
+// Remove um deck do store após ser deletado na API, sem recarregar a lista
+export const deckRemoveAction = (deckId: string): DeckRemoveAction => {
+  return {
+    type: types.DECK_REMOVE,
+    payload: { deckId },
   };
 };

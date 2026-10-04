@@ -40,8 +40,15 @@ export interface DeckFavoriteUpdateAction extends Action<string> {
   [key: string]: unknown;
 }
 
+export interface DeckRemoveAction extends Action<string> {
+  type: typeof types.DECK_REMOVE;
+  payload: { deckId: string };
+  [key: string]: unknown;
+}
+
 export type DeckActionTypes =
   | DeckRequestAction
   | DeckSuccessAction
   | DeckFailureAction
-  | DeckFavoriteUpdateAction;
+  | DeckFavoriteUpdateAction
+  | DeckRemoveAction;

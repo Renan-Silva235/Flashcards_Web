@@ -27,6 +27,53 @@
   --animate-gradient-x: gradient-x 6s ease infinite;
   --animate-word-in: word-in 0.5s ease-out both;
 
+  /*carrossel de flashcards*/
+  --animate-slide-in-right: slide-in-right 0.35s ease-out both;
+  --animate-slide-in-left: slide-in-left 0.35s ease-out both;
+  --animate-slide-out-left: slide-out-left 0.35s ease-out both;
+  --animate-slide-out-right: slide-out-right 0.35s ease-out both;
+
+  @keyframes slide-in-right {
+    from {
+      transform: translateX(100%);
+      opacity: 0;
+    }
+    to {
+      transform: translateX(0);
+      opacity: 1;
+    }
+  }
+  @keyframes slide-in-left {
+    from {
+      transform: translateX(-100%);
+      opacity: 0;
+    }
+    to {
+      transform: translateX(0);
+      opacity: 1;
+    }
+  }
+  @keyframes slide-out-left {
+    from {
+      transform: translateX(0);
+      opacity: 1;
+    }
+    to {
+      transform: translateX(-100%);
+      opacity: 0;
+    }
+  }
+  @keyframes slide-out-right {
+    from {
+      transform: translateX(0);
+      opacity: 1;
+    }
+    to {
+      transform: translateX(100%);
+      opacity: 0;
+    }
+  }
+
   @keyframes float {
     0%,
     100% {

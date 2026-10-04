@@ -2,6 +2,8 @@ import { useEffect, useState } from "react";
 import api from "../../../config/api";
 import axios, { type AxiosResponse } from "axios";
 import { Loading } from "../../../components/Loading";
+import { useSelector } from "react-redux";
+import type { RootState } from "../../../store/rootReducer";
 
 interface StatisticsData {
   totalCards: number;
@@ -24,6 +26,12 @@ const useGrowAnimation = (trigger: unknown) => {
     let frame: number;
     const start = performance.now();
 
+    // Em aba oculta o navegador pausa o requestAnimationFrame: mostra o valor final direto
+    if (document.visibilityState === "hidden") {
+      const timer = setTimeout(() => setProgress(1), 0);
+      return () => clearTimeout(timer);
+    }
+
     const animate = (now: number) => {
       const linear = Math.min((now - start) / ANIMATION_MS, 1);
       setProgress(1 - Math.pow(1 - linear, 3));
@@ -41,6 +49,13 @@ export const CardsStatistic = ({ selectedLanguage }: CardsStatisticProps) => {
   const [stats, setStats] = useState<StatisticsData | null>(null);
   const [isLoading, setIsLoading] = useState(false);
   const progress = useGrowAnimation(stats);
+  const { decks } = useSelector((state: RootState) => state.deck);
+
+  // Muda quando um deck ou card é criado/deletado (favoritar não altera),
+  // e aí as estatísticas são buscadas de novo
+  const decksSignature = decks
+    ? `${decks.length}:${decks.reduce((sum, deck) => sum + deck.cardsCount, 0)}`
+    : "";
 
   useEffect(() => {
     const fetchStatistics = async () => {
@@ -65,7 +80,7 @@ export const CardsStatistic = ({ selectedLanguage }: CardsStatisticProps) => {
       }
     };
     fetchStatistics();
-  }, [selectedLanguage]);
+  }, [selectedLanguage, decksSignature]);
 
   const bars = [
     {
@@ -99,7 +114,7 @@ export const CardsStatistic = ({ selectedLanguage }: CardsStatisticProps) => {
       </div>
 
       <div className="relative h-56 flex items-end justify-around gap-8 px-4 mt-6">
-        {isLoading ? (
+        {isLoading && !stats ? (
           <div className="absolute inset-0 flex items-center justify-center">
             <Loading />
           </div>
