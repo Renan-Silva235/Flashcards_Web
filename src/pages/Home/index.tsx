@@ -106,10 +106,20 @@ export const Home = () => {
         {/* HERO */}
         <section className="max-w-6xl mx-auto px-4 sm:px-6 pt-6 sm:pt-10 pb-16 sm:pb-24 md:pt-20 grid grid-cols-1 md:grid-cols-2 gap-12 md:gap-16 items-center">
           <div>
-            <span className="inline-flex items-center gap-2 max-w-full text-[11px] sm:text-xs font-semibold tracking-wide sm:tracking-wider uppercase text-second-color bg-second-color/10 border border-second-color/30 rounded-full px-3 py-1 animate-word-in">
-              <span className="w-2 h-2 rounded-full bg-second-color animate-pulse" />
-              Aprenda idiomas com flashcards
-            </span>
+            <div className="flex flex-wrap items-center gap-2">
+              <span className="inline-flex items-center gap-2 max-w-full text-[11px] sm:text-xs font-semibold tracking-wide sm:tracking-wider uppercase text-second-color bg-second-color/10 border border-second-color/30 rounded-full px-3 py-1 animate-word-in">
+                <span className="w-2 h-2 rounded-full bg-second-color animate-pulse" />
+                Aprenda idiomas com flashcards
+              </span>
+
+              <a
+                href="#fluently-ai"
+                className="inline-flex items-center gap-2 max-w-full text-[11px] sm:text-xs font-semibold tracking-wide sm:tracking-wider uppercase text-color-purple-1 bg-color-purple-1/10 border border-color-purple-1/30 rounded-full px-3 py-1 animate-word-in hover:bg-color-purple-1/20 transition-colors duration-300"
+              >
+                <IoSparklesSharp />
+                Novo: correção de textos com I.A.
+              </a>
+            </div>
 
             <h2 className="font-bold text-4xl sm:text-5xl lg:text-6xl leading-tight mt-6">
               Memorize palavras em{" "}
@@ -125,7 +135,8 @@ export const Home = () => {
 
             <p className="text-color-silver-2 text-base sm:text-lg mt-6 max-w-lg">
               Crie seus próprios decks, pratique com cards que viram, ouça a
-              pronúncia e acompanhe sua evolução em um só lugar.
+              pronúncia, treine sua escrita com a Fluently AI e acompanhe sua
+              evolução em um só lugar.
             </p>
 
             <div className="flex flex-col sm:flex-row sm:flex-wrap sm:items-center gap-3 sm:gap-4 mt-8 sm:mt-10">
@@ -214,7 +225,10 @@ export const Home = () => {
         </section>
 
         {/* FLUENTLY AI */}
-        <section className="max-w-6xl mx-auto px-4 sm:px-6 py-16 sm:py-24">
+        <section
+          id="fluently-ai"
+          className="max-w-6xl mx-auto px-4 sm:px-6 py-16 sm:py-24 scroll-mt-10"
+        >
           <Reveal>
             <div className="relative overflow-hidden rounded-3xl border border-color-purple-1/30 bg-color-silver-1/10 p-6 sm:p-12 grid grid-cols-1 md:grid-cols-2 gap-10 md:gap-16 items-center">
               <div className="pointer-events-none absolute -top-24 -right-24 w-80 h-80 rounded-full bg-color-purple-1/20 blur-3xl" />
