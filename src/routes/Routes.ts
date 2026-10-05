@@ -9,4 +9,5 @@ export const PATHS = {
   FLASHCARDS: "/flashcards",
   DECK_CREATE: "/deck/create",
   PROFILE: "/perfil",
+  FLUENTLYAI: "/FluentlyAi",
 };

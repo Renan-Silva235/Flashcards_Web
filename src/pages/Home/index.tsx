@@ -4,6 +4,7 @@ import { useSelector } from "react-redux";
 import { MdOutlineTrendingFlat } from "react-icons/md";
 import { HiOutlineSpeakerWave } from "react-icons/hi2";
 import { LuLanguages, LuLayers, LuChartColumn } from "react-icons/lu";
+import { IoSparklesSharp } from "react-icons/io5";
 import type { IconType } from "react-icons/lib";
 import type { RootState } from "../../store/rootReducer";
 import { PATHS } from "../../routes/Routes";
@@ -11,6 +12,7 @@ import { HeroCard } from "./components/HeroCard";
 import { CreateDeckDemo } from "./components/CreateDeckDemo";
 import { StudyDemo } from "./components/StudyDemo";
 import { StatsDemo } from "./components/StatsDemo";
+import { FluentlyAiDemo } from "./components/FluentlyAiDemo";
 import { Reveal } from "./components/Reveal";
 import { useTicker } from "./components/useTicker";
 import { wakeUpServer } from "../../services/serverStatus";
@@ -77,6 +79,9 @@ export const Home = () => {
 
   const handleStart = () =>
     navigate(isAuthenticated ? PATHS.DASHBOARD : PATHS.LOGIN);
+
+  const handleTryAi = () =>
+    navigate(isAuthenticated ? PATHS.FLUENTLYAI : PATHS.LOGIN);
 
   return (
     <div className="relative min-h-screen overflow-x-hidden text-color-white">
@@ -206,6 +211,48 @@ export const Home = () => {
               </Reveal>
             ))}
           </div>
+        </section>
+
+        {/* FLUENTLY AI */}
+        <section className="max-w-6xl mx-auto px-4 sm:px-6 py-16 sm:py-24">
+          <Reveal>
+            <div className="relative overflow-hidden rounded-3xl border border-color-purple-1/30 bg-color-silver-1/10 p-6 sm:p-12 grid grid-cols-1 md:grid-cols-2 gap-10 md:gap-16 items-center">
+              <div className="pointer-events-none absolute -top-24 -right-24 w-80 h-80 rounded-full bg-color-purple-1/20 blur-3xl" />
+
+              <div className="relative">
+                <span className="inline-flex items-center gap-2 text-[11px] sm:text-xs font-semibold tracking-wide sm:tracking-wider uppercase text-color-purple-1 bg-color-purple-1/10 border border-color-purple-1/30 rounded-full px-3 py-1">
+                  <IoSparklesSharp />
+                  Novidade
+                </span>
+
+                <h3
+                  className="font-black text-3xl sm:text-4xl mt-5 inline-block
+                            bg-linear-to-r from-btn-main-color via-color-purple-1 to-second-color
+                            bg-[length:200%_auto] bg-clip-text text-transparent ml-2"
+                >
+                  Fluently AI
+                </h3>
+
+                <p className="text-color-silver-2 text-base sm:text-lg mt-4 max-w-lg">
+                  Escreva com liberdade. Nossa inteligência artificial aponta o
+                  que pode melhorar no seu texto e sugere como um nativo diria a
+                  mesma frase — tudo explicado em português.
+                </p>
+
+                <button
+                  onClick={handleTryAi}
+                  className="group h-12 px-6 rounded-lg justify-center mt-8 bg-linear-to-r from-btn-main-color via-color-purple-1 to-second-color bg-[length:200%_auto] animate-gradient-x font-bold flex items-center gap-2 cursor-pointer shadow-lg shadow-color-purple-1/30 hover:shadow-color-purple-1/50 hover:scale-[1.03] transition-all duration-300"
+                >
+                  Experimentar a Fluently AI
+                  <MdOutlineTrendingFlat className="w-6 h-6 transition-transform duration-300 group-hover:translate-x-1" />
+                </button>
+              </div>
+
+              <div className="relative flex justify-center md:justify-end">
+                <FluentlyAiDemo />
+              </div>
+            </div>
+          </Reveal>
         </section>
 
         {/* CTA FINAL */}

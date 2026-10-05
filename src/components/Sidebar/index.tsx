@@ -8,6 +8,7 @@ import { PATHS } from "../../routes/Routes";
 import { Navbar } from "../Navbar";
 import { Modal } from "../Modal";
 import { ConfirmLogout } from "../ConfirmLogout";
+import { IoSparklesSharp } from "react-icons/io5";
 
 interface SidebarProps {
   isOpen: boolean; // só tem efeito abaixo de lg (gaveta); em telas grandes ela fica sempre visível
@@ -71,6 +72,12 @@ export const Sidebar = ({ isOpen, onClose }: SidebarProps) => {
             icon={CgProfile}
             name="Perfil"
             endpoint={PATHS.PROFILE}
+            onNavigate={onClose}
+          />
+          <Navbar
+            icon={IoSparklesSharp}
+            name="Fluently AI"
+            endpoint={PATHS.FLUENTLYAI}
             onNavigate={onClose}
           />
         </nav>
