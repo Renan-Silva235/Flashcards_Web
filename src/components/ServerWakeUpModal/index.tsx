@@ -47,9 +47,7 @@ export const ServerWakeUpModal = () => {
           O servidor desta aplicação está hospedado em um{" "}
           <span className="text-color-white font-bold">plano gratuito</span>,
           que desliga após 15 minutos sem uso. No primeiro acesso ele pode levar{" "}
-          <span className="text-color-white font-bold">
-            de 40 segundos a 1 minuto
-          </span>{" "}
+          <span className="text-color-white font-bold">de 2 a 3 minuto</span>{" "}
           para ligar. Depois disso, tudo funciona normalmente.
         </p>
 
