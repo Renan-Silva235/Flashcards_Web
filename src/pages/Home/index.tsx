@@ -12,7 +12,7 @@ import { HeroCard } from "./components/HeroCard";
 import { CreateDeckDemo } from "./components/CreateDeckDemo";
 import { StudyDemo } from "./components/StudyDemo";
 import { StatsDemo } from "./components/StatsDemo";
-import { FluentlyAiDemo } from "./components/FluentlyAiDemo";
+import { WriteCleanAiDemo } from "./components/WriteCleanAiDemo";
 import { Reveal } from "./components/Reveal";
 import { useTicker } from "./components/useTicker";
 import { wakeUpServer } from "../../services/serverStatus";
@@ -81,7 +81,7 @@ export const Home = () => {
     navigate(isAuthenticated ? PATHS.DASHBOARD : PATHS.LOGIN);
 
   const handleTryAi = () =>
-    navigate(isAuthenticated ? PATHS.FLUENTLYAI : PATHS.LOGIN);
+    navigate(isAuthenticated ? PATHS.WRITECLEANAI : PATHS.LOGIN);
 
   return (
     <div className="relative min-h-screen overflow-x-hidden text-color-white">
@@ -113,7 +113,7 @@ export const Home = () => {
               </span>
 
               <a
-                href="#fluently-ai"
+                href="#writeclean-ai"
                 className="inline-flex items-center gap-2 max-w-full text-[11px] sm:text-xs font-semibold tracking-wide sm:tracking-wider uppercase text-color-purple-1 bg-color-purple-1/10 border border-color-purple-1/30 rounded-full px-3 py-1 animate-word-in hover:bg-color-purple-1/20 transition-colors duration-300"
               >
                 <IoSparklesSharp />
@@ -135,7 +135,7 @@ export const Home = () => {
 
             <p className="text-color-silver-2 text-base sm:text-lg mt-6 max-w-lg">
               Crie seus próprios decks, pratique com cards que viram, ouça a
-              pronúncia, treine sua escrita com a Fluently AI e acompanhe sua
+              pronúncia, treine sua escrita com a WriteClean AI e acompanhe sua
               evolução em um só lugar.
             </p>
 
@@ -224,9 +224,9 @@ export const Home = () => {
           </div>
         </section>
 
-        {/* FLUENTLY AI */}
+        {/* WRITECLEAN AI */}
         <section
-          id="fluently-ai"
+          id="writeclean-ai"
           className="max-w-6xl mx-auto px-4 sm:px-6 py-16 sm:py-24 scroll-mt-10"
         >
           <Reveal>
@@ -242,9 +242,9 @@ export const Home = () => {
                 <h3
                   className="font-black text-3xl sm:text-4xl mt-5 inline-block
                             bg-linear-to-r from-btn-main-color via-color-purple-1 to-second-color
-                            bg-[length:200%_auto] bg-clip-text text-transparent ml-2"
+                            bg-size-[200%_auto] bg-clip-text text-transparent ml-2"
                 >
-                  Fluently AI
+                  WriteClean AI
                 </h3>
 
                 <p className="text-color-silver-2 text-base sm:text-lg mt-4 max-w-lg">
@@ -257,13 +257,13 @@ export const Home = () => {
                   onClick={handleTryAi}
                   className="group h-12 px-6 rounded-lg justify-center mt-8 bg-linear-to-r from-btn-main-color via-color-purple-1 to-second-color bg-[length:200%_auto] animate-gradient-x font-bold flex items-center gap-2 cursor-pointer shadow-lg shadow-color-purple-1/30 hover:shadow-color-purple-1/50 hover:scale-[1.03] transition-all duration-300"
                 >
-                  Experimentar a Fluently AI
+                  Experimentar a WriteClean AI
                   <MdOutlineTrendingFlat className="w-6 h-6 transition-transform duration-300 group-hover:translate-x-1" />
                 </button>
               </div>
 
               <div className="relative flex justify-center md:justify-end">
-                <FluentlyAiDemo />
+                <WriteCleanAiDemo />
               </div>
             </div>
           </Reveal>

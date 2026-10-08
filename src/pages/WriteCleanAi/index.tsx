@@ -11,7 +11,7 @@ import type { EssayCorrectionResult } from "./types";
 
 const MAX_LENGTH = 2000;
 
-export const FluentlyAi = () => {
+export const WriteCleanAi = () => {
   const [selectedLanguage, setSelectedLanguage] = usePreferredLanguage();
   const [text, setText] = useState<string>("");
   const [isLoading, setIsLoading] = useState<boolean>(false);
@@ -65,10 +65,10 @@ export const FluentlyAi = () => {
                       bg-linear-to-r from-btn-main-color via-color-purple-1 to-second-color
                       bg-[length:200%_auto] bg-clip-text text-transparent"
           >
-            Fluently AI
+            WriteClean AI
           </h1>
           <p className="text-color-silver-2 mt-2">
-            Escreva com liberdade. A Fluently AI aponta o que pode melhorar no
+            Escreva com liberdade. A WriteClean AI aponta o que pode melhorar no
             seu texto e sugere como um nativo diria a mesma frase — tudo
             explicado em português, pra te ajudar a evoluir no idioma.
           </p>
@@ -104,7 +104,7 @@ export const FluentlyAi = () => {
           </button>
         </div>
         <p className="text-color-silver-2 text-xs text-center mt-3">
-          A Fluently AI pode cometer erros. Revise as correções antes de
+          A WriteClean AI pode cometer erros. Revise as correções antes de
           confiar nelas.
         </p>
       </form>

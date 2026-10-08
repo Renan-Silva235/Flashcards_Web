@@ -76,8 +76,8 @@ export const Sidebar = ({ isOpen, onClose }: SidebarProps) => {
           />
           <Navbar
             icon={IoSparklesSharp}
-            name="Fluently AI"
-            endpoint={PATHS.FLUENTLYAI}
+            name="WriteClean AI"
+            endpoint={PATHS.WRITECLEANAI}
             onNavigate={onClose}
           />
         </nav>

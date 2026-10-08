@@ -10,9 +10,9 @@ const ORIGINAL_END = LOADING_END + 7; // mostra o erro em vermelho
 const CORRECTED_END = ORIGINAL_END + 10; // mostra o texto corrigido em verde
 const CYCLE = CORRECTED_END + 5; // pausa antes de recomeçar
 
-// Reproduz o fluxo real da tela Fluently AI: o usuário digita, clica em
+// Reproduz o fluxo real da tela WriteClean AI: o usuário digita, clica em
 // "Corrigir", vê o erro destacado e depois a correção — tudo em loop.
-export const FluentlyAiDemo = () => {
+export const WriteCleanAiDemo = () => {
   const tick = useTicker(150);
   const step = tick % CYCLE;
 
@@ -27,7 +27,7 @@ export const FluentlyAiDemo = () => {
   const showCursor = isTyping && Math.floor(tick / 2) % 2 === 0;
 
   return (
-    <DemoWindow title="flashcards.app/FluentlyAi">
+    <DemoWindow title="flashcards.app/WriteCleanAi">
       <div className="flex flex-col h-full">
         <div className="flex items-center justify-between text-xs text-color-silver-2 mb-3 h-5">
           <span>Inglês</span>

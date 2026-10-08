@@ -9,7 +9,7 @@ import { Flashcards } from "../pages/Flashcards";
 import { CreateDeckComponent } from "../pages/Dashboard/CreateDeck";
 import { StudySessionPage } from "../pages/StudySessionPage";
 import { Profile } from "../pages/Profile";
-import { FluentlyAi } from "../pages/FluentlyAi";
+import { WriteCleanAi } from "../pages/WriteCleanAi";
 
 export const AppRoutes = () => {
   return (
@@ -26,7 +26,7 @@ export const AppRoutes = () => {
         <Route path={PATHS.FLASHCARDS} element={<Flashcards />} />
         <Route path={PATHS.DECK_CREATE} element={<CreateDeckComponent />} />
         <Route path={PATHS.PROFILE} element={<Profile />} />
-        <Route path={PATHS.FLUENTLYAI} element={<FluentlyAi />} />
+        <Route path={PATHS.WRITECLEANAI} element={<WriteCleanAi />} />
       </Route>
     </Routes>
   );
