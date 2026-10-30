@@ -17,7 +17,7 @@ Adicione aqui prints ou um GIF da aplicação, por exemplo:
 - **Landing page animada**: apresentação da aplicação com demonstrações animadas de como ela funciona
 - **Autenticação**: login com JWT armazenado em cookie `HttpOnly` e logout com confirmação
 - **Decks**
-  - Criação de decks com nome, categoria e idioma (🇺🇸 Inglês, 🇪🇸 Espanhol, 🇹🇷 Turco)
+  - Criação de decks com nome, categoria e idioma (🇺🇸 Inglês, 🇪🇸 Espanhol, 🇹🇷 Turco, 🇮🇹 Italiano)
   - Filtro por idioma e busca por nome
   - O idioma selecionado fica salvo por usuário, inclusive após logout/login
 - **Flashcards**: criar, visualizar, editar e excluir cards com palavra, tradução, tempos verbais (passado, presente e futuro) e até três frases de exemplo
