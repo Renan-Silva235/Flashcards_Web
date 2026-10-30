@@ -28,3 +28,4 @@ public/piper
 *.sw?
 .env
 .editorconfig
+relatorio.docx

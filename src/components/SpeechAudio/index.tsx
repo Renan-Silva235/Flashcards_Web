@@ -1,6 +1,7 @@
 import { speak } from "../../services/speech/speechService";
 import { getLanguageCode } from "../../services/speech/getLanguageCode";
 import { IoVolumeMedium } from "react-icons/io5";
+import { toast } from "react-toastify";
 
 interface SpeechAudioProps {
   language: string;
@@ -13,6 +14,7 @@ export const SpeechAudio = ({ language, pronounce }: SpeechAudioProps) => {
     const languageCode = getLanguageCode(language);
     speak(pronounce, languageCode).catch((error) => {
       console.error("Falha ao reproduzir áudio:", error);
+      toast.error("Não foi possível reproduzir o áudio. Tente novamente.");
     });
   };
 

@@ -6,4 +6,10 @@ declare module "piper-tts-web" {
 
     destroy(): void;
   }
+
+  export class RemoteVoiceProvider {
+    constructor(options?: { baseUrl?: string; separator?: string });
+
+    destroy(): void;
+  }
 }
