@@ -1,9 +1,36 @@
-import { PiperWebEngine } from "piper-tts-web";
+import type { PiperWebEngine } from "piper-tts-web";
 
-const engine = new PiperWebEngine();
+// O piper-tts-web tem ~46MB (WASM embutido): só é baixado na primeira vez que
+// um áudio em turco é pedido, em vez de pesar no carregamento do app inteiro
+let enginePromise: Promise<PiperWebEngine> | null = null;
+
+function getPiperEngine(): Promise<PiperWebEngine> {
+  enginePromise ??= import("piper-tts-web")
+    .then(
+      ({ OnnxWebRuntime, PiperWebEngine, RemoteVoiceProvider }) =>
+        new PiperWebEngine({
+          voiceProvider: new RemoteVoiceProvider({
+            baseUrl: "/piper/models/",
+          }),
+          onnxRuntime: new OnnxWebRuntime({ numThreads: 1 }),
+        }),
+    )
+    .catch((error) => {
+      // Permite tentar de novo (ex.: a rede caiu no meio do download)
+      enginePromise = null;
+      throw error;
+    });
+  return enginePromise;
+}
+
+const audioContext = new AudioContext();
+let currentAudio: AudioBufferSourceNode | null = null;
+const GENERATION_TIMEOUT_MS = 30000;
 
 function speakWithBrowserVoice(text: string, language: string): void {
-  if (!("speechSynthesis" in window)) return;
+  if (!("speechSynthesis" in window)) {
+    throw new Error("Este navegador não oferece suporte a síntese de voz.");
+  }
 
   window.speechSynthesis.cancel();
 
@@ -16,12 +43,50 @@ function speakWithBrowserVoice(text: string, language: string): void {
 }
 
 async function speakWithPiper(text: string, voice: string): Promise<void> {
-  const { file } = (await engine.generate(text, voice)) as { file: Blob };
+  // Resume synchronously from the click handler so autoplay policies allow the
+  // generated audio to play after Piper finishes processing the text.
+  await audioContext.resume();
+  currentAudio?.stop();
+  currentAudio = null;
 
-  const audioUrl = URL.createObjectURL(file);
-  const audio = new Audio(audioUrl);
-  audio.onended = () => URL.revokeObjectURL(audioUrl);
-  await audio.play();
+  const engine = await getPiperEngine();
+  let file: Blob;
+  try {
+    const generation = engine.generate(text, voice) as Promise<{
+      file: Blob;
+    }>;
+    ({ file } = await Promise.race([
+      generation,
+      new Promise<never>((_, reject) => {
+        setTimeout(
+          () =>
+            reject(
+              new Error(
+                "A geração do áudio demorou mais que o esperado. Tente novamente.",
+              ),
+            ),
+          GENERATION_TIMEOUT_MS,
+        );
+      }),
+    ]));
+  } catch (error) {
+    // Depois de uma falha o motor do Piper pode ficar travado: descarta e
+    // cria um novo na próxima tentativa
+    engine.destroy();
+    enginePromise = null;
+    throw error;
+  }
+  const audioData = await file.arrayBuffer();
+  const audioBuffer = await audioContext.decodeAudioData(audioData);
+  const audio = audioContext.createBufferSource();
+  audio.buffer = audioBuffer;
+  audio.connect(audioContext.destination);
+  currentAudio = audio;
+  audio.onended = () => {
+    if (currentAudio === audio) currentAudio = null;
+  };
+
+  audio.start();
 }
 
 export async function speak(text: string, language: string): Promise<void> {

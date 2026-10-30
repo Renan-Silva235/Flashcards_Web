@@ -17,7 +17,7 @@ Adicione aqui prints ou um GIF da aplicação, por exemplo:
 - **Landing page animada**: apresentação da aplicação com demonstrações animadas de como ela funciona
 - **Autenticação**: login com JWT armazenado em cookie `HttpOnly` e logout com confirmação
 - **Decks**
-  - Criação de decks com nome, categoria e idioma (🇺🇸 Inglês, 🇪🇸 Espanhol, 🇹🇷 Turco)
+  - Criação de decks com nome, categoria e idioma (🇺🇸 Inglês, 🇪🇸 Espanhol, 🇹🇷 Turco, 🇮🇹 Italiano)
   - Filtro por idioma e busca por nome
   - O idioma selecionado fica salvo por usuário, inclusive após logout/login
 - **Flashcards**: criar, visualizar, editar e excluir cards com palavra, tradução, tempos verbais (passado, presente e futuro) e até três frases de exemplo
@@ -25,7 +25,7 @@ Adicione aqui prints ou um GIF da aplicação, por exemplo:
   - Card com animação de virar (palavra → tradução)
   - Avaliação de cada card como **Fácil**, **Médio** ou **Difícil**
   - Barra de progresso e contador da sessão
-- **Pronúncia em áudio**: Web Speech API do navegador e, para o turco, síntese de voz local com [Piper TTS](https://github.com/rhasspy/piper)
+- **Pronúncia em áudio**: Web Speech API do navegador e, para o turco, síntese de voz local com [Piper TTS](https://github.com/rhasspy/piper), sem depender de vozes instaladas no computador
 - **Estatísticas**: total de cards e distribuição por dificuldade em um gráfico animado, filtrado por idioma
 - **Perfil**
   - Totais de decks, flashcards e favoritos
@@ -82,7 +82,7 @@ git clone https://github.com/Renan-Silva235/Flashcards_Web.git
 cd Flashcards_Web
 
 # 2. Instale as dependências
-#    (o postinstall copia os arquivos do Piper TTS para a pasta public/)
+#    (o postinstall copia os arquivos do Piper TTS e o modelo turco para a pasta public/)
 npm install
 
 # 3. Crie o arquivo .env na raiz do projeto
@@ -117,7 +117,7 @@ A aplicação estará disponível em `http://localhost:5173`.
 
 ## ☁️ Deploy
 
-O projeto está configurado para a **Vercel**. O arquivo `vercel.json` define os cabeçalhos `Cross-Origin-Opener-Policy` e `Cross-Origin-Embedder-Policy`, necessários para o Piper TTS (WebAssembly) funcionar no navegador. Os mesmos cabeçalhos estão configurados no `vite.config.ts` para os modos `dev` e `preview`.
+O projeto está configurado para a **Vercel**. O arquivo `vercel.json` define os cabeçalhos `Cross-Origin-Opener-Policy` e `Cross-Origin-Embedder-Policy`, necessários para o Piper TTS (WebAssembly) funcionar no navegador. Os mesmos cabeçalhos estão configurados no `vite.config.ts` para os modos `dev` e `preview`. O modelo turco é baixado durante a instalação/build e servido localmente, evitando bloqueios de carregamento cross-origin e dependência de voz instalada no cliente.
 
 Lembre-se de cadastrar a variável `VITE_URL_API` nas configurações do projeto na Vercel.
 

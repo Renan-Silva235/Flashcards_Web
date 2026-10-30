@@ -17,7 +17,7 @@ import { Reveal } from "./components/Reveal";
 import { useTicker } from "./components/useTicker";
 import { wakeUpServer } from "../../services/serverStatus";
 
-const LANGUAGES = ["Inglês", "Espanhol", "Turco"];
+const LANGUAGES = ["Inglês", "Espanhol", "Turco", "Italiano"];
 
 const STEPS = [
   {
@@ -52,7 +52,7 @@ const FEATURES: { icon: IconType; title: string; description: string }[] = [
   {
     icon: LuLanguages,
     title: "Vários idiomas",
-    description: "Inglês, Espanhol e Turco no mesmo lugar.",
+    description: "Inglês, Espanhol, Turco e Italiano no mesmo lugar.",
   },
   {
     icon: LuLayers,

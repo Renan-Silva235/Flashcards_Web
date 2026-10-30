@@ -2,14 +2,17 @@ import { useEffect, useState } from "react";
 import { useSelector } from "react-redux";
 import type { RootState } from "../store/rootReducer";
 import { Navigate, Outlet, useLocation } from "react-router-dom";
-import { LuMenu } from "react-icons/lu";
 import { PATHS } from "./Routes";
 import { Sidebar } from "../components/Sidebar";
+import { BottomNav } from "../components/BottomNav";
 import { Loading } from "../components/Loading";
 
 // Tela de espera enquanto o login é restaurado. Com o Render dormindo, a primeira
 // resposta pode demorar, então depois de alguns segundos explica o motivo.
 const SLOW_HINT_DELAY_MS = 3000;
+
+// Telas "de foco" no celular: têm o próprio X para fechar, então ficam sem a barra de baixo
+const PATHS_WITHOUT_BOTTOM_NAV = [PATHS.FLASHCARDS, PATHS.STUDY_SESSION];
 
 const SessionLoading = () => {
   const [isSlow, setIsSlow] = useState<boolean>(false);
@@ -36,25 +39,7 @@ export const ProtectedRoute = () => {
     (state: RootState) => state.auth,
   );
   const location = useLocation();
-  // Guarda em qual página o menu foi aberto: ao navegar para outra (inclusive
-  // pelo voltar do navegador), ele fecha sozinho, sem precisar de useEffect
-  const [menuOpenOn, setMenuOpenOn] = useState<string | null>(null);
-  const isMenuOpen = menuOpenOn === location.pathname;
-  const closeMenu = () => setMenuOpenOn(null);
-
-  // Gaveta aberta: Esc fecha e a página de trás não rola
-  useEffect(() => {
-    if (!isMenuOpen) return;
-    const handleKeyDown = (event: KeyboardEvent) => {
-      if (event.key === "Escape") setMenuOpenOn(null);
-    };
-    window.addEventListener("keydown", handleKeyDown);
-    document.body.style.overflow = "hidden";
-    return () => {
-      window.removeEventListener("keydown", handleKeyDown);
-      document.body.style.overflow = "";
-    };
-  }, [isMenuOpen]);
+  const showBottomNav = !PATHS_WITHOUT_BOTTOM_NAV.includes(location.pathname);
 
   // Ainda verificando o cookie (/auth/me): espera, senão ao recarregar a página
   // o usuário seria mandado para o login mesmo estando logado
@@ -65,32 +50,24 @@ export const ProtectedRoute = () => {
     return <Navigate to={PATHS.LOGIN} replace state={{ from: location }} />;
 
   return (
-    <div className="flex min-h-screen">
-      <Sidebar isOpen={isMenuOpen} onClose={closeMenu} />
+    <div className="flex min-h-dvh">
+      <Sidebar />
 
       {/* min-w-0 deixa o conteúdo encolher em vez de estourar a largura da tela */}
       <div className="flex flex-col flex-1 min-w-0">
-        {/* Barra do topo com o menu ☰ (só celular/tablet) */}
-        <header className="lg:hidden sticky top-0 z-30 flex items-center justify-between h-16 px-4 sm:px-6 bg-[#070b12]/95 backdrop-blur border-b border-color-silver-1/60 text-color-white">
-          <span className="font-sans font-black tracking-tighter text-2xl">
-            Flash Cards
-          </span>
-          <button
-            type="button"
-            onClick={() => setMenuOpenOn(location.pathname)}
-            aria-label="Abrir menu"
-            aria-controls="app-sidebar"
-            aria-expanded={isMenuOpen}
-            className="flex items-center justify-center w-11 h-11 rounded-lg text-2xl hover:bg-white/10 cursor-pointer"
-          >
-            <LuMenu />
-          </button>
-        </header>
-
-        <main className="flex-1 px-4 py-6 sm:px-6 md:p-10 xl:p-20">
+        {/* pb extra no celular: o conteúdo não fica escondido atrás da barra de baixo */}
+        <main
+          className={`flex-1 px-4 pt-[calc(env(safe-area-inset-top)+1.5rem)] sm:px-6 md:px-10 md:pt-10 lg:pb-10 xl:p-20 ${
+            showBottomNav
+              ? "pb-[calc(max(env(safe-area-inset-bottom),0.75rem)+6rem)]"
+              : "pb-[calc(env(safe-area-inset-bottom)+1.5rem)]"
+          }`}
+        >
           <Outlet />
         </main>
       </div>
+
+      {showBottomNav && <BottomNav />}
     </div>
   );
 };

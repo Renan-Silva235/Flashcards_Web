@@ -1,4 +1,4 @@
-import { cpSync, existsSync } from "node:fs";
+import { cpSync, existsSync, mkdirSync, writeFileSync } from "node:fs";
 import { fileURLToPath } from "node:url";
 import path from "node:path";
 
@@ -16,4 +16,33 @@ for (const dir of ["onnx", "piper"]) {
   });
 }
 
-console.log("piper-tts-web assets copied to public/");
+const voice = "tr_TR-dfki-medium";
+const voiceDirectory = path.join(
+  root,
+  "public",
+  "piper",
+  "models",
+  "tr",
+  "tr_TR",
+  "dfki",
+  "medium",
+);
+const voiceBaseUrl =
+  "https://huggingface.co/rhasspy/piper-voices/resolve/main/tr/tr_TR/dfki/medium";
+
+mkdirSync(voiceDirectory, { recursive: true });
+
+for (const extension of ["onnx.json", "onnx"]) {
+  const filePath = path.join(voiceDirectory, `${voice}.${extension}`);
+  const response = await fetch(`${voiceBaseUrl}/${voice}.${extension}`);
+
+  if (!response.ok) {
+    throw new Error(
+      `Could not download Piper Turkish voice (${response.status} ${response.statusText})`,
+    );
+  }
+
+  writeFileSync(filePath, Buffer.from(await response.arrayBuffer()));
+}
+
+console.log("Piper assets and Turkish voice copied to public/");

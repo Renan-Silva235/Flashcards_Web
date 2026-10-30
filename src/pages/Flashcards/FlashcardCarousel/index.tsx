@@ -63,6 +63,9 @@ export const FlashcardCarousel = ({
   // Setas do teclado também navegam
   useEffect(() => {
     const handleKeyDown = (event: KeyboardEvent) => {
+      // Digitando num campo, as setas movem o cursor do texto, não trocam de card
+      const target = event.target as HTMLElement;
+      if (target.closest("input, textarea")) return;
       if (event.key === "ArrowRight") go(1);
       if (event.key === "ArrowLeft") go(-1);
     };
@@ -75,32 +78,36 @@ export const FlashcardCarousel = ({
   const arrowClass =
     "flex items-center justify-center w-12 h-12 shrink-0 rounded-full border border-color-silver-1 bg-color-silver-1/60 text-color-white text-3xl cursor-pointer hover:bg-second-color hover:border-second-color hover:scale-110 transition-all duration-200";
 
-  const previousButton = (className = "") =>
+  const textNavClass =
+    "flex items-center gap-1 h-11 whitespace-nowrap text-color-white font-medium cursor-pointer active:text-btn-main-color";
+
+  // Setas laterais: só a partir de 640px
+  const previousButton = () =>
     hasPrevious ? (
       <button
         type="button"
         onClick={() => go(-1)}
         aria-label="Card anterior"
-        className={`${arrowClass} ${className}`}
+        className={`${arrowClass} hidden sm:flex`}
       >
         <HiChevronLeft />
       </button>
     ) : (
-      <span className={`w-12 shrink-0 ${className}`} />
+      <span className="hidden sm:block w-12 shrink-0" />
     );
 
-  const nextButton = (className = "") =>
+  const nextButton = () =>
     hasNext ? (
       <button
         type="button"
         onClick={() => go(1)}
         aria-label="Próximo card"
-        className={`${arrowClass} ${className}`}
+        className={`${arrowClass} hidden sm:flex`}
       >
         <HiChevronRight />
       </button>
     ) : (
-      <span className={`w-12 shrink-0 ${className}`} />
+      <span className="hidden sm:block w-12 shrink-0" />
     );
 
   // Deslizar o dedo para os lados troca de card (celular)
@@ -118,8 +125,7 @@ export const FlashcardCarousel = ({
   return (
     <div className="flex flex-col items-center max-w-full">
       <div className="flex items-center gap-4 max-w-full">
-        {/* Setas laterais: só a partir de 640px */}
-        {previousButton("hidden sm:flex")}
+        {previousButton()}
 
         <div
           className="relative w-[26rem] max-w-full px-2 sm:px-4 overflow-hidden"
@@ -155,16 +161,36 @@ export const FlashcardCarousel = ({
           )}
         </div>
 
-        {nextButton("hidden sm:flex")}
+        {nextButton()}
       </div>
 
-      {/* No celular as setas ficam aqui embaixo, ao lado do contador */}
-      <div className="flex items-center justify-center gap-6 mt-3">
-        {previousButton("sm:hidden")}
-        <p className="text-color-silver-2 text-sm tabular-nums">
+      {/* No celular a navegação fica aqui embaixo, com texto (além de deslizar o dedo) */}
+      <div className="grid grid-cols-3 items-center w-full px-2 mt-3 sm:flex sm:justify-center">
+        <div className="sm:hidden">
+          {hasPrevious && (
+            <button
+              type="button"
+              onClick={() => go(-1)}
+              className={textNavClass}
+            >
+              <HiChevronLeft className="text-2xl" /> Anterior
+            </button>
+          )}
+        </div>
+        <p className="text-center text-color-silver-2 text-sm tabular-nums">
           {index + 1} / {cards.length}
         </p>
-        {nextButton("sm:hidden")}
+        <div className="flex justify-end sm:hidden">
+          {hasNext && (
+            <button
+              type="button"
+              onClick={() => go(1)}
+              className={textNavClass}
+            >
+              Próximo card <HiChevronRight className="text-2xl" />
+            </button>
+          )}
+        </div>
       </div>
     </div>
   );

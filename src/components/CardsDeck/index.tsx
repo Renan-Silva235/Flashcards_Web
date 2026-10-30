@@ -9,7 +9,7 @@ import { Modal } from "../Modal";
 import { DeleteDeck } from "../../pages/Dashboard/DeleteDeck";
 import api from "../../config/api";
 import { deckFavoriteUpdateAction } from "../../store/modules/decks/actions";
-import { getLanguageFlag } from "../../utils/languages";
+import { getLanguageFlag, getLanguageLabel } from "../../utils/languages";
 import { PATHS } from "../../routes/Routes";
 
 interface Metadata {
@@ -64,10 +64,83 @@ export const CardsDeck = ({
     );
   };
 
+  const deleteButton = (
+    <button
+      type="button"
+      onClick={(event) => {
+        event.stopPropagation();
+        setIsDeleteModalOpen(true);
+      }}
+      title="Deletar deck"
+      aria-label="Deletar deck"
+      className="text-2xl text-color-red-1 cursor-pointer transition-all duration-200 hover:brightness-125 hover:scale-125 active:scale-90"
+    >
+      <MdDeleteOutline />
+    </button>
+  );
+
+  const favoriteButton = (
+    <button
+      type="button"
+      onClick={(event) => {
+        event.stopPropagation();
+        handleToggleFavorite();
+      }}
+      disabled={isTogglingFavorite}
+      title={favorite ? "Remover dos favoritos" : "Adicionar aos favoritos"}
+      aria-label={
+        favorite ? "Remover dos favoritos" : "Adicionar aos favoritos"
+      }
+      aria-pressed={favorite}
+      className={`text-2xl cursor-pointer transition-all duration-200 hover:scale-125 active:scale-90 ${
+        favorite
+          ? "text-color-yellow-1 drop-shadow-[0_0_6px_rgba(224,184,24,0.6)]"
+          : "text-color-silver-2 hover:text-color-yellow-1"
+      }`}
+    >
+      {favorite ? <FaStar /> : <FaRegStar />}
+    </button>
+  );
+
   return (
     <>
+      {/* Celular/tablet: o card inteiro abre o deck (estudar fica dentro do deck) */}
       <div
-        className="flex flex-col justify-between overflow-hidden h-60 border border-color-white rounded-lg w-96 p-7 
+        role="button"
+        tabIndex={0}
+        onClick={handleOpenDeck}
+        onKeyDown={(event) => {
+          // Só o próprio card: Enter na estrela/lixeira não deve abrir o deck
+          if (event.key === "Enter" && event.target === event.currentTarget)
+            handleOpenDeck();
+        }}
+        className="lg:hidden flex flex-col w-full gap-4 rounded-xl border border-color-silver-1 bg-input-bg-main-color p-5
+                  cursor-pointer active:scale-[0.99] transition-transform duration-150"
+      >
+        <div className="flex items-start justify-between gap-3">
+          <div className="min-w-0">
+            <h2 className="font-bold text-color-white text-xl break-words">
+              {title}
+            </h2>
+            <p className="text-color-silver-2 mt-1 line-clamp-2">{category}</p>
+          </div>
+          <div className="flex items-center gap-4 shrink-0">
+            {favoriteButton}
+            {deleteButton}
+          </div>
+        </div>
+        <div className="flex items-center justify-between gap-3">
+          <span className="rounded-md bg-[#0d1424] px-2.5 py-1 text-sm text-color-white">
+            {getLanguageLabel(language)}
+          </span>
+          <span className="text-color-silver-2 tabular-nums">
+            {counter} {counter === 1 ? "Card" : "Cards"}
+          </span>
+        </div>
+      </div>
+
+      <div
+        className="hidden lg:flex flex-col justify-between overflow-hidden h-60 border border-color-white rounded-lg w-96 p-7 
                   bg-linear-to-r from-color-white/10 to-main-color shadow-lg shadow-black/50
                   transition-transform duration-300 hover:scale-100 hover:-translate-y-2 cursor-pointer"
       >
@@ -76,34 +149,8 @@ export const CardsDeck = ({
             {getLanguageFlag(language)} {language}
           </p>
           <div className="flex items-center gap-3">
-            <button
-              type="button"
-              onClick={() => setIsDeleteModalOpen(true)}
-              title="Deletar deck"
-              aria-label="Deletar deck"
-              className="text-2xl text-color-red-1 cursor-pointer transition-all duration-200 hover:brightness-125 hover:scale-125 active:scale-90"
-            >
-              <MdDeleteOutline />
-            </button>
-            <button
-              type="button"
-              onClick={handleToggleFavorite}
-              disabled={isTogglingFavorite}
-              title={
-                favorite ? "Remover dos favoritos" : "Adicionar aos favoritos"
-              }
-              aria-label={
-                favorite ? "Remover dos favoritos" : "Adicionar aos favoritos"
-              }
-              aria-pressed={favorite}
-              className={`text-2xl cursor-pointer transition-all duration-200 hover:scale-125 active:scale-90 ${
-                favorite
-                  ? "text-color-yellow-1 drop-shadow-[0_0_6px_rgba(224,184,24,0.6)]"
-                  : "text-color-silver-2 hover:text-color-yellow-1"
-              }`}
-            >
-              {favorite ? <FaStar /> : <FaRegStar />}
-            </button>
+            {deleteButton}
+            {favoriteButton}
           </div>
         </div>
         <div className="flex justify-between items-center">

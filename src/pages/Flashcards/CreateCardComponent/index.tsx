@@ -8,6 +8,8 @@ import { CardComponent } from "../CardComponent";
 import { useDispatch, useSelector } from "react-redux";
 import type { RootState } from "../../../store/rootReducer";
 import { deckRequestAction } from "../../../store/modules/decks/actions";
+import { useIsMobile } from "../../../hooks/useIsMobile";
+import { CardFormScreen } from "../CardFormScreen";
 
 interface CreateCardComponentProps {
   onClose: () => void;
@@ -22,6 +24,8 @@ export const CreateCardComponent = ({ onClose }: CreateCardComponentProps) => {
   const [phrase1, setPhrase1] = useState<string>("");
   const [phrase2, setPhrase2] = useState<string>("");
   const [phrase3, setPhrase3] = useState<string>("");
+  const [isSaving, setIsSaving] = useState<boolean>(false);
+  const isMobile = useIsMobile();
   const [searchParams] = useSearchParams();
   const deckId = searchParams.get("deckId");
   const dispatch = useDispatch();
@@ -54,6 +58,8 @@ export const CreateCardComponent = ({ onClose }: CreateCardComponentProps) => {
 
   const handleSubmit = async (event: React.FormEvent<HTMLFormElement>) => {
     event.preventDefault();
+    if (isSaving) return;
+    setIsSaving(true);
     try {
       if (deckId && user) {
         const response: AxiosResponse = await api.post(
@@ -85,23 +91,42 @@ export const CreateCardComponent = ({ onClose }: CreateCardComponentProps) => {
       }
 
       toast.error("erro inesperado.");
+    } finally {
+      setIsSaving(false);
     }
   };
+
+  const formData = {
+    word,
+    translation,
+    past,
+    present,
+    future,
+    examplePhrase1: phrase1,
+    examplePhrase2: phrase2,
+    examplePhrase3: phrase3,
+  };
+
+  // Celular/tablet: mesma tela cheia do Editar, com os campos vazios.
+  // Depois de criar ela continua aberta e limpa, para cadastrar vários cards seguidos
+  if (isMobile)
+    return (
+      <CardFormScreen
+        title="Novo card"
+        submitLabel="Criar card"
+        data={formData}
+        onChange={onChangeField}
+        onSubmit={handleSubmit}
+        onCancel={onClose}
+        isSaving={isSaving}
+      />
+    );
 
   return (
     <form onSubmit={handleSubmit}>
       <CardComponent
         mode="form"
-        data={{
-          word,
-          translation,
-          past,
-          present,
-          future,
-          examplePhrase1: phrase1,
-          examplePhrase2: phrase2,
-          examplePhrase3: phrase3,
-        }}
+        data={formData}
         onChange={onChangeField}
         textButton="Criar Card"
         onClose={onClose}

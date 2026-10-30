@@ -25,14 +25,14 @@ export const CardFlip = ({
   // e a página não "pula" quando os cards terminam de carregar
   if (isLoading)
     return (
-      <div className="flex w-full h-64 sm:h-80 items-center justify-center">
+      <div className="flex w-full h-80 items-center justify-center">
         <Loading />
       </div>
     );
 
   return (
     <div
-      className="w-full h-64 sm:h-80 text-color-white cursor-pointer perspective-1000"
+      className="w-full h-80 text-color-white cursor-pointer perspective-1000"
       onClick={onFlip}
     >
       <div
@@ -49,7 +49,16 @@ export const CardFlip = ({
             {word}
           </h2>
           <div className="w-fit mt-6" onClick={(e) => e.stopPropagation()}>
-            <SpeechAudio language={deckLanguage ?? ""} pronounce={word} />
+            <span className="lg:hidden">
+              <SpeechAudio
+                language={deckLanguage ?? ""}
+                pronounce={word}
+                label="Ouvir Pronúncia"
+              />
+            </span>
+            <span className="hidden lg:block">
+              <SpeechAudio language={deckLanguage ?? ""} pronounce={word} />
+            </span>
           </div>
           <p className="text-sm text-color-white/60 mt-2">
             Toque no card para virar

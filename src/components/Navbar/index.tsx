@@ -5,17 +5,11 @@ interface AbasInterface {
   icon: IconType;
   name: string;
   endpoint: string;
-  onNavigate?: () => void; // usado para fechar a gaveta do menu no celular
 }
 
-export const Navbar = ({
-  icon: Icon,
-  name,
-  endpoint,
-  onNavigate,
-}: AbasInterface) => {
+export const Navbar = ({ icon: Icon, name, endpoint }: AbasInterface) => {
   return (
-    <NavLink to={endpoint} className="w-full" onClick={onNavigate}>
+    <NavLink to={endpoint} className="w-full">
       {({ isActive }) => (
         <div
           className={`flex items-center rounded-lg justify-start w-full h-11 mt-2 pl-2 whitespace-nowrap gap-3 cursor-pointer transition-all duration-300 ${
