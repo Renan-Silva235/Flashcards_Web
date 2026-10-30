@@ -2,7 +2,8 @@ import { useState } from "react";
 import { LanguageDropdown } from "../LanguageDropdown";
 import { usePreferredLanguage } from "../../../hooks/usePreferredLanguage";
 import api from "../../../config/api";
-import axios, { type AxiosResponse, AxiosError } from "axios";
+import { type AxiosResponse } from "axios";
+import { getApiErrorMessages } from "../../../utils/apiError";
 import { toast } from "react-toastify";
 import { deckRequestAction } from "../../../store/modules/decks/actions";
 import { useSelector, useDispatch } from "react-redux";
@@ -15,6 +16,8 @@ export const CreateDeckComponent = () => {
     useState<string>(preferredLanguage);
   const [name, setName] = useState<string>("");
   const [category, setCategory] = useState<string>("");
+  // Trava o botão enquanto a API responde: dois cliques não criam dois decks
+  const [isSaving, setIsSaving] = useState<boolean>(false);
   const dispatch = useDispatch();
 
   const { user } = useSelector((state: RootState) => state.auth);
@@ -29,6 +32,8 @@ export const CreateDeckComponent = () => {
 
   const handleSubmit = async (event: React.FormEvent<HTMLFormElement>) => {
     event.preventDefault();
+    if (isSaving) return;
+    setIsSaving(true);
     try {
       if (user?.id) {
         const response: AxiosResponse = await api.post("decks", deckPayload);
@@ -41,13 +46,11 @@ export const CreateDeckComponent = () => {
       setName("");
       setCategory("");
     } catch (error: unknown) {
-      if (axios.isAxiosError(error)) {
-        error.response?.data.forEach((erro: AxiosError) =>
-          toast.error(erro.message),
-        );
-        return;
-      }
-      toast.error("Erro inesperado");
+      getApiErrorMessages(error, "Erro inesperado").forEach((message) =>
+        toast.error(message),
+      );
+    } finally {
+      setIsSaving(false);
     }
   };
 
@@ -102,10 +105,11 @@ export const CreateDeckComponent = () => {
 
           <button
             type="submit"
+            disabled={isSaving}
             className="mt-4 sm:mt-6 h-11 bg-second-color  text-center text-color-white rounded-lg hover:brightness-110 scale-[0.98]
-                            transition-all duration-200 cursor-pointer w-full sm:w-44"
+                            transition-all duration-200 cursor-pointer w-full sm:w-44 disabled:opacity-60 disabled:cursor-not-allowed"
           >
-            Criar Baralho
+            {isSaving ? "Criando..." : "Criar Baralho"}
           </button>
         </form>
       </div>

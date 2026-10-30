@@ -1,5 +1,5 @@
+import { useState } from "react";
 import api from "../../../config/api";
-import type { AxiosResponse } from "axios";
 import axios from "axios";
 import { toast } from "react-toastify";
 import { flashcardRequestAction } from "../../../store/modules/flashcards/actions";
@@ -21,26 +21,26 @@ export const DeleteFlashCard = ({
   const [searchParams] = useSearchParams();
   const deckId = searchParams.get("deckId");
   const { user } = useSelector((state: RootState) => state.auth);
+  // Trava os botões enquanto a API responde: evita apagar duas vezes com clique duplo
+  const [isDeleting, setIsDeleting] = useState<boolean>(false);
 
   const handleSubmit = async (event: React.FormEvent<HTMLFormElement>) => {
     event.preventDefault();
+    if (isDeleting || !flashcardId || !deckId || !user?.id) return;
+    setIsDeleting(true);
     try {
-      if (flashcardId && deckId && user?.id) {
-        // @ts-expect-error - ignorar erro ts(6133)
-        // eslint-disable-next-line @typescript-eslint/no-unused-vars
-        const response: AxiosResponse = await api.delete(
-          `/flashcards/${flashcardId}`,
-        );
-        toast.success("Card deletado.");
-        dispatch(flashcardRequestAction(deckId));
-        dispatch(deckRequestAction(user.id));
-      }
+      await api.delete(`/flashcards/${flashcardId}`);
+      toast.success("Card deletado.");
+      onClose();
+      dispatch(flashcardRequestAction(deckId));
+      dispatch(deckRequestAction(user.id));
     } catch (error: unknown) {
       if (axios.isAxiosError(error)) {
-        return toast.error("Não foi possível deletar o Flashcard.");
+        toast.error("Não foi possível deletar o Flashcard.");
+      } else {
+        toast.error("Erro inesperado.");
       }
-
-      toast.error("Erro inesperado.");
+      setIsDeleting(false);
     }
   };
 
@@ -58,15 +58,17 @@ export const DeleteFlashCard = ({
       >
         <button
           type="submit"
-          className="flex-1 sm:flex-none sm:w-32 h-11 sm:h-10 bg-red-700 text-color-white rounded-lg text-base cursor-pointer hover:brightness-110 transition-all duration-200"
+          disabled={isDeleting}
+          className="flex-1 sm:flex-none sm:w-32 h-11 sm:h-10 bg-red-700 text-color-white rounded-lg text-base cursor-pointer hover:brightness-110 transition-all duration-200 disabled:opacity-60 disabled:cursor-not-allowed"
         >
-          Deletar
+          {isDeleting ? "Deletando..." : "Deletar"}
         </button>
         {/* type="button": sem isso o botão envia o form e apaga o card */}
         <button
           type="button"
           onClick={onClose}
-          className="flex-1 sm:flex-none sm:w-32 h-11 sm:h-10 bg-color-white text-black rounded-lg text-base cursor-pointer hover:brightness-110 transition-all duration-200"
+          disabled={isDeleting}
+          className="flex-1 sm:flex-none sm:w-32 h-11 sm:h-10 bg-color-white text-black rounded-lg text-base cursor-pointer hover:brightness-110 transition-all duration-200 disabled:opacity-60"
         >
           Cancelar
         </button>
