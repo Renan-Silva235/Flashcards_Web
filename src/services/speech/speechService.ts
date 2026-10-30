@@ -1,11 +1,19 @@
-import { PiperWebEngine, RemoteVoiceProvider } from "piper-tts-web";
+import {
+  OnnxWebRuntime,
+  PiperWebEngine,
+  RemoteVoiceProvider,
+} from "piper-tts-web";
 
 const voiceProvider = new RemoteVoiceProvider({
   baseUrl: "/piper/models/",
 });
-const engine = new PiperWebEngine({ voiceProvider });
+const engine = new PiperWebEngine({
+  voiceProvider,
+  onnxRuntime: new OnnxWebRuntime({ numThreads: 1 }),
+});
 const audioContext = new AudioContext();
 let currentAudio: AudioBufferSourceNode | null = null;
+const GENERATION_TIMEOUT_MS = 30000;
 
 function speakWithBrowserVoice(text: string, language: string): void {
   if (!("speechSynthesis" in window)) {
@@ -29,7 +37,21 @@ async function speakWithPiper(text: string, voice: string): Promise<void> {
   currentAudio?.stop();
   currentAudio = null;
 
-  const { file } = (await engine.generate(text, voice)) as { file: Blob };
+  const generation = engine.generate(text, voice) as Promise<{ file: Blob }>;
+  const { file } = await Promise.race([
+    generation,
+    new Promise<never>((_, reject) => {
+      setTimeout(
+        () =>
+          reject(
+            new Error(
+              "A geração do áudio demorou mais que o esperado. Tente novamente.",
+            ),
+          ),
+        GENERATION_TIMEOUT_MS,
+      );
+    }),
+  ]);
   const audioData = await file.arrayBuffer();
   const audioBuffer = await audioContext.decodeAudioData(audioData);
   const audio = audioContext.createBufferSource();

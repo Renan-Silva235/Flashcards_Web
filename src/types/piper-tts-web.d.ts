@@ -1,4 +1,10 @@
 declare module "piper-tts-web" {
+  export class OnnxWebRuntime {
+    constructor(options?: { basePath?: string; numThreads?: number });
+
+    destroy(): void;
+  }
+
   export class PiperWebEngine {
     constructor(options?: unknown);
 
