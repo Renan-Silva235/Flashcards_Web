@@ -4,7 +4,8 @@ const voiceProvider = new RemoteVoiceProvider({
   baseUrl: "/piper/models/",
 });
 const engine = new PiperWebEngine({ voiceProvider });
-let currentAudio: HTMLAudioElement | null = null;
+const audioContext = new AudioContext();
+let currentAudio: AudioBufferSourceNode | null = null;
 
 function speakWithBrowserVoice(text: string, language: string): void {
   if (!("speechSynthesis" in window)) {
@@ -22,31 +23,24 @@ function speakWithBrowserVoice(text: string, language: string): void {
 }
 
 async function speakWithPiper(text: string, voice: string): Promise<void> {
+  // Resume synchronously from the click handler so autoplay policies allow the
+  // generated audio to play after Piper finishes processing the text.
+  await audioContext.resume();
+  currentAudio?.stop();
+  currentAudio = null;
+
   const { file } = (await engine.generate(text, voice)) as { file: Blob };
-
-  currentAudio?.pause();
-  if (currentAudio?.src) URL.revokeObjectURL(currentAudio.src);
-
-  const audioUrl = URL.createObjectURL(file);
-  const audio = new Audio(audioUrl);
+  const audioData = await file.arrayBuffer();
+  const audioBuffer = await audioContext.decodeAudioData(audioData);
+  const audio = audioContext.createBufferSource();
+  audio.buffer = audioBuffer;
+  audio.connect(audioContext.destination);
   currentAudio = audio;
-
-  const releaseAudio = () => {
-    URL.revokeObjectURL(audioUrl);
+  audio.onended = () => {
     if (currentAudio === audio) currentAudio = null;
   };
 
-  audio.addEventListener("ended", releaseAudio, { once: true });
-  audio.addEventListener("error", releaseAudio, { once: true });
-
-  try {
-    await audio.play();
-  } catch (error) {
-    releaseAudio();
-    throw new Error("O navegador bloqueou a reprodução do áudio.", {
-      cause: error,
-    });
-  }
+  audio.start();
 }
 
 export async function speak(text: string, language: string): Promise<void> {
