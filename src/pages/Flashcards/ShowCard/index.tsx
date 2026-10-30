@@ -7,6 +7,8 @@ import axios, { type AxiosResponse, AxiosError } from "axios";
 import { toast } from "react-toastify";
 import { flashcardRequestAction } from "../../../store/modules/flashcards/actions";
 import api from "../../../config/api";
+import { SpeechAudio } from "../../../components/SpeechAudio";
+import { CardFormScreen } from "../CardFormScreen";
 
 interface ShowCardProps {
   data: FlashcardResponseApi;
@@ -22,8 +24,12 @@ export const ShowCard = ({ data, onClose }: ShowCardProps) => {
   const [phrase1, setPhrase1] = useState<string>(data.examplePhrase1);
   const [phrase2, setPhrase2] = useState<string>(data.examplePhrase2);
   const [phrase3, setPhrase3] = useState<string>(data.examplePhrase3);
+  // Só no celular: começa na visualização e o botão Editar abre a tela de edição
+  const [isEditing, setIsEditing] = useState<boolean>(false);
+  const [isSaving, setIsSaving] = useState<boolean>(false);
   const [searchParams] = useSearchParams();
   const deckId = searchParams.get("deckId");
+  const deckLanguage = searchParams.get("deckLanguage") ?? "";
   const dispatch = useDispatch();
 
   const onChangeField = (field: string, value: string) => {
@@ -52,6 +58,8 @@ export const ShowCard = ({ data, onClose }: ShowCardProps) => {
   };
   const handleSubmit = async (event: React.FormEvent<HTMLFormElement>) => {
     event.preventDefault();
+    if (isSaving) return;
+    setIsSaving(true);
     try {
       if (data.id && deckId) {
         const response: AxiosResponse = await api.put(
@@ -61,6 +69,7 @@ export const ShowCard = ({ data, onClose }: ShowCardProps) => {
         if (response) {
           toast.success("Card editado com sucesso.");
           dispatch(flashcardRequestAction(deckId));
+          setIsEditing(false);
         }
       }
     } catch (error: unknown) {
@@ -72,23 +81,124 @@ export const ShowCard = ({ data, onClose }: ShowCardProps) => {
       }
 
       toast.error("Erro inesperado.");
+    } finally {
+      setIsSaving(false);
     }
   };
 
+  // Cancelar a edição descarta o que foi digitado e volta para a visualização
+  const handleCancelEdit = () => {
+    setWord(data.word);
+    setTranslation(data.translation);
+    setPast(data.past);
+    setPresent(data.present);
+    setFuture(data.future);
+    setPhrase1(data.examplePhrase1);
+    setPhrase2(data.examplePhrase2);
+    setPhrase3(data.examplePhrase3);
+    setIsEditing(false);
+  };
+
+  const form = (
+    <form onSubmit={handleSubmit}>
+      <CardComponent
+        mode="form"
+        data={dataToUpdatePayload}
+        onChange={onChangeField}
+        textButton="Editar"
+        onClose={onClose}
+      />
+    </form>
+  );
+
+  const tenses = [
+    { label: "Passado", value: past },
+    { label: "Presente", value: present },
+    { label: "Futuro", value: future },
+  ].filter((tense) => tense.value);
+  const phrases = [phrase1, phrase2, phrase3].filter(Boolean);
+
   return (
     <>
-      <p className="text-color-white">
-        Você pode editar o seu card enquanto visualiza
-      </p>
-      <form onSubmit={handleSubmit}>
-        <CardComponent
-          mode="form"
+      {/* Celular/tablet: visualização só leitura, com áudio em cada linha */}
+      <div className="lg:hidden w-full rounded-2xl border border-color-silver-1 bg-input-bg-main-color p-5 text-color-white">
+        <div className="flex items-start justify-between gap-3">
+          <h2 className="min-w-0 break-words text-3xl font-bold">{word}</h2>
+          <div className="shrink-0 pt-1">
+            <SpeechAudio language={deckLanguage} pronounce={word} />
+          </div>
+        </div>
+        <p className="mt-2 text-color-silver-2 break-words">{translation}</p>
+
+        {tenses.length > 0 && (
+          <ul className="mt-5 flex flex-col gap-3">
+            {tenses.map((tense) => (
+              <li
+                key={tense.label}
+                className="flex items-center justify-between gap-3"
+              >
+                <p className="min-w-0 break-words">
+                  <span className="text-color-silver-2">{tense.label}:</span>{" "}
+                  {tense.value}
+                </p>
+                <SpeechAudio language={deckLanguage} pronounce={tense.value} />
+              </li>
+            ))}
+          </ul>
+        )}
+
+        {phrases.length > 0 && (
+          <ul className="mt-5 flex flex-col gap-3">
+            {phrases.map((phrase, index) => (
+              <li
+                key={index}
+                className="flex items-center justify-between gap-3"
+              >
+                <p className="min-w-0 break-words">
+                  <span className="text-color-silver-2">•</span> {phrase}
+                </p>
+                <SpeechAudio language={deckLanguage} pronounce={phrase} />
+              </li>
+            ))}
+          </ul>
+        )}
+
+        <div className="mt-6 flex flex-col gap-3">
+          <button
+            type="button"
+            onClick={() => setIsEditing(true)}
+            className="h-12 rounded-lg bg-amber-500 font-bold text-color-white cursor-pointer active:brightness-110"
+          >
+            Editar
+          </button>
+          <button
+            type="button"
+            onClick={onClose}
+            className="h-12 rounded-lg bg-second-color font-bold text-color-white cursor-pointer active:brightness-110"
+          >
+            Fechar
+          </button>
+        </div>
+      </div>
+
+      <div className="hidden lg:block">
+        <p className="text-color-white">
+          Você pode editar o seu card enquanto visualiza
+        </p>
+        {form}
+      </div>
+
+      {isEditing && (
+        <CardFormScreen
+          title="Editar card"
+          submitLabel="Salvar"
           data={dataToUpdatePayload}
           onChange={onChangeField}
-          textButton="Editar"
-          onClose={onClose}
+          onSubmit={handleSubmit}
+          onCancel={handleCancelEdit}
+          isSaving={isSaving}
         />
-      </form>
+      )}
     </>
   );
 };

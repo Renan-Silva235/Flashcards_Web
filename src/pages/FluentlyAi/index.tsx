@@ -58,10 +58,11 @@ export const FluentlyAi = () => {
 
   return (
     <>
-      <div className="flex flex-col sm:flex-row sm:flex-wrap w-full items-start gap-x-3 gap-y-4">
-        <div className="w-full sm:flex-1 sm:basis-32 sm:min-w-0">
+      {/* Igual ao Dashboard: título e idioma (só a bandeira, no celular) lado a lado */}
+      <div className="flex w-full items-start justify-between gap-3">
+        <div className="flex-1 min-w-0">
           <h1
-            className="font-black text-4xl font-sans tracking-tight inline-block
+            className="font-black text-3xl lg:text-4xl font-sans tracking-tight inline-block
                       bg-linear-to-r from-btn-main-color via-color-purple-1 to-second-color
                       bg-[length:200%_auto] bg-clip-text text-transparent"
           >
@@ -75,6 +76,7 @@ export const FluentlyAi = () => {
         </div>
         <div className="shrink-0">
           <LanguageDropdown
+            compact
             selectedLanguage={selectedLanguage}
             onChange={(language) => setSelectedLanguage(language)}
           />
@@ -104,8 +106,8 @@ export const FluentlyAi = () => {
           </button>
         </div>
         <p className="text-color-silver-2 text-xs text-center mt-3">
-          A Fluently AI pode cometer erros. Revise as correções antes de
-          confiar nelas.
+          A Fluently AI pode cometer erros. Revise as correções antes de confiar
+          nelas.
         </p>
       </form>
 

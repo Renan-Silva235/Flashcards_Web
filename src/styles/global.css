@@ -164,22 +164,36 @@ input:-webkit-autofill:active {
   }
 }
 
-/* Toasts no celular: o react-toastify ocupa a largura toda colado nas bordas.
+/* Snackbar no celular/tablet (abaixo de lg): aviso fino de uma linha, embaixo.
    Regra do projeto: nada encosta nas bordas no celular (evita toques acidentais). */
-@media only screen and (max-width: 480px) {
-  .Toastify .Toastify__toast-container,
-  .Toastify .Toastify__toast-container[data-stacked="true"] {
+@media only screen and (max-width: 1023px) {
+  .Toastify .Toastify__toast-container--bottom-center {
     width: calc(100vw - 2rem);
     left: 1rem;
     right: 1rem;
+    transform: none;
+    bottom: calc(max(env(safe-area-inset-bottom), 0.75rem) + 0.75rem);
   }
-  .Toastify .Toastify__toast-container--top-right,
-  .Toastify .Toastify__toast-container--top-left,
-  .Toastify .Toastify__toast-container--top-center {
-    top: calc(env(safe-area-inset-top) + 1rem);
+  /* Com a barra de navegação na tela, o snackbar fica logo acima dela */
+  body:has([data-bottom-nav])
+    .Toastify
+    .Toastify__toast-container--bottom-center {
+    bottom: calc(max(env(safe-area-inset-bottom), 0.75rem) + 4.75rem);
   }
   .Toastify .Toastify__toast {
-    margin-bottom: 0.5rem;
-    border-radius: var(--toastify-toast-bd-radius);
+    min-height: 48px;
+    margin: 0;
+    padding: 10px 16px;
+    border-radius: 12px;
+    border: 1px solid var(--color-color-silver-1);
+    background: var(--color-input-bg-main-color);
+    color: var(--color-color-white);
+    font-family: var(--font-sans);
+    font-size: 14px;
+    box-shadow: 0 8px 24px rgba(0, 0, 0, 0.45);
+  }
+  .Toastify .Toastify__toast-icon {
+    width: 18px;
+    margin-inline-end: 10px;
   }
 }

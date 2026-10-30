@@ -90,10 +90,11 @@ export const CreateDeckComponent = () => {
             className="h-11 w-full sm:w-90 min-w-0 rounded-lg bg-input-bg-main-color focus:bg-input-bg-main-color focus:border focus:border-color-white 
                     focus:shadow focus:shadow-color-white/35 autofill:bg-input-bg-main-color text-color-white p-4 outline-none"
           />
-          {/* No celular o rótulo fica em cima do dropdown */}
-          <div className="flex flex-col sm:flex-row gap-2 sm:gap-4 items-center mt-4 sm:mt-6">
+          {/* Igual ao Dashboard: no celular o dropdown mostra só a bandeira, ao lado do rótulo */}
+          <div className="flex w-full lg:w-auto justify-between lg:justify-center gap-4 items-center mt-4 sm:mt-6">
             <label className="text-lg sm:text-2xl">Idioma do Baralho:</label>
             <LanguageDropdown
+              compact
               selectedLanguage={selectedLanguage}
               onChange={(language) => setSelectedLanguage(language)}
             />

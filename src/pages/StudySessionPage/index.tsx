@@ -1,6 +1,6 @@
 import { useSelector, useDispatch } from "react-redux";
 import { useState, useEffect } from "react";
-import { useSearchParams, useNavigate } from "react-router-dom";
+import { useSearchParams, useNavigate, Link } from "react-router-dom";
 import type { RootState } from "../../store/rootReducer";
 import { flashcardRequestAction } from "../../store/modules/flashcards/actions";
 import { CardFlip } from "../../components/CardFlip";
@@ -156,6 +156,7 @@ export const StudySessionPage = () => {
       : null;
 
   const total = flashcards?.length ?? 0;
+  const cardNumber = Math.min(currentIndex + 1, total);
   const answered = currentIndex + (cardAnimation === "leaving" ? 1 : 0);
   const progress = total > 0 ? (answered / total) * 100 : 0;
 
@@ -167,16 +168,31 @@ export const StudySessionPage = () => {
 
   return (
     <>
-      <BackButton to={PATHS.DASHBOARD} label="Voltar para Meus Decks" />
+      <div className="hidden lg:block">
+        <BackButton to={PATHS.DASHBOARD} label="Voltar para Meus Decks" />
+      </div>
 
-      <div className="flex flex-col w-full max-w-2xl mx-auto mt-6 sm:mt-10">
-        <div className="flex items-center justify-between gap-4 text-sm text-color-silver-2 mb-3">
-          <span className="min-w-0 truncate">{deckName}</span>
+      <div className="flex flex-col w-full max-w-2xl mx-auto lg:mt-10">
+        <div className="flex items-center justify-between gap-4 text-color-silver-2 mb-3 lg:text-sm">
+          <span className="min-w-0 truncate">
+            <span className="lg:hidden tabular-nums">
+              {total > 0 && `Card ${cardNumber} de ${total}`}
+            </span>
+            <span className="hidden lg:inline">{deckName}</span>
+          </span>
           {total > 0 && (
-            <span className="shrink-0 tabular-nums">
-              {Math.min(currentIndex + 1, total)}/{total}
+            <span className="hidden lg:inline shrink-0 tabular-nums">
+              {cardNumber}/{total}
             </span>
           )}
+          {/* Celular/tablet: sem a barra de baixo, o X volta para o deck */}
+          <Link
+            to={`${PATHS.FLASHCARDS}?${searchParams.toString()}`}
+            aria-label="Sair da sessão de estudo"
+            className="lg:hidden flex items-center justify-center w-11 h-11 shrink-0 rounded-lg text-3xl active:bg-white/10"
+          >
+            <LuX />
+          </Link>
         </div>
         <div className="h-2 w-full rounded-full bg-color-silver-1 overflow-hidden">
           <div

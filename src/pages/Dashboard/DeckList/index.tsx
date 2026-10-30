@@ -71,7 +71,7 @@ export const DeckList = ({
     );
 
   return (
-    <div className="flex flex-wrap gap-5 mt-10 justify-center">
+    <div className="flex flex-col lg:flex-row lg:flex-wrap gap-4 lg:gap-5 mt-6 lg:mt-10 lg:justify-center">
       {sortedDecks.map((deck) => (
         <CardsDeck
           key={deck.id}

@@ -63,12 +63,47 @@ export const CardComponent = ({
     onChange?.(field, event.target.value);
   };
 
+  const openView = () => (onView ? onView() : setIsModalOpen(true));
+
   return (
     <>
+      {/* Celular/tablet: linha compacta; tocar abre o card completo */}
+      {mode === "view" && (
+        <div
+          role="button"
+          tabIndex={0}
+          onClick={openView}
+          onKeyDown={(event) => {
+            if (event.key === "Enter" && event.target === event.currentTarget)
+              openView();
+          }}
+          className="lg:hidden relative w-full rounded-xl border border-color-silver-1 bg-input-bg-main-color p-5 pr-14
+                    cursor-pointer active:scale-[0.99] transition-transform duration-150"
+        >
+          <p className="text-color-white text-xl font-bold break-words">
+            {data.word}
+          </p>
+          <p className="text-color-silver-2 mt-1 break-words">
+            {data.translation}
+          </p>
+          <button
+            type="button"
+            onClick={(event) => {
+              event.stopPropagation();
+              setIsDeleteModalOpen(true);
+            }}
+            aria-label="Deletar card"
+            className="absolute top-4 right-4 text-2xl text-color-red-1 cursor-pointer"
+          >
+            <MdDeleteOutline />
+          </button>
+        </div>
+      )}
+
       <div
         className={
           mode === "view"
-            ? "w-full max-w-96 mt-7 h-fit border border-color-white rounded-lg bg-linear-to-r from-color-white/10 to-main-color shadow-lg shadow-black/50 transition-transform duration-300 hover:scale-100 hover:-translate-y-2 p-4 sm:p-6"
+            ? "hidden lg:block w-full max-w-96 mt-7 h-fit border border-color-white rounded-lg bg-linear-to-r from-color-white/10 to-main-color shadow-lg shadow-black/50 transition-transform duration-300 hover:scale-100 hover:-translate-y-2 p-4 sm:p-6"
             : "w-96 max-w-full mt-7 h-fit border border-color-white rounded-lg bg-linear-to-r from-color-white/10 to-main-color shadow-lg shadow-black/50 p-4 sm:p-6"
         }
       >
@@ -347,7 +382,7 @@ export const CardComponent = ({
         <div className="mt-4 flex flex-col w-full gap-2.5 items-center">
           {mode === "view" ? (
             <button
-              onClick={() => (onView ? onView() : setIsModalOpen(true))}
+              onClick={openView}
               className="bg-color-yellow-1 w-full max-w-55 h-11 rounded-lg cursor-pointer hover:brightness-110 scale-[0.98] transition-all duration-50"
             >
               Visualizar

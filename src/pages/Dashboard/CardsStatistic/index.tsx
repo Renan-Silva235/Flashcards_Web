@@ -85,18 +85,21 @@ export const CardsStatistic = ({ selectedLanguage }: CardsStatisticProps) => {
   const bars = [
     {
       label: "Fácil",
+      tileLabel: "Cards Fáceis",
       value: stats?.easy ?? 0,
       color: "text-color-green-1",
       bar: "bg-color-green-1",
     },
     {
       label: "Médio",
+      tileLabel: "Cards Médios",
       value: stats?.medium ?? 0,
       color: "text-color-yellow-1",
       bar: "bg-color-yellow-1",
     },
     {
       label: "Difícil",
+      tileLabel: "Cards Difíceis",
       value: stats?.hard ?? 0,
       color: "text-color-red-1",
       bar: "bg-color-red-1",
@@ -104,50 +107,85 @@ export const CardsStatistic = ({ selectedLanguage }: CardsStatisticProps) => {
   ];
   const max = Math.max(...bars.map((bar) => bar.value));
 
+  const tiles = [
+    {
+      label: "Total Cards",
+      value: stats?.totalCards ?? 0,
+      color: "text-second-color",
+    },
+    ...bars.map((bar) => ({
+      label: bar.tileLabel,
+      value: bar.value,
+      color: bar.color,
+    })),
+  ];
+
   return (
-    <div className="w-full rounded-2xl border border-color-silver-1 bg-[#0d1424] shadow-2xl shadow-black/50 p-6">
-      <div className="rounded-lg border border-color-silver-1 bg-color-silver-1/40 px-5 py-4 flex items-center justify-between">
-        <span className="text-color-silver-2">Total Cards</span>
-        <span className="text-second-color text-3xl font-bold tabular-nums">
-          {Math.round((stats?.totalCards ?? 0) * progress)}
-        </span>
-      </div>
-
-      <div className="relative h-56 flex items-end justify-around gap-8 px-4 mt-6">
-        {isLoading && !stats ? (
-          <div className="absolute inset-0 flex items-center justify-center">
-            <Loading />
-          </div>
-        ) : (
-          bars.map((bar) => (
-            <div
-              key={bar.label}
-              className="flex flex-col items-center justify-end h-full flex-1"
+    <>
+      {/* Celular/tablet: só os números, em caixinhas */}
+      <div className="lg:hidden grid grid-cols-4 gap-2 w-full">
+        {tiles.map((tile) => (
+          <div
+            key={tile.label}
+            className="flex flex-col items-center justify-center gap-1 min-w-0 rounded-xl border border-color-silver-1 bg-input-bg-main-color px-1 py-3 text-center"
+          >
+            <span
+              className={`${tile.color} text-2xl sm:text-3xl font-bold tabular-nums`}
             >
-              <span
-                className={`${bar.color} text-xl font-bold tabular-nums mb-2`}
-              >
-                {Math.round(bar.value * progress)}
-              </span>
-              <div
-                className={`${bar.bar} w-full max-w-24 rounded-t-md opacity-80`}
-                style={{
-                  height: max > 0 ? `${(bar.value / max) * 75 * progress}%` : 0,
-                }}
-              />
-              <span className="text-color-silver-2 text-sm mt-3">
-                {bar.label}
-              </span>
-            </div>
-          ))
-        )}
-
-        {!isLoading && max === 0 && (
-          <p className="absolute inset-x-0 top-1/3 text-center text-color-silver-2 text-sm">
-            Estude um deck para ver suas estatísticas aqui.
-          </p>
-        )}
+              {isLoading && !stats ? "–" : Math.round(tile.value * progress)}
+            </span>
+            <span className="text-color-silver-2 text-[11px] sm:text-sm leading-tight">
+              {tile.label}
+            </span>
+          </div>
+        ))}
       </div>
-    </div>
+
+      <div className="hidden lg:block w-full rounded-2xl border border-color-silver-1 bg-[#0d1424] shadow-2xl shadow-black/50 p-6">
+        <div className="rounded-lg border border-color-silver-1 bg-color-silver-1/40 px-5 py-4 flex items-center justify-between">
+          <span className="text-color-silver-2">Total Cards</span>
+          <span className="text-second-color text-3xl font-bold tabular-nums">
+            {Math.round((stats?.totalCards ?? 0) * progress)}
+          </span>
+        </div>
+
+        <div className="relative h-56 flex items-end justify-around gap-8 px-4 mt-6">
+          {isLoading && !stats ? (
+            <div className="absolute inset-0 flex items-center justify-center">
+              <Loading />
+            </div>
+          ) : (
+            bars.map((bar) => (
+              <div
+                key={bar.label}
+                className="flex flex-col items-center justify-end h-full flex-1"
+              >
+                <span
+                  className={`${bar.color} text-xl font-bold tabular-nums mb-2`}
+                >
+                  {Math.round(bar.value * progress)}
+                </span>
+                <div
+                  className={`${bar.bar} w-full max-w-24 rounded-t-md opacity-80`}
+                  style={{
+                    height:
+                      max > 0 ? `${(bar.value / max) * 75 * progress}%` : 0,
+                  }}
+                />
+                <span className="text-color-silver-2 text-sm mt-3">
+                  {bar.label}
+                </span>
+              </div>
+            ))
+          )}
+
+          {!isLoading && max === 0 && (
+            <p className="absolute inset-x-0 top-1/3 text-center text-color-silver-2 text-sm">
+              Estude um deck para ver suas estatísticas aqui.
+            </p>
+          )}
+        </div>
+      </div>
+    </>
   );
 };

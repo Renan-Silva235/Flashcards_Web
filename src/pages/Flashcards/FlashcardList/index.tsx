@@ -56,7 +56,7 @@ export const FlashcardList = ({ deckId, searchTerm }: FlashcardListProps) => {
       );
 
     return (
-      <div className="w-full flex flex-wrap gap-5 mt-10 justify-center">
+      <div className="w-full flex flex-col lg:flex-row lg:flex-wrap gap-3 lg:gap-5 mt-6 lg:mt-10 lg:justify-center">
         {filteredFlashcard.map((flashcard: FlashcardResponseApi, index) => (
           <CardComponent
             key={flashcard.id}
